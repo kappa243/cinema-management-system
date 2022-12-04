@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="pl.edu.agh.cinema.ui.ApplicationController">
     <center>
         <TableView fx:id="usersTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn fx:id="userFirstName" prefWidth="75.0" text="First name" />
-                <TableColumn fx:id="userLastName" prefWidth="75.0" text="Last name" />
-                <TableColumn fx:id="userEmail" prefWidth="75.0" text="Email" />
+                <TableColumn fx:id="firstNameColumn" prefWidth="75.0" text="First name"/>
+                <TableColumn fx:id="lastNameColumn" prefWidth="75.0" text="Last name"/>
+                <TableColumn fx:id="emailColumn" prefWidth="75.0" text="Email"/>
             </columns>
             <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
             </columnResizePolicy>
         </TableView>
     </center>
@@ -23,23 +22,33 @@
             <opaqueInsets>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </opaqueInsets>
-            <children>
-                <Button fx:id="exitButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308"
-                        mnemonicParsing="false" text="Exit">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                    </VBox.margin>
-                </Button>
-                <Button fx:id="addNewUserButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308"
-                        mnemonicParsing="false" text="Add new user">
-                    <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                    </VBox.margin>
-                </Button>
-            </children>
             <BorderPane.margin>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </BorderPane.margin>
+            <Button fx:id="exitButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308"
+                    mnemonicParsing="false" text="Exit">
+                <VBox.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </VBox.margin>
+            </Button>
+            <Button fx:id="addNewUserButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308"
+                    mnemonicParsing="false" text="Add new user">
+                <VBox.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </VBox.margin>
+            </Button>
+            <Button fx:id="editUserButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308"
+                    mnemonicParsing="false" text="Edit user">
+                <VBox.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </VBox.margin>
+            </Button>
+            <Button fx:id="deleteUserButton" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308"
+                    mnemonicParsing="false" text="Delete user">
+                <VBox.margin>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </VBox.margin>
+            </Button>
         </VBox>
     </right>
 </BorderPane>

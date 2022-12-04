@@ -10,7 +10,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Component
 public class StageManager {
@@ -20,8 +19,8 @@ public class StageManager {
 
     private final Property<Stage> primaryStage;
 
-    public Optional<Stage> getPrimaryStage() {
-        return Optional.ofNullable(primaryStage.getValue());
+    public Stage getPrimaryStage() {
+        return primaryStage.getValue();
     }
 
     public Property<Stage> primaryStageProperty() {
@@ -32,10 +31,11 @@ public class StageManager {
         this.application = application;
         this.viewManager = viewManager;
 
-        this.primaryStage = new SimpleObjectProperty<Stage>(application, "primaryStage");
+        this.primaryStage = new SimpleObjectProperty<>(application, "primaryStage");
     }
 
 
+    // primary stage initialization
     @EventListener
     public void onApplicationReady(ApplicationReadyEvent event) {
         Stage stage = event.getStage();
@@ -43,7 +43,7 @@ public class StageManager {
         primaryStage.setValue(stage);
 
         try {
-            Parent parent = viewManager.load("/fxml/main.fxml", stage);
+            Parent parent = viewManager.loadObject("/fxml/main.fxml", stage);
             stage.setScene(new Scene(parent));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -52,6 +52,7 @@ public class StageManager {
         stage.show();
     }
 
+    // close application from any controller
     @EventListener
     public void onApplicationClose(ApplicationCloseEvent event) throws Exception {
         application.stop();
