@@ -4,13 +4,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import lombok.Setter;
+import org.hibernate.Transaction;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import pl.edu.agh.cinema.model.person.Person;
 import pl.edu.agh.cinema.model.person.Role;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 @Scope("prototype")
@@ -27,6 +32,9 @@ public class EditUserController implements StageAware {
     private TextField email;
     @FXML
     private ChoiceBox<Role> roleChoiceBox;
+    @FXML
+    private Label warningMessage;
+
     @Setter
     protected Stage stage;
 
@@ -73,10 +81,28 @@ public class EditUserController implements StageAware {
         confirmButton.setText(text);
     }
 
-    private void handleConfirmAction(ActionEvent event) {
-        updateModel();
-        confirmed = true;
+    public boolean validateInput() {
+        if (firstName.getText().matches(".*\\d.*") || firstName.getText().isEmpty()) {
+            warningMessage.setText("First name should contain only letters!");
+            return false;
+        }
+        else if (lastName.getText().matches(".*\\d.*") || lastName.getText().isEmpty()) {
+            warningMessage.setText("Last name should contain only letters!");
+            return false;
+        }
+        else if (!email.getText().matches("^[\\w.]+@([\\w-]+.)+[\\w-]{2,4}$") || email.getText().isEmpty()) {
+            warningMessage.setText("Wrong email address!");
+            return false;
+        }
+        else warningMessage.setText("");
+        return true;
+    }
 
-        stage.close();
+    private void handleConfirmAction(ActionEvent event) {
+        if (validateInput()) {
+            updateModel();
+            confirmed = true;
+            stage.close();
+        }
     }
 }

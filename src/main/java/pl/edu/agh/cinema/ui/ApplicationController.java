@@ -60,9 +60,10 @@ public class ApplicationController {
 
     @FXML
     private TableColumn<Person, String> emailColumn;
+
     @FXML
     @Enumerated(EnumType.STRING)
-    private TableColumn<Person, String> roleColumn;
+    private TableColumn<Person, Role> roleColumn;
 
 
     public ApplicationController(ApplicationEventPublisher publisher,

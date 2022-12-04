@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="492.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.cinema.ui.EditUserController">
+<AnchorPane prefHeight="530.0" prefWidth="492.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.cinema.ui.EditUserController">
     <Button fx:id="confirmButton" layoutX="209.0" layoutY="437.0" mnemonicParsing="false" text="Edit User" AnchorPane.leftAnchor="209.0" AnchorPane.rightAnchor="208.6" AnchorPane.topAnchor="437.0">
         <font>
             <Font size="14.0" />
@@ -62,4 +62,9 @@
       </Label>
       <ChoiceBox fx:id="roleChoiceBox" prefHeight="26.0" prefWidth="280.0" />
     </VBox>
+   <Label fx:id="warningMessage" alignment="CENTER" layoutX="106.0" layoutY="482.0" prefHeight="20.0" prefWidth="280.0" textAlignment="CENTER" textFill="RED">
+      <font>
+         <Font size="16.0" />
+      </font>
+   </Label>
 </AnchorPane>
