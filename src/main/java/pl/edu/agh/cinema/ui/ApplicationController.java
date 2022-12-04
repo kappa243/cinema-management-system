@@ -1,6 +1,7 @@
 package pl.edu.agh.cinema.ui;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,7 +21,10 @@ import pl.edu.agh.cinema.StageManager;
 import pl.edu.agh.cinema.ViewManager;
 import pl.edu.agh.cinema.model.person.Person;
 import pl.edu.agh.cinema.model.person.PersonService;
+import pl.edu.agh.cinema.model.person.Role;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.io.IOException;
 
 @Component
@@ -56,6 +60,9 @@ public class ApplicationController {
 
     @FXML
     private TableColumn<Person, String> emailColumn;
+    @FXML
+    @Enumerated(EnumType.STRING)
+    private TableColumn<Person, String> roleColumn;
 
 
     public ApplicationController(ApplicationEventPublisher publisher,
@@ -105,7 +112,16 @@ public class ApplicationController {
                 throw new RuntimeException(e);
             }
         });
-
+        roleColumn.setCellValueFactory(cellData -> {
+            try {
+                return JavaBeanObjectPropertyBuilder.create()
+                        .bean(cellData.getValue())
+                        .name("role")
+                        .build();
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         exitButton.setOnAction(event -> publisher.publishEvent(new ApplicationCloseEvent(this)));
 
@@ -134,7 +150,7 @@ public class ApplicationController {
             stage.setResizable(false);
             stage.setTitle("Add new user");
 
-            Person person = new Person("", "", "");
+            Person person = new Person("", "", "", Role.ASSISTANT);
             controller.setData(person);
             controller.setStage(stage);
 

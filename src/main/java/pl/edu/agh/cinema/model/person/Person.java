@@ -2,10 +2,7 @@ package pl.edu.agh.cinema.model.person;
 
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -49,6 +46,15 @@ public class Person {
         pcs.firePropertyChange("email", oldEmail, email);
     }
 
+    @Getter
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public void setRole(Role role) {
+        Role oldRole = this.role;
+        this.role = role;
+        pcs.firePropertyChange("role", oldRole, role);
+    }
 
     public Person() {
         pcs = new PropertyChangeSupport(this);
@@ -63,11 +69,12 @@ public class Person {
     }
 
 
-    public Person(String firstName, String lastName, String email) {
+    public Person(String firstName, String lastName, String email, Role role) {
         this();
 
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.role = role;
     }
 }

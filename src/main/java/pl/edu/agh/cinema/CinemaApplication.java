@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.GenericApplicationContext;
 import pl.edu.agh.cinema.model.person.Person;
 import pl.edu.agh.cinema.model.person.PersonRepository;
+import pl.edu.agh.cinema.model.person.Role;
 
 import java.util.List;
 
@@ -56,9 +57,9 @@ public class CinemaApplication extends Application {
     @Bean
     public CommandLineRunner demo(PersonRepository personRepository) {
         return args -> {
-            Person p1 = new Person("Jan", "Kowalski", "jkowalski@example.com");
-            Person p2 = new Person("Adam", "Nowak", "anowak@example.com");
-            Person p3 = new Person("Anna", "Kowalska", "akowalska@example.com");
+            Person p1 = new Person("Jan", "Kowalski", "jkowalski@example.com", Role.ADMINISTRATOR);
+            Person p2 = new Person("Adam", "Nowak", "anowak@example.com", Role.ASSISTANT);
+            Person p3 = new Person("Anna", "Kowalska", "akowalska@example.com", Role.MODERATOR);
 
             personRepository.saveAll(List.of(p1, p2, p3));
 
