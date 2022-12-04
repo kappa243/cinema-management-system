@@ -33,3 +33,7 @@ Okno edycji użytkownika, w którym można zmienić jego informacje. Jednocześn
 
 
 ## Modele danych
+
+Zawiera modele danych oraz serwisy do ich obsługi. Modele danych są mapowane na tabele w bazie danych przy użyciu JPA. Serwisy udostępniają API do komunikacji z bazą danych.
+
+![Diagram bazodanowy](./assets/database_diagram.png)
