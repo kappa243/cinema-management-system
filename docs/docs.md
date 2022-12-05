@@ -10,6 +10,8 @@ Funkcjonalności projektu zostały podzielone na następujące grupy:
 - część modeli danych - tworzy modele bazodanowe, zapewnia komunikację z bazą danych poprzez API i udostępnia serwisy
   do swoich modeli
 
+![Diagram bazodanowy](./assets/app_diagram.png)
+
 ## Główna aplikacja
 
 Jej głównym zadaniem jest inicjalizacja JavaFX i Spring, z odpowiednimi ustawieniami. Proces ten zaczyna się w *CinemaApplication.java*. Uruchamia on event odpowiedzialny za utworzonie głównego okna aplikacji oraz rejestruje beany dające dostęp do aplikacji.
