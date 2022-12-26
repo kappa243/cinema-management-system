@@ -1,4 +1,4 @@
-package pl.edu.agh.cinema.ui;
+package pl.edu.agh.cinema.ui.userManager;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
@@ -12,7 +12,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Setter;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.util.Pair;
@@ -23,6 +23,7 @@ import pl.edu.agh.cinema.ViewManager;
 import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.UserService;
 import pl.edu.agh.cinema.model.user.Role;
+import pl.edu.agh.cinema.ui.StageAware;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -30,9 +31,9 @@ import java.io.IOException;
 
 @Component
 @Scope("prototype")
-public class ApplicationController {
+public class UserManagerController implements StageAware {
 
-    @Autowired
+
     ApplicationEventPublisher publisher;
     StageManager stageManager;
     ViewManager viewManager;
@@ -67,8 +68,11 @@ public class ApplicationController {
     @Enumerated(EnumType.STRING)
     private TableColumn<User, Role> roleColumn;
 
+    @Setter
+    private Stage stage;
 
-    public ApplicationController(ApplicationEventPublisher publisher,
+
+    public UserManagerController(ApplicationEventPublisher publisher,
                                  StageManager stageManager,
                                  ViewManager viewManager,
                                  UserService userService) {
@@ -150,11 +154,12 @@ public class ApplicationController {
 
             stage.setScene(new Scene(parent));
             stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(stageManager.getPrimaryStage());
+            stage.initOwner(this.stage);
             stage.setResizable(false);
+            stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
             stage.setTitle("Add new user");
 
-            User user = new User("", "", "", Role.ASSISTANT);
+            User user = new User("", "", "", "", Role.ASSISTANT);
             controller.setData(user);
             controller.setStage(stage);
 
@@ -181,8 +186,9 @@ public class ApplicationController {
 
             stage.setScene(new Scene(parent));
             stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(stageManager.getPrimaryStage());
+            stage.initOwner(this.stage);
             stage.setResizable(false);
+            stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
             stage.setTitle("Edit user");
 
             User user = usersTable.getSelectionModel().getSelectedItem();

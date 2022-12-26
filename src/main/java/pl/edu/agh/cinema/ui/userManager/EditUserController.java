@@ -1,17 +1,16 @@
-package pl.edu.agh.cinema.ui;
+package pl.edu.agh.cinema.ui.userManager;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.Role;
+import pl.edu.agh.cinema.ui.StageAware;
 
 @Component
 @Scope("prototype")
@@ -20,6 +19,7 @@ public class EditUserController implements StageAware {
     @FXML
     private Button confirmButton;
 
+    // TODO - add password field
     @FXML
     private TextField firstName;
     @FXML
@@ -30,6 +30,9 @@ public class EditUserController implements StageAware {
     private ChoiceBox<Role> roleChoiceBox;
     @FXML
     private Label warningMessage;
+
+    @FXML
+    private PasswordField password;
 
     @Setter
     protected Stage stage;
@@ -55,6 +58,8 @@ public class EditUserController implements StageAware {
         user.setFirstName(firstName.getText());
         user.setLastName(lastName.getText());
         user.setEmail(email.getText());
+        String hashed = BCrypt.hashpw(password.getText(), BCrypt.gensalt());
+        user.setPassword(hashed);
         user.setRole(roleChoiceBox.getValue());
     }
 
@@ -78,6 +83,7 @@ public class EditUserController implements StageAware {
     }
 
     public boolean validateInput() {
+        // TODO - implement password validation (contains at least one digit, one uppercase letter, one lowercase letter, one special character, set minimal length)
         if (firstName.getText().matches(".*\\d.*") || firstName.getText().isEmpty()) {
             warningMessage.setText("First name should contain only letters!");
             return false;

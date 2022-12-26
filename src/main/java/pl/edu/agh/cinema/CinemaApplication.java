@@ -10,16 +10,19 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import pl.edu.agh.cinema.model.user.Role;
 import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.UserRepository;
-import pl.edu.agh.cinema.model.user.Role;
 
 import java.util.List;
 
 @SpringBootApplication
 public class CinemaApplication extends Application {
 
+
     private ConfigurableApplicationContext applicationContext;
+
 
     public static void main(String[] args) {
         Application.launch(CinemaApplication.class, args);
@@ -32,7 +35,6 @@ public class CinemaApplication extends Application {
                 .sources(CinemaApplication.class)
                 .initializers(initializers())
                 .run(getParameters().getRaw().toArray(new String[0]));
-
     }
 
     @Override
@@ -57,11 +59,14 @@ public class CinemaApplication extends Application {
     @Bean
     public CommandLineRunner demo(UserRepository userRepository) {
         return args -> {
-            User p1 = new User("Jan", "Kowalski", "jkowalski@example.com", Role.ADMINISTRATOR);
-            User p2 = new User("Adam", "Nowak", "anowak@example.com", Role.ASSISTANT);
-            User p3 = new User("Anna", "Kowalska", "akowalska@example.com", Role.MODERATOR);
+            String password = "admin";
+            String hashed = BCrypt.hashpw(password, BCrypt.gensalt());
+            User admin = new User("admin", "admin", "admin", hashed, Role.ADMINISTRATOR);
+            User p1 = new User("Jan", "Kowalski", "jkowalski@example.com", hashed, Role.ASSISTANT);
+            User p2 = new User("Adam", "Nowak", "anowak@example.com", hashed, Role.ASSISTANT);
+            User p3 = new User("Anna", "Kowalska", "akowalska@example.com", hashed, Role.MODERATOR);
 
-            userRepository.saveAll(List.of(p1, p2, p3));
+            userRepository.saveAll(List.of(admin, p1, p2, p3));
 
 
         };

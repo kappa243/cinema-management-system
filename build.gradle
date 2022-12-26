@@ -24,6 +24,7 @@ dependencies {
     // core
 
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
 //    implementation 'org.controlsfx:controlsfx:11.1.2'
 
@@ -33,6 +34,9 @@ dependencies {
     // https://projectlombok.org/
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    // gson
+    implementation 'com.google.code.gson:gson:2.10'
 
 
     // test

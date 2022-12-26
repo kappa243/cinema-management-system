@@ -1,6 +1,7 @@
 package pl.edu.agh.cinema.model.user;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.beans.PropertyChangeListener;
@@ -38,6 +39,7 @@ public class User {
     }
 
     @Getter
+    @Column(unique = true, nullable = false)
     private String email;
 
     public void setEmail(String email) {
@@ -47,6 +49,7 @@ public class User {
     }
 
     @Getter
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -55,6 +58,11 @@ public class User {
         this.role = role;
         pcs.firePropertyChange("role", oldRole, role);
     }
+
+    @Getter
+    @Setter // dont allow property binding (silent change)
+    @Column(nullable = false)
+    private String password;
 
     public User() {
         pcs = new PropertyChangeSupport(this);
@@ -69,12 +77,13 @@ public class User {
     }
 
 
-    public User(String firstName, String lastName, String email, Role role) {
+    public User(String firstName, String lastName, String email, String password, Role role) {
         this();
 
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password = password;
         this.role = role;
     }
 }
