@@ -8,14 +8,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import lombok.Setter;
-import org.hibernate.Transaction;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import pl.edu.agh.cinema.model.person.Person;
-import pl.edu.agh.cinema.model.person.Role;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import pl.edu.agh.cinema.model.user.User;
+import pl.edu.agh.cinema.model.user.Role;
 
 @Component
 @Scope("prototype")
@@ -38,13 +34,13 @@ public class EditUserController implements StageAware {
     @Setter
     protected Stage stage;
 
-    private Person person;
+    private User user;
 
     private boolean confirmed = false;
 
 
-    public void setData(Person person) {
-        this.person = person;
+    public void setData(User user) {
+        this.user = user;
         updateContent();
     }
 
@@ -56,17 +52,17 @@ public class EditUserController implements StageAware {
     }
 
     private void updateModel() {
-        person.setFirstName(firstName.getText());
-        person.setLastName(lastName.getText());
-        person.setEmail(email.getText());
-        person.setRole(roleChoiceBox.getValue());
+        user.setFirstName(firstName.getText());
+        user.setLastName(lastName.getText());
+        user.setEmail(email.getText());
+        user.setRole(roleChoiceBox.getValue());
     }
 
     private void updateContent() {
-        firstName.setText(person.getFirstName());
-        lastName.setText(person.getLastName());
-        email.setText(person.getEmail());
-        roleChoiceBox.setValue(person.getRole());
+        firstName.setText(user.getFirstName());
+        lastName.setText(user.getLastName());
+        email.setText(user.getEmail());
+        roleChoiceBox.setValue(user.getRole());
     }
 
     @FXML

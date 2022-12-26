@@ -12,6 +12,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.util.Pair;
@@ -19,9 +20,9 @@ import org.springframework.stereotype.Component;
 import pl.edu.agh.cinema.ApplicationCloseEvent;
 import pl.edu.agh.cinema.StageManager;
 import pl.edu.agh.cinema.ViewManager;
-import pl.edu.agh.cinema.model.person.Person;
-import pl.edu.agh.cinema.model.person.PersonService;
-import pl.edu.agh.cinema.model.person.Role;
+import pl.edu.agh.cinema.model.user.User;
+import pl.edu.agh.cinema.model.user.UserService;
+import pl.edu.agh.cinema.model.user.Role;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -31,11 +32,12 @@ import java.io.IOException;
 @Scope("prototype")
 public class ApplicationController {
 
+    @Autowired
     ApplicationEventPublisher publisher;
     StageManager stageManager;
     ViewManager viewManager;
 
-    PersonService personService;
+    UserService userService;
 
     @FXML
     private Button exitButton;
@@ -50,36 +52,36 @@ public class ApplicationController {
     private Button deleteUserButton;
 
     @FXML
-    private TableView<Person> usersTable;
+    private TableView<User> usersTable;
 
     @FXML
-    private TableColumn<Person, String> firstNameColumn;
+    private TableColumn<User, String> firstNameColumn;
 
     @FXML
-    private TableColumn<Person, String> lastNameColumn;
+    private TableColumn<User, String> lastNameColumn;
 
     @FXML
-    private TableColumn<Person, String> emailColumn;
+    private TableColumn<User, String> emailColumn;
 
     @FXML
     @Enumerated(EnumType.STRING)
-    private TableColumn<Person, Role> roleColumn;
+    private TableColumn<User, Role> roleColumn;
 
 
     public ApplicationController(ApplicationEventPublisher publisher,
                                  StageManager stageManager,
                                  ViewManager viewManager,
-                                 PersonService personService) {
+                                 UserService userService) {
         this.publisher = publisher;
         this.viewManager = viewManager;
         this.stageManager = stageManager;
 
-        this.personService = personService;
+        this.userService = userService;
     }
 
     @FXML
     public void initialize() {
-        usersTable.setItems(personService.getPersons());
+        usersTable.setItems(userService.getUsers());
 
         firstNameColumn.setCellValueFactory(cellData -> {
             try {
@@ -115,6 +117,7 @@ public class ApplicationController {
         });
         roleColumn.setCellValueFactory(cellData -> {
             try {
+                //noinspection unchecked
                 return JavaBeanObjectPropertyBuilder.create()
                         .bean(cellData.getValue())
                         .name("role")
@@ -151,8 +154,8 @@ public class ApplicationController {
             stage.setResizable(false);
             stage.setTitle("Add new user");
 
-            Person person = new Person("", "", "", Role.ASSISTANT);
-            controller.setData(person);
+            User user = new User("", "", "", Role.ASSISTANT);
+            controller.setData(user);
             controller.setStage(stage);
 
             // TODO - temporary solution
@@ -161,7 +164,7 @@ public class ApplicationController {
             stage.showAndWait();
 
             if (controller.isConfirmed()) {
-                personService.addPerson(person);
+                userService.addUser(user);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -182,13 +185,13 @@ public class ApplicationController {
             stage.setResizable(false);
             stage.setTitle("Edit user");
 
-            Person person = usersTable.getSelectionModel().getSelectedItem();
-            controller.setData(person);
+            User user = usersTable.getSelectionModel().getSelectedItem();
+            controller.setData(user);
 
             stage.showAndWait();
 
             if (controller.isConfirmed()) {
-                personService.updatePerson(person);
+                userService.updateUser(user);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -196,7 +199,7 @@ public class ApplicationController {
     }
 
     private void handleDeleteAction(ActionEvent event) {
-        Person person = usersTable.getSelectionModel().getSelectedItem();
-        personService.deletePerson(person);
+        User user = usersTable.getSelectionModel().getSelectedItem();
+        userService.deleteUser(user);
     }
 }

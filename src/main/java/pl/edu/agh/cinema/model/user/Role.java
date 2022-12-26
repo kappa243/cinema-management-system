@@ -1,4 +1,4 @@
-package pl.edu.agh.cinema.model.person;
+package pl.edu.agh.cinema.model.user;
 
 public enum Role {
     ADMINISTRATOR,

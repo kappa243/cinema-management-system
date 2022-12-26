@@ -10,9 +10,9 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.GenericApplicationContext;
-import pl.edu.agh.cinema.model.person.Person;
-import pl.edu.agh.cinema.model.person.PersonRepository;
-import pl.edu.agh.cinema.model.person.Role;
+import pl.edu.agh.cinema.model.user.User;
+import pl.edu.agh.cinema.model.user.UserRepository;
+import pl.edu.agh.cinema.model.user.Role;
 
 import java.util.List;
 
@@ -55,13 +55,13 @@ public class CinemaApplication extends Application {
     }
 
     @Bean
-    public CommandLineRunner demo(PersonRepository personRepository) {
+    public CommandLineRunner demo(UserRepository userRepository) {
         return args -> {
-            Person p1 = new Person("Jan", "Kowalski", "jkowalski@example.com", Role.ADMINISTRATOR);
-            Person p2 = new Person("Adam", "Nowak", "anowak@example.com", Role.ASSISTANT);
-            Person p3 = new Person("Anna", "Kowalska", "akowalska@example.com", Role.MODERATOR);
+            User p1 = new User("Jan", "Kowalski", "jkowalski@example.com", Role.ADMINISTRATOR);
+            User p2 = new User("Adam", "Nowak", "anowak@example.com", Role.ASSISTANT);
+            User p3 = new User("Anna", "Kowalska", "akowalska@example.com", Role.MODERATOR);
 
-            personRepository.saveAll(List.of(p1, p2, p3));
+            userRepository.saveAll(List.of(p1, p2, p3));
 
 
         };

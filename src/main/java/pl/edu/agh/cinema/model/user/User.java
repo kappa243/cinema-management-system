@@ -1,4 +1,4 @@
-package pl.edu.agh.cinema.model.person;
+package pl.edu.agh.cinema.model.user;
 
 import lombok.Getter;
 
@@ -7,8 +7,8 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 
-@Entity
-public class Person {
+@Entity(name = "person")
+public class User {
 
     @Transient
     private final PropertyChangeSupport pcs;
@@ -56,7 +56,7 @@ public class Person {
         pcs.firePropertyChange("role", oldRole, role);
     }
 
-    public Person() {
+    public User() {
         pcs = new PropertyChangeSupport(this);
     }
 
@@ -69,7 +69,7 @@ public class Person {
     }
 
 
-    public Person(String firstName, String lastName, String email, Role role) {
+    public User(String firstName, String lastName, String email, Role role) {
         this();
 
         this.firstName = firstName;
