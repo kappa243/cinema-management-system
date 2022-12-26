@@ -58,7 +58,7 @@ public class AuthenticationService {
         userContext.logout();
     }
 
-    private boolean isEmailTaken(String email) {
+    public boolean isEmailTaken(String email) {
         return userService.findUserByEmail(email).isPresent();
     }
 

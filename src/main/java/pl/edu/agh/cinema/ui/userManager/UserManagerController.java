@@ -24,6 +24,8 @@ import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.UserService;
 import pl.edu.agh.cinema.model.user.Role;
 import pl.edu.agh.cinema.ui.StageAware;
+import pl.edu.agh.cinema.ui.userManager.editDialog.AddUserController;
+import pl.edu.agh.cinema.ui.userManager.editDialog.EditUserController;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -148,9 +150,9 @@ public class UserManagerController implements StageAware {
         try {
             Stage stage = new Stage();
 
-            Pair<Parent, EditUserController> vmLoad = viewManager.load("/fxml/editUser.fxml", stage);
+            Pair<Parent, AddUserController> vmLoad = viewManager.load("/fxml/userManager/editDialog/addUser.fxml", stage);
             Parent parent = vmLoad.getFirst();
-            EditUserController controller = vmLoad.getSecond();
+            AddUserController controller = vmLoad.getSecond();
 
             stage.setScene(new Scene(parent));
             stage.initModality(Modality.WINDOW_MODAL);
@@ -163,14 +165,8 @@ public class UserManagerController implements StageAware {
             controller.setData(user);
             controller.setStage(stage);
 
-            // TODO - temporary solution
-            controller.renameButton("Add user");
-
             stage.showAndWait();
 
-            if (controller.isConfirmed()) {
-                userService.addUser(user);
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -179,7 +175,7 @@ public class UserManagerController implements StageAware {
     private void handleEditAction(ActionEvent event) {
         try {
             Stage stage = new Stage();
-            Pair<Parent, EditUserController> vmLoad = viewManager.load("/fxml/editUser.fxml", stage);
+            Pair<Parent, EditUserController> vmLoad = viewManager.load("/fxml/userManager/editDialog/editUser.fxml", stage);
             Parent parent = vmLoad.getFirst();
             EditUserController controller = vmLoad.getSecond();
 
@@ -193,12 +189,10 @@ public class UserManagerController implements StageAware {
 
             User user = usersTable.getSelectionModel().getSelectedItem();
             controller.setData(user);
+            controller.setStage(stage);
 
             stage.showAndWait();
 
-            if (controller.isConfirmed()) {
-                userService.updateUser(user);
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }

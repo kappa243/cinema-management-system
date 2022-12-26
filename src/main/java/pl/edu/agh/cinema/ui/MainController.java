@@ -63,7 +63,7 @@ public class MainController implements StageAware {
         userManagerButton.setOnAction(event -> {
             try {
                 Stage stage = new Stage();
-                Pair<Parent, UserManagerController> vmLoad = viewManager.load("/fxml/userManager.fxml", stage);
+                Pair<Parent, UserManagerController> vmLoad = viewManager.load("/fxml/userManager/userManager.fxml", stage);
                 stage.setScene(new Scene(vmLoad.getFirst()));
 
                 stage.initModality(Modality.WINDOW_MODAL);
@@ -77,6 +77,9 @@ public class MainController implements StageAware {
                 e.printStackTrace();
             }
         });
+
+        // TODO - implement movie management
+        // TODO - implement ticket sales
 
         logoutButton.setOnAction(event -> {
             authenticationService.logout();
