@@ -56,6 +56,10 @@ public class DialogFieldController {
             warningMessage.setText("Wrong email address!");
             return false;
         }
+        else if (roleChoiceBox.getSelectionModel().isEmpty()) {
+            warningMessage.setText("Role not set!");
+            return false;
+        }
         else warningMessage.setText("");
         return true;
     }
