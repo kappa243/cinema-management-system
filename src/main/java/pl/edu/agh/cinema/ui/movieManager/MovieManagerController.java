@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Setter;
@@ -22,19 +23,19 @@ import pl.edu.agh.cinema.ViewManager;
 import pl.edu.agh.cinema.model.movie.Movie;
 import pl.edu.agh.cinema.model.movie.MovieService;
 import pl.edu.agh.cinema.ui.StageAware;
-import pl.edu.agh.cinema.ui.movieManager.editMovieDialog.EditMovieController;
 import pl.edu.agh.cinema.ui.movieManager.editMovieDialog.AddMovieController;
+import pl.edu.agh.cinema.ui.movieManager.editMovieDialog.EditMovieController;
 
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Scope("prototype")
 public class MovieManagerController implements StageAware {
 
-    private ApplicationEventPublisher publisher;
-    private StageManager stageManager;
     private ViewManager viewManager;
     private MovieService movieService;
     @Setter
@@ -55,19 +56,18 @@ public class MovieManagerController implements StageAware {
     @FXML
     private Button deleteMovieButton;
 
-    public MovieManagerController(ApplicationEventPublisher publisher,
-                                  StageManager stageManager,
-                                  ViewManager viewManager,
+    @FXML
+    private TextField queryField;
+
+    public MovieManagerController(ViewManager viewManager,
                                   MovieService movieService) {
-        this.publisher = publisher;
-        this.stageManager = stageManager;
         this.viewManager = viewManager;
         this.movieService = movieService;
     }
 
     @FXML
     public void initialize() {
-        setItems();
+        moviesTable.setItems(movieService.getMovies());
 
         titleColumn.setCellValueFactory(cellData -> {
             try {
@@ -99,6 +99,7 @@ public class MovieManagerController implements StageAware {
                 throw new RuntimeException(e);
             }
         });
+
         editMovieButton.disableProperty().bind(
                 Bindings.size(moviesTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
         );
@@ -106,10 +107,27 @@ public class MovieManagerController implements StageAware {
         addNewMovieButton.setOnAction(this::handleAddAction);
         deleteMovieButton.setOnAction(this::handleDeleteAction);
 
+        queryField.setOnKeyTyped(e -> this.setItems());
     }
-    @FXML
+
     public void setItems() {
-        moviesTable.setItems(movieService.getMovies());
+        moviesTable.setItems(movieService.getMovies().filtered(movie -> {
+            List<String> queries = new ArrayList<>(List.of(queryField.getText().split(" ")));
+
+            // remove empty queries
+            queries.removeIf(String::isEmpty);
+
+            if (queries.isEmpty()) {
+                return true;
+            }
+
+            return queries.stream().allMatch(query -> {
+                String lowerCaseQuery = query.toLowerCase();
+                return movie.getTitle().toLowerCase().contains(lowerCaseQuery) ||
+                        movie.getDescription().toLowerCase().contains(lowerCaseQuery);
+            });
+
+        }));
     }
 
     private void handleAddAction(ActionEvent event) {

@@ -28,6 +28,9 @@ public class MainController implements StageAware {
     private Button userManagerButton;
 
     @FXML
+    private Button showManagerButton;
+
+    @FXML
     private Button movieManagerButton;
 
     @FXML
@@ -68,7 +71,7 @@ public class MainController implements StageAware {
 
                 stage.initModality(Modality.WINDOW_MODAL);
                 stage.initOwner(this.stage);
-                stage.setTitle("User management");
+                stage.setTitle("Users management");
                 stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
 
                 stage.show();
@@ -77,6 +80,25 @@ public class MainController implements StageAware {
                 e.printStackTrace();
             }
         });
+
+        showManagerButton.setOnAction(event -> {
+            try {
+                Stage stage = new Stage();
+                Pair<Parent, UserManagerController> vmLoad = viewManager.load("/fxml/showManager/showManager.fxml", stage);
+                stage.setScene(new Scene(vmLoad.getFirst()));
+
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(this.stage);
+                stage.setTitle("Shows management");
+                stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
+
+                stage.show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
         movieManagerButton.setOnAction(event -> {
 
             try {
@@ -85,7 +107,7 @@ public class MainController implements StageAware {
                 stage.setScene(new Scene(vmLoad.getFirst()));
                 stage.initModality(Modality.WINDOW_MODAL);
                 stage.initOwner(this.stage);
-                stage.setTitle("Movie management");
+                stage.setTitle("Movies management");
                 stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
 
                 stage.show();
@@ -94,8 +116,6 @@ public class MainController implements StageAware {
                 e.printStackTrace();
             }
         });
-        // TODO - implement movie management
-        // TODO - implement ticket sales
 
         logoutButton.setOnAction(event -> {
             authenticationService.logout();
