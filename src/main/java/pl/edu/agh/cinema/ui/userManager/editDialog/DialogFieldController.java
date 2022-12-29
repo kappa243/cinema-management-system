@@ -13,7 +13,6 @@ import pl.edu.agh.cinema.model.user.Role;
 @Component
 @Scope("prototype")
 public class DialogFieldController {
-
     @FXML
     public TextField firstName;
 
@@ -33,16 +32,18 @@ public class DialogFieldController {
     public Label warningMessage;
 
     public boolean validateInput(boolean updatePassword) {
-        // TODO - implement is role selected validation
+
         if (!firstName.getText().matches("[A-Z]{1}[a-z]+") || firstName.getText().isEmpty()) {
             warningMessage.setText("First name should contain only letters and start with uppercase!");
             return false;
         }
-        else if (!lastName.getText().matches("[A-Z]{1}[a-z]+") || lastName.getText().isEmpty()) {
+
+        if (!lastName.getText().matches("[A-Z]{1}[a-z]+") || lastName.getText().isEmpty()) {
             warningMessage.setText("Last name should contain only letters! and start with uppercase");
             return false;
         }
-        else if (updatePassword) {
+
+        if (updatePassword) {
             String passwd = password.getText();
             if (passwd.length() < 8 || !passwd.matches(".*[!@#$%&*(),._+=|<>?{}\\[\\]~-].*")
                     || !passwd.matches(".*[A-Z].*")
@@ -52,15 +53,19 @@ public class DialogFieldController {
                 return false;
             }
         }
-        else if (!email.getText().matches("^[\\w.]+@([\\w-]+.)+[\\w-]{2,4}$") || email.getText().isEmpty()) {
+
+        String RFC5322_EMAIL_PATTERN = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
+        if (!email.getText().matches(RFC5322_EMAIL_PATTERN) || email.getText().isEmpty()) {
             warningMessage.setText("Wrong email address!");
             return false;
         }
-        else if (roleChoiceBox.getSelectionModel().isEmpty()) {
+
+        if (roleChoiceBox.getSelectionModel().isEmpty()) {
             warningMessage.setText("Role not set!");
             return false;
         }
-        else warningMessage.setText("");
+
+        warningMessage.setText("");
         return true;
     }
 
