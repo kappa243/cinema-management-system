@@ -20,7 +20,10 @@ import pl.edu.agh.cinema.model.show.ShowRepository;
 import pl.edu.agh.cinema.model.user.Role;
 import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.UserRepository;
+import pl.edu.agh.cinema.utils.ImageConverter;
 
+import java.awt.*;
+import java.io.File;
 import java.sql.Date;
 import java.util.List;
 
@@ -74,7 +77,9 @@ public class CinemaApplication extends Application {
             User p3 = new User("Anna", "Kowalska", "akowalska@example.com", hashed, Role.MODERATOR);
 
             userRepository.saveAll(List.of(admin, p1, p2, p3));
-            Movie m1 = new Movie("movie1", "nice", Date.valueOf("2001-12-01"));
+
+            byte[] image = ImageConverter.fileToByte(new File("src/main/resources/static/img/movie-icon.png"));
+            Movie m1 = new Movie("movie1", "nice", Date.valueOf("2001-12-01"), image);
             movieRepository.save(m1);
 
             Room room1 = new Room("room1", 20);

@@ -14,11 +14,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Setter;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
-import pl.edu.agh.cinema.StageManager;
 import pl.edu.agh.cinema.ViewManager;
 import pl.edu.agh.cinema.model.movie.Movie;
 import pl.edu.agh.cinema.model.movie.MovieService;
@@ -36,8 +34,8 @@ import java.util.List;
 @Scope("prototype")
 public class MovieManagerController implements StageAware {
 
-    private ViewManager viewManager;
-    private MovieService movieService;
+    private final ViewManager viewManager;
+    private final MovieService movieService;
     @Setter
     private Stage stage;
 
@@ -145,7 +143,7 @@ public class MovieManagerController implements StageAware {
             stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
             stage.setTitle("Add new movie");
 
-            Movie movie = new Movie("", "", Date.valueOf(LocalDate.now()));
+            Movie movie = new Movie("", "", Date.valueOf(LocalDate.now()), null);
             controller.setData(movie);
             controller.setStage(stage);
 

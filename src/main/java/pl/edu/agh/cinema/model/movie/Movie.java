@@ -44,6 +44,18 @@ public class Movie {
         this.releaseDate = releaseDate;
         pcs.firePropertyChange("releaseDate", oldReleaseDate, description);
     }
+
+    @Getter
+    @Lob
+    private byte[] cover;
+
+    public void setCover(byte[] cover) {
+        byte[] oldCover = this.cover;
+        this.cover = cover;
+        pcs.firePropertyChange("cover", oldCover, cover);
+    }
+
+
     @Getter
     @OneToMany(mappedBy="movie")
     Set<Show> shows = new HashSet<>();
@@ -72,10 +84,11 @@ public class Movie {
         pcs = new PropertyChangeSupport(this);
     }
 
-    public Movie(String title, String description, Date releaseDate) {
+    public Movie(String title, String description, Date releaseDate, byte[] cover) {
         this();
         this.title = title;
         this.description = description;
         this.releaseDate = releaseDate;
+        this.cover = cover;
     }
 }
