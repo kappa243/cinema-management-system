@@ -15,7 +15,7 @@ public class Room {
     @Id
     @GeneratedValue
     @Getter
-    private int id;
+    private Long id;
 
     @Getter
     private String roomName;

@@ -1,6 +1,7 @@
 package pl.edu.agh.cinema.model.movie;
 
 import lombok.Getter;
+import lombok.Setter;
 import pl.edu.agh.cinema.model.show.Show;
 
 import javax.persistence.*;
@@ -18,10 +19,12 @@ public class Movie {
     @Id
     @GeneratedValue
     @Getter
-    private int id;
+    @Setter
+    private Long id;
 
     @Getter
     String title;
+
     public void setTitle(String title) {
         String oldTitle = this.title;
         this.title = title;
@@ -29,7 +32,9 @@ public class Movie {
     }
 
     @Getter
+    @Column(columnDefinition = "TEXT")
     String description;
+
     public void setDescription(String description) {
         String oldDescription = this.description;
         this.description = description;
@@ -38,13 +43,24 @@ public class Movie {
 
     @Getter
     Date releaseDate;
+
     public void setReleaseDate(Date releaseDate) {
         Date oldReleaseDate = this.releaseDate;
         this.releaseDate = releaseDate;
-        pcs.firePropertyChange("releaseDate", oldReleaseDate, description);
+        pcs.firePropertyChange("releaseDate", oldReleaseDate, releaseDate);
     }
+
     @Getter
-    @OneToMany(mappedBy="movie")
+    int duration;
+
+    public void setDuration(int duration) {
+        int oldDuration = this.duration;
+        this.duration = duration;
+        pcs.firePropertyChange("duration", oldDuration, duration);
+    }
+
+    @Getter
+    @OneToMany(mappedBy = "movie")
     Set<Show> shows;
 
     public void setShows(Set<Show> shows) {
@@ -65,11 +81,17 @@ public class Movie {
         pcs = new PropertyChangeSupport(this);
     }
 
-    public Movie(String title, String description, Date releaseDate) {
+    public Movie(String title, String description, Date releaseDate, int duration) {
         this();
         this.title = title;
         this.description = description;
         this.releaseDate = releaseDate;
+        this.duration = duration;
+    }
+
+    @Override
+    public String toString() {
+        return title;
     }
 
     @Override

@@ -1,11 +1,8 @@
 package pl.edu.agh.cinema.ui.showManager;
 
-
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
-
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import lombok.Setter;
 import org.springframework.context.ApplicationEventPublisher;
@@ -20,24 +17,38 @@ import pl.edu.agh.cinema.model.show.ShowService;
 import pl.edu.agh.cinema.ui.StageAware;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Scope("prototype")
 public class ShowManagerController implements StageAware {
-    private ApplicationEventPublisher publisher;
-    private StageManager stageManager;
-    private ViewManager viewManager;
-    private ShowService showService;
-    @Setter
-    private Stage stage;
+
+
+    ApplicationEventPublisher publisher;
+    StageManager stageManager;
+    ViewManager viewManager;
+
+    ShowService showService;
+
+    @FXML
+    private Button addNewShowButton;
+
+    @FXML
+    private Button editShowButton;
+
+    @FXML
+    private Button deleteShowButton;
 
     @FXML
     private TableView<Show> showsTable;
 
     @FXML
-    private TableColumn<Show, Movie> movieColumn;
+    private TableColumn<Show, Room> roomColumn;
+
     @FXML
-    private TableColumn<Room, Movie> roomColumn;
+    private TableColumn<Show, Movie> movieColumn;
 
     @FXML
     private TableColumn<Show, Timestamp> startTimeColumn;
@@ -46,13 +57,16 @@ public class ShowManagerController implements StageAware {
     private TableColumn<Show, Timestamp> endTimeColumn;
 
     @FXML
-    private TableColumn<Show, Timestamp> sellTicketsFromColumn;
-
-    @FXML
-    private TableColumn<Show, Double> ticketPriceColumn;
+    private TableColumn<Show, Integer> ticketPriceColumn;
 
     @FXML
     private TableColumn<Show, Integer> soldTicketsColumn;
+
+    @FXML
+    private TextField queryField;
+
+    @Setter
+    private Stage stage;
 
 
     public ShowManagerController(ApplicationEventPublisher publisher,
@@ -60,24 +74,33 @@ public class ShowManagerController implements StageAware {
                                  ViewManager viewManager,
                                  ShowService showService) {
         this.publisher = publisher;
-        this.stageManager = stageManager;
         this.viewManager = viewManager;
+        this.stageManager = stageManager;
+
         this.showService = showService;
     }
 
     @FXML
     public void initialize() {
-        setItems();
-        movieColumn.setCellValueFactory(cellData -> {
-            try {
-                return JavaBeanObjectPropertyBuilder.create()
-                        .bean(cellData.getValue())
-                        .name("movie")
-                        .build();
-            } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
+        showsTable.setItems(showService.getShows());
+
+
+        roomColumn.setCellFactory(column -> {
+            TableCell<Show, Room> cell = new TableCell<Show, Room>() {
+
+                @Override
+                protected void updateItem(Room item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.getRoomName());
+                    }
+                }
+            };
+            return cell;
         });
+
         roomColumn.setCellValueFactory(cellData -> {
             try {
                 return JavaBeanObjectPropertyBuilder.create()
@@ -88,8 +111,53 @@ public class ShowManagerController implements StageAware {
                 throw new RuntimeException(e);
             }
         });
+
+        movieColumn.setCellFactory(column -> {
+            TableCell<Show, Movie> cell = new TableCell<Show, Movie>() {
+
+                @Override
+                protected void updateItem(Movie item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.getTitle());
+                    }
+                }
+            };
+            return cell;
+        });
+        movieColumn.setCellValueFactory(cellData -> {
+            try {
+                return JavaBeanObjectPropertyBuilder.create()
+                        .bean(cellData.getValue())
+                        .name("movie")
+                        .build();
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        startTimeColumn.setCellFactory(column -> {
+            TableCell<Show, Timestamp> cell = new TableCell<Show, Timestamp>() {
+                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+
+                @Override
+                protected void updateItem(Timestamp item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(format.format(item));
+                    }
+                }
+            };
+
+            return cell;
+        });
         startTimeColumn.setCellValueFactory(cellData -> {
             try {
+                //noinspection unchecked
                 return JavaBeanObjectPropertyBuilder.create()
                         .bean(cellData.getValue())
                         .name("startTime")
@@ -98,8 +166,28 @@ public class ShowManagerController implements StageAware {
                 throw new RuntimeException(e);
             }
         });
+
+        endTimeColumn.setCellFactory(column -> {
+            TableCell<Show, Timestamp> cell = new TableCell<Show, Timestamp>() {
+                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+
+                @Override
+                protected void updateItem(Timestamp item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(format.format(item));
+                    }
+                }
+            };
+
+            return cell;
+        });
+
         endTimeColumn.setCellValueFactory(cellData -> {
             try {
+                //noinspection unchecked
                 return JavaBeanObjectPropertyBuilder.create()
                         .bean(cellData.getValue())
                         .name("endTime")
@@ -108,18 +196,10 @@ public class ShowManagerController implements StageAware {
                 throw new RuntimeException(e);
             }
         });
-        sellTicketsFromColumn.setCellValueFactory(cellData -> {
-            try {
-                return JavaBeanObjectPropertyBuilder.create()
-                        .bean(cellData.getValue())
-                        .name("sellTicketsFrom")
-                        .build();
-            } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
-        });
+
         ticketPriceColumn.setCellValueFactory(cellData -> {
             try {
+                //noinspection unchecked
                 return JavaBeanObjectPropertyBuilder.create()
                         .bean(cellData.getValue())
                         .name("ticketPrice")
@@ -128,8 +208,10 @@ public class ShowManagerController implements StageAware {
                 throw new RuntimeException(e);
             }
         });
+
         soldTicketsColumn.setCellValueFactory(cellData -> {
             try {
+                //noinspection unchecked
                 return JavaBeanObjectPropertyBuilder.create()
                         .bean(cellData.getValue())
                         .name("soldTickets")
@@ -138,11 +220,28 @@ public class ShowManagerController implements StageAware {
                 throw new RuntimeException(e);
             }
         });
+
+        queryField.setOnKeyTyped(e -> this.setItems());
+
     }
 
-    @FXML
     public void setItems() {
-        showsTable.setItems(showService.getShows());
-    }
+        showsTable.setItems(showService.getShows().filtered(show -> {
+            List<String> queries = new ArrayList<>(List.of(queryField.getText().split(" ")));
 
+            // remove empty queries
+            queries.removeIf(String::isEmpty);
+
+            if (queries.isEmpty()) {
+                return true;
+            }
+
+            return queries.stream().allMatch(query -> {
+                String lowerCaseQuery = query.toLowerCase();
+                return show.getMovie().getTitle().toLowerCase().contains(lowerCaseQuery) ||
+                        show.getRoom().getRoomName().toLowerCase().contains(lowerCaseQuery);
+            });
+
+        }));
+    }
 }

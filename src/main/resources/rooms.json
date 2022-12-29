@@ -1,0 +1,24 @@
+{
+  "rooms": [
+    {
+      "name": "S1",
+      "capacity": "100"
+    },
+    {
+      "name": "S2",
+      "capacity": "200"
+    },
+    {
+      "name": "S3",
+      "capacity": "80"
+    },
+    {
+      "name": "S4",
+      "capacity": "60"
+    },
+    {
+      "name": "S5",
+      "capacity": "40"
+    }
+  ]
+}

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import pl.edu.agh.cinema.StageManager;
 import pl.edu.agh.cinema.ViewManager;
 import pl.edu.agh.cinema.auth.AuthenticationService;
+import pl.edu.agh.cinema.ui.showManager.ShowManagerController;
 import pl.edu.agh.cinema.ui.userManager.UserManagerController;
 
 @Component
@@ -28,7 +29,7 @@ public class MainController implements StageAware {
     private Button userManagerButton;
 
     @FXML
-    private Button movieManagerButton;
+    private Button showManagerButton;
 
     @FXML
     private Button ticketManagerButton;
@@ -53,7 +54,7 @@ public class MainController implements StageAware {
             pane.getChildren().remove(userManagerButton);
         }
         if(!authenticationService.isAuthorized("movies")){
-            pane.getChildren().remove(movieManagerButton);
+            pane.getChildren().remove(showManagerButton);
         }
         if(!authenticationService.isAuthorized("tickets")){
             pane.getChildren().remove(ticketManagerButton);
@@ -77,10 +78,15 @@ public class MainController implements StageAware {
                 e.printStackTrace();
             }
         });
-        movieManagerButton.setOnAction(event -> {
+
+
+
+        // TODO - implement movie management
+
+        showManagerButton.setOnAction(event -> {
             try {
                 Stage stage = new Stage();
-                Pair<Parent, UserManagerController> vmLoad = viewManager.load("/fxml/showManager/showManager.fxml", stage);
+                Pair<Parent, ShowManagerController> vmLoad = viewManager.load("/fxml/showManager/showManager.fxml", stage);
                 stage.setScene(new Scene(vmLoad.getFirst()));
 
                 stage.initModality(Modality.WINDOW_MODAL);
@@ -94,7 +100,6 @@ public class MainController implements StageAware {
                 e.printStackTrace();
             }
         });
-        // TODO - implement movie management
         // TODO - implement ticket sales
 
         logoutButton.setOnAction(event -> {
