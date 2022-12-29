@@ -3,6 +3,8 @@ package pl.edu.agh.cinema;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -11,10 +13,26 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import pl.edu.agh.cinema.model.movie.Movie;
+import pl.edu.agh.cinema.model.movie.MovieRepository;
+import pl.edu.agh.cinema.model.movie.MovieService;
+import pl.edu.agh.cinema.model.room.Room;
+import pl.edu.agh.cinema.model.room.RoomRepository;
+import pl.edu.agh.cinema.model.show.Show;
+import pl.edu.agh.cinema.model.show.ShowRepository;
 import pl.edu.agh.cinema.model.user.Role;
 import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.UserRepository;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @SpringBootApplication
@@ -67,8 +85,87 @@ public class CinemaApplication extends Application {
             User p3 = new User("Anna", "Kowalska", "akowalska@example.com", hashed, Role.MODERATOR);
 
             userRepository.saveAll(List.of(admin, p1, p2, p3));
+        };
+    }
+
+    @Bean
+    public CommandLineRunner addMovies(MovieService movieService) {
+        return args -> {
+
+            String movieData = """
+                    Triangle of Sadness; In Ruben Östlund's wickedly funny Palme d'Or winner, social hierarchy is turned upside down, revealing the tawdry relationship between power and beauty. Celebrity model couple, Carl (Harris Dickinson) and Yaya (Charlbi Dean), are invited on a luxury cruise for the uber-rich, helmed by an unhinged boat captain (Woody Harrelson). What first appeared instagrammable ends catastrophically, leaving the survivors stranded on a desert island and fighting for survival.; 2023-01-06; 147
+                    Avatar: The Way of Water; Jake Sully lives with his newfound family formed on the extrasolar moon Pandora. Once a familiar threat returns to finish what was previously started, Jake must work with Neytiri and the army of the Na'vi race to protect their home.; 2022-12-16; 192
+                    Glass Onion: A Knives Out Mystery; Five long-time friends are invited to the Greek island home of billionaire Miles Bron. All five know Bron from way back and owe their current wealth, fame and careers to him. The main event is a murder weekend game with Bron to be the victim. In reality, they all have reasons to kill him. Also invited is Benoit Blanc, the world's greatest detective.; 2022-12-23; 139
+                    Babilon; An original epic set in 1920s Los Angeles led by Brad Pitt, Margot Robbie and Diego Calva, with an ensemble cast including Jovan Adepo, Li Jun Li and Jean Smart. A tale of outsized ambition and outrageous excess, it traces the rise and fall of multiple characters during an era of unbridled decadence and depravity in early Hollywood.; 2023-01-20; 188
+                    The Banshees of Inisherin; Set on a remote island off the west coast of Ireland, THE BANSHEES OF INISHERIN follows lifelong friends Padraic (Colin Farrell) and Colm (Brendan Gleeson), who find themselves at an impasse when Colm unexpectedly puts an end to their friendship. A stunned Padraic, aided by his sister Siobhan (Kerry Condon) and troubled young islander Dominic (Barry Keoghan), endeavours to repair the relationship, refusing to take no for an answer. But Padraic's repeated efforts only strengthen his former friend's resolve and when Colm delivers a desperate ultimatum, events swiftly escalate, with shocking consequences.; 2023-01-23; 128
+                    Black Adam; Reawakening after 5000 years, Black Adam becomes the world's ruthless protector: an anti-villain to take on the likes of Superman and Wonder Woman. Now in the 21st-Century, Black Adam must face off against the Justice Society of America and its heroes: Doctor Fate, Hawkman, Atom Smasher and Cyclone. The fate of the world hangs in the balance.; 2022-10-21; 125
+                    Guillermo del Toro's Pinocchio; Academy Award®-winning filmmaker Guillermo del Toro reinvents Carlo Collodi's classic tale of the wooden marionette who is magically brought to life in order to mend the heart of a grieving woodcarver named Geppetto. This whimsical, stop-motion musical directed by Guillermo del Toro and Mark Gustafson follows the mischievous and disobedient adventures of Pinocchio in his pursuit of a place in the world.; 2022-12-09; 117
+                    Bullet Train; Unlucky assassin Ladybug (Brad Pitt) is determined to do his job peacefully after one too many gigs has gone off the rails. Fate has other plans, however: Ladybug's latest mission puts him on a collision course with lethal adversaries from around the globe--all with connected, yet conflicting, objectives--on the world's fastest train. The end of the line is just the beginning in this non-stop thrill-ride through modern-day Japan.; 2022-08-05; 127
+                    Top Gun: Maverick; Set 30 years after its predecessor, it follows Maverick's return to the United States Navy Strike Fighter Tactics Instructor program (also known as U.S. Navy-Fighter Weapons School - "TOPGUN"), where he must confront his past as he trains a group of younger pilots, among them the son of Maverick's deceased best friend Lieutenant Nick "Goose" Bradshaw, USN.; 2022-05-27; 130 
+                    """;
+
+            BufferedReader r = new BufferedReader(new StringReader(movieData));
+            List<Movie> movieList = new ArrayList<>();
+            for (; ; ) {
+                String line = r.readLine();
+                if (line == null) break;
+                String[] movieTab = line.split(";\\s*");
+
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                Date dateStr = formatter.parse(movieTab[2]);
+                java.sql.Date sqlDate = new java.sql.Date(dateStr.getTime());
+                Movie m = new Movie(movieTab[0], movieTab[1], sqlDate, Integer.parseInt(movieTab[3]));
+                System.out.println(m);
+                movieList.add(m);
+            }
+
+            movieService.saveAll(movieList);
+
+        };
+    }
+
+    List<Room> readRooms() {
+        List<Room> rooms = new ArrayList<>();
+        try {
+            String content = null;
+//            content = Files.readString(Paths.get(getClass().getResource("/resources/rooms.json").toURI()));
+            content = Files.readString(Path.of("src/main/resources/rooms.json"));
+            JSONObject jo = new JSONObject(content);
+//            System.out.println(jo.get("rooms"));
+            for (var r : (JSONArray) jo.get("rooms")) {
+                var name = (String) ((JSONObject) r).get("name");
+                var capacity = (String) ((JSONObject) r).get("capacity");
+                rooms.add(new Room(name, Integer.parseInt(capacity)));
+//                System.out.println(name+" "+Integer.parseInt(capacity));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return rooms;
+    }
+
+    @Bean
+    public CommandLineRunner addRooms(RoomRepository roomRepository) {
+        return args -> {
+            List<Room> rooms = readRooms();
+            roomRepository.saveAll(rooms);
+        };
+    }
 
 
+    @Bean
+    public CommandLineRunner addShows(ShowRepository showRepository, MovieRepository movieRepository, RoomRepository roomRepository) {
+        return args -> {
+            Show show1 = new Show(Timestamp.valueOf("2022-11-12 11:00:03.123456789"), Timestamp.valueOf("2022-11-12 13:02:03.123456789"), Timestamp.valueOf("2018-11-12 01:02:03.123456789"), 12, 38);
+            List<Movie> movies = movieRepository.findAll();
+            show1.setMovie(movies.get(0));
+            List<Room> rooms = roomRepository.findAll();
+            show1.setRoom(rooms.get(0));
+            showRepository.save(show1);
+//            System.out.println(showRepository.getShowsForMovie(movies.get(0).getId()));
+//            System.out.println(showRepository.getShowsForDateAndRoom(12, 11, 2022, rooms.get(0).getId()));
         };
     }
 }

@@ -18,7 +18,7 @@ public class Show {
     @Id
     @GeneratedValue
     @Getter
-    int id;
+    Long id;
 
     @ManyToOne
     @JoinColumn(name = "movie_id")

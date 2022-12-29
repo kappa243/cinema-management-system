@@ -15,7 +15,7 @@ public class Room {
     @Id
     @GeneratedValue
     @Getter
-    private int id;
+    private Long id;
 
     @Getter
     private String roomName;
@@ -48,7 +48,7 @@ public class Room {
         pcs.removePropertyChangeListener(listener);
     }
 
-    Room(String roomName, int seatsNumber){
+    public Room(String roomName, int seatsNumber){
         this();
         this.roomName=roomName;
         this.seatsNumber=seatsNumber;
