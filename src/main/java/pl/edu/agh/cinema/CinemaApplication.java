@@ -13,6 +13,10 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import pl.edu.agh.cinema.model.movie.Movie;
 import pl.edu.agh.cinema.model.movie.MovieRepository;
+import pl.edu.agh.cinema.model.room.Room;
+import pl.edu.agh.cinema.model.room.RoomRepository;
+import pl.edu.agh.cinema.model.show.Show;
+import pl.edu.agh.cinema.model.show.ShowRepository;
 import pl.edu.agh.cinema.model.user.Role;
 import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.UserRepository;
@@ -60,7 +64,7 @@ public class CinemaApplication extends Application {
     }
 
     @Bean
-    public CommandLineRunner demo(UserRepository userRepository, MovieRepository movieRepository) {
+    public CommandLineRunner demo(UserRepository userRepository, MovieRepository movieRepository, ShowRepository showRepository, RoomRepository roomRepository) {
         return args -> {
             String password = "admin";
             String hashed = BCrypt.hashpw(password, BCrypt.gensalt());
@@ -72,6 +76,16 @@ public class CinemaApplication extends Application {
             userRepository.saveAll(List.of(admin, p1, p2, p3));
             Movie m1 = new Movie("movie1", "nice", Date.valueOf("2001-12-01"));
             movieRepository.save(m1);
+
+            Room room1 = new Room("room1", 20);
+
+            roomRepository.save(room1);
+
+            Show show1 = new Show(Date.valueOf("2020-12-01"),  Date.valueOf("2020-12-02"), Date.valueOf("2020-11-31"), 10, 10);
+            show1.setMovie(m1);
+            show1.setRoom(room1);
+
+            showRepository.save(show1);
         };
     }
 }

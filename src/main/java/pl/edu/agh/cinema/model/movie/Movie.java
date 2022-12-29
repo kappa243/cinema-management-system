@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -45,12 +46,18 @@ public class Movie {
     }
     @Getter
     @OneToMany(mappedBy="movie")
-    Set<Show> shows;
+    Set<Show> shows = new HashSet<>();
 
-    public void setShows(Set<Show> shows) {
-        Set<Show> oldShows = this.shows;
-        this.shows = shows;
-        pcs.firePropertyChange("shows", oldShows, shows);
+    public void addShow(Show show){
+        this.shows.add(show);
+
+        pcs.firePropertyChange("shows", null, shows);
+    }
+
+    public void removeShow(Show show){
+        this.shows.remove(show);
+
+        pcs.firePropertyChange("shows", null, shows);
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
