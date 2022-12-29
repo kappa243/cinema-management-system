@@ -1,4 +1,4 @@
-package pl.edu.agh.cinema.ui.userManager.editDialog;
+package pl.edu.agh.cinema.ui.userManager.editUserDialog;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -11,7 +11,7 @@ import pl.edu.agh.cinema.model.user.Role;
 
 @Component
 @Scope("prototype")
-public class DialogFieldController {
+public class UserDialogFieldController {
 
     @FXML
     public TextField firstName;

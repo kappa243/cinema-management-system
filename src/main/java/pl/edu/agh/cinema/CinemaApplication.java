@@ -11,10 +11,13 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import pl.edu.agh.cinema.model.movie.Movie;
+import pl.edu.agh.cinema.model.movie.MovieRepository;
 import pl.edu.agh.cinema.model.user.Role;
 import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.UserRepository;
 
+import java.sql.Date;
 import java.util.List;
 
 @SpringBootApplication
@@ -57,7 +60,7 @@ public class CinemaApplication extends Application {
     }
 
     @Bean
-    public CommandLineRunner demo(UserRepository userRepository) {
+    public CommandLineRunner demo(UserRepository userRepository, MovieRepository movieRepository) {
         return args -> {
             String password = "admin";
             String hashed = BCrypt.hashpw(password, BCrypt.gensalt());
@@ -67,8 +70,8 @@ public class CinemaApplication extends Application {
             User p3 = new User("Anna", "Kowalska", "akowalska@example.com", hashed, Role.MODERATOR);
 
             userRepository.saveAll(List.of(admin, p1, p2, p3));
-
-
+            Movie m1 = new Movie("movie1", "nice", Date.valueOf("2001-12-01"));
+            movieRepository.save(m1);
         };
     }
 }

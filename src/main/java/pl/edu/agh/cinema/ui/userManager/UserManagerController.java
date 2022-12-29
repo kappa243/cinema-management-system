@@ -24,8 +24,8 @@ import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.UserService;
 import pl.edu.agh.cinema.model.user.Role;
 import pl.edu.agh.cinema.ui.StageAware;
-import pl.edu.agh.cinema.ui.userManager.editDialog.AddUserController;
-import pl.edu.agh.cinema.ui.userManager.editDialog.EditUserController;
+import pl.edu.agh.cinema.ui.userManager.editUserDialog.AddUserController;
+import pl.edu.agh.cinema.ui.userManager.editUserDialog.EditUserController;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -150,7 +150,7 @@ public class UserManagerController implements StageAware {
         try {
             Stage stage = new Stage();
 
-            Pair<Parent, AddUserController> vmLoad = viewManager.load("/fxml/userManager/editDialog/addUser.fxml", stage);
+            Pair<Parent, AddUserController> vmLoad = viewManager.load("/fxml/userManager/editMovieDialog/addUser.fxml", stage);
             Parent parent = vmLoad.getFirst();
             AddUserController controller = vmLoad.getSecond();
 
@@ -175,7 +175,7 @@ public class UserManagerController implements StageAware {
     private void handleEditAction(ActionEvent event) {
         try {
             Stage stage = new Stage();
-            Pair<Parent, EditUserController> vmLoad = viewManager.load("/fxml/userManager/editDialog/editUser.fxml", stage);
+            Pair<Parent, EditUserController> vmLoad = viewManager.load("/fxml/userManager/editMovieDialog/editUser.fxml", stage);
             Parent parent = vmLoad.getFirst();
             EditUserController controller = vmLoad.getSecond();
 

@@ -77,7 +77,23 @@ public class MainController implements StageAware {
                 e.printStackTrace();
             }
         });
+        movieManagerButton.setOnAction(event -> {
 
+            try {
+                Stage stage = new Stage();
+                Pair<Parent, UserManagerController> vmLoad = viewManager.load("/fxml/movieManager/movieManager.fxml", stage);
+                stage.setScene(new Scene(vmLoad.getFirst()));
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(this.stage);
+                stage.setTitle("Movie management");
+                stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
+
+                stage.show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         // TODO - implement movie management
         // TODO - implement ticket sales
 

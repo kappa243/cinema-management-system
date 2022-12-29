@@ -4,14 +4,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="530.0" prefWidth="492.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="pl.edu.agh.cinema.ui.userManager.editDialog.AddUserController">
+            fx:controller="pl.edu.agh.cinema.ui.userManager.editUserDialog.EditUserController">
     <Button fx:id="confirmButton" layoutX="195.0" layoutY="457.0" mnemonicParsing="false" prefHeight="30.0"
-            prefWidth="102.0" text="Add User" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="195.0"
+            prefWidth="102.0" text="Edit User" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="195.0"
             AnchorPane.topAnchor="457.0">
         <font>
             <Font size="14.0"/>
         </font>
     </Button>
     <fx:include fx:id="dialogFields" layoutX="106.0" layoutY="25.0" AnchorPane.leftAnchor="106.0"
-                AnchorPane.rightAnchor="106.0" AnchorPane.topAnchor="25.0" source="dialogFields.fxml"/>
+                AnchorPane.rightAnchor="106.0" AnchorPane.topAnchor="25.0" source="userDialogFields.fxml"/>
 </AnchorPane>
