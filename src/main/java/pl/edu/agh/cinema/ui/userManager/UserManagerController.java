@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Setter;
@@ -17,12 +18,11 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
-import pl.edu.agh.cinema.ApplicationCloseEvent;
 import pl.edu.agh.cinema.StageManager;
 import pl.edu.agh.cinema.ViewManager;
+import pl.edu.agh.cinema.model.user.Role;
 import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.UserService;
-import pl.edu.agh.cinema.model.user.Role;
 import pl.edu.agh.cinema.ui.StageAware;
 import pl.edu.agh.cinema.ui.userManager.editDialog.AddUserController;
 import pl.edu.agh.cinema.ui.userManager.editDialog.EditUserController;
@@ -30,6 +30,8 @@ import pl.edu.agh.cinema.ui.userManager.editDialog.EditUserController;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Scope("prototype")
@@ -39,11 +41,7 @@ public class UserManagerController implements StageAware {
     ApplicationEventPublisher publisher;
     StageManager stageManager;
     ViewManager viewManager;
-
     UserService userService;
-
-    @FXML
-    private Button exitButton;
 
     @FXML
     private Button addNewUserButton;
@@ -67,6 +65,10 @@ public class UserManagerController implements StageAware {
     private TableColumn<User, String> emailColumn;
 
     @FXML
+    private TextField queryField;
+
+
+    @FXML
     @Enumerated(EnumType.STRING)
     private TableColumn<User, Role> roleColumn;
 
@@ -87,7 +89,8 @@ public class UserManagerController implements StageAware {
 
     @FXML
     public void initialize() {
-        usersTable.setItems(userService.getUsers());
+
+        setItems();
 
         firstNameColumn.setCellValueFactory(cellData -> {
             try {
@@ -133,7 +136,6 @@ public class UserManagerController implements StageAware {
             }
         });
 
-        exitButton.setOnAction(event -> publisher.publishEvent(new ApplicationCloseEvent(this)));
 
         addNewUserButton.setOnAction(this::handleAddAction);
 
@@ -143,8 +145,41 @@ public class UserManagerController implements StageAware {
         editUserButton.setOnAction(this::handleEditAction);
 
         deleteUserButton.setOnAction(this::handleDeleteAction);
+
+        queryField.setOnKeyTyped(e -> this.setItems());
     }
 
+    public void setItems() {
+        usersTable.setItems(userService.getUsers().filtered(user -> {
+            List<String> queries = new ArrayList<>(List.of(queryField.getText().split(" ")));
+
+            // remove empty queries
+            queries.removeIf(String::isEmpty);
+
+            if (queries.isEmpty()) {
+                return true;
+            }
+
+            return queries.stream().allMatch(query -> {
+                String lowerCaseQuery = query.toLowerCase();
+                return user.getFirstName().toLowerCase().contains(lowerCaseQuery) ||
+                        user.getLastName().toLowerCase().contains(lowerCaseQuery) ||
+                        user.getEmail().toLowerCase().contains(lowerCaseQuery) ||
+                        user.getRole().toString().toLowerCase().contains(lowerCaseQuery);
+            });
+
+        }));
+
+
+//        usersTable.setItems(userService.getUsers().filtered(user -> {
+//            boolean match = user.getFirstName().matches(".*" + firstNameQuery.getText() + ".*") &&
+//                    user.getLastName().matches(".*" + lastNameQuery.getText() + ".*") &&
+//                    user.getEmail().matches(".*" + emailQuery.getText() + ".*");
+//            if (roleQuery.getValue() != null) {
+//                return match && user.getRole().equals(roleQuery.getValue());
+//            } else return match;
+//        }));
+    }
 
     private void handleAddAction(ActionEvent event) {
         try {
@@ -166,6 +201,7 @@ public class UserManagerController implements StageAware {
             controller.setStage(stage);
 
             stage.showAndWait();
+            setItems();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -192,6 +228,7 @@ public class UserManagerController implements StageAware {
             controller.setStage(stage);
 
             stage.showAndWait();
+            setItems();
 
         } catch (IOException e) {
             e.printStackTrace();
