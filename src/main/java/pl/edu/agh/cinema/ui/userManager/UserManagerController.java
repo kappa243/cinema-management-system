@@ -169,16 +169,6 @@ public class UserManagerController implements StageAware {
             });
 
         }));
-
-
-//        usersTable.setItems(userService.getUsers().filtered(user -> {
-//            boolean match = user.getFirstName().matches(".*" + firstNameQuery.getText() + ".*") &&
-//                    user.getLastName().matches(".*" + lastNameQuery.getText() + ".*") &&
-//                    user.getEmail().matches(".*" + emailQuery.getText() + ".*");
-//            if (roleQuery.getValue() != null) {
-//                return match && user.getRole().equals(roleQuery.getValue());
-//            } else return match;
-//        }));
     }
 
     private void handleAddAction(ActionEvent event) {

@@ -2,10 +2,7 @@ package pl.edu.agh.cinema.ui.showManager;
 
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import lombok.Setter;
 import org.springframework.context.ApplicationEventPublisher;
@@ -21,6 +18,8 @@ import pl.edu.agh.cinema.ui.StageAware;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Scope("prototype")
@@ -62,6 +61,9 @@ public class ShowManagerController implements StageAware {
 
     @FXML
     private TableColumn<Show, Integer> soldTicketsColumn;
+
+    @FXML
+    private TextField queryField;
 
     @Setter
     private Stage stage;
@@ -219,5 +221,27 @@ public class ShowManagerController implements StageAware {
             }
         });
 
+        queryField.setOnKeyTyped(e -> this.setItems());
+
+    }
+
+    public void setItems() {
+        showsTable.setItems(showService.getShows().filtered(show -> {
+            List<String> queries = new ArrayList<>(List.of(queryField.getText().split(" ")));
+
+            // remove empty queries
+            queries.removeIf(String::isEmpty);
+
+            if (queries.isEmpty()) {
+                return true;
+            }
+
+            return queries.stream().allMatch(query -> {
+                String lowerCaseQuery = query.toLowerCase();
+                return show.getMovie().getTitle().toLowerCase().contains(lowerCaseQuery) ||
+                        show.getRoom().getRoomName().toLowerCase().contains(lowerCaseQuery);
+            });
+
+        }));
     }
 }

@@ -10,7 +10,6 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.sql.Date;
 import java.util.Set;
-@ToString
 @Entity
 public class Movie {
 
