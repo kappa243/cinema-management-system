@@ -48,9 +48,14 @@ public class Room {
         pcs.removePropertyChangeListener(listener);
     }
 
-    Room(String roomName, int seatsNumber){
+    public Room(String roomName, int seatsNumber){
         this();
         this.roomName=roomName;
         this.seatsNumber=seatsNumber;
+    }
+
+    @Override
+    public String toString() {
+        return roomName;
     }
 }

@@ -7,9 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Setter;
@@ -67,6 +67,15 @@ public class UserManagerController implements StageAware {
     private TableColumn<User, String> emailColumn;
 
     @FXML
+    private TextField firstNameQuery;
+    @FXML
+    private TextField lastNameQuery;
+    @FXML
+    private TextField emailQuery;
+    @FXML
+    private ChoiceBox<Role> roleQuery;
+
+    @FXML
     @Enumerated(EnumType.STRING)
     private TableColumn<User, Role> roleColumn;
 
@@ -87,7 +96,10 @@ public class UserManagerController implements StageAware {
 
     @FXML
     public void initialize() {
-        usersTable.setItems(userService.getUsers());
+        roleQuery.getItems().addAll(Role.values());
+        roleQuery.getItems().add(null);
+
+        setItems();
 
         firstNameColumn.setCellValueFactory(cellData -> {
             try {
@@ -143,9 +155,24 @@ public class UserManagerController implements StageAware {
         editUserButton.setOnAction(this::handleEditAction);
 
         deleteUserButton.setOnAction(this::handleDeleteAction);
+
+        roleQuery.setOnAction(e -> this.setItems());
+        firstNameQuery.setOnKeyTyped(e -> this.setItems());
+        lastNameQuery.setOnKeyTyped(e -> this.setItems());
+        emailQuery.setOnKeyTyped(e -> this.setItems());
     }
 
-
+    @FXML
+    public void setItems() {
+        usersTable.setItems(userService.getUsers().filtered(user -> {
+            boolean match = user.getFirstName().matches(".*" + firstNameQuery.getText() + ".*") &&
+                    user.getLastName().matches(".*" + lastNameQuery.getText() + ".*") &&
+                    user.getEmail().matches(".*" + emailQuery.getText() + ".*");
+            if (roleQuery.getValue() != null) {
+                return match && user.getRole().equals(roleQuery.getValue());
+            } else return match;
+        }));
+    }
     private void handleAddAction(ActionEvent event) {
         try {
             Stage stage = new Stage();
