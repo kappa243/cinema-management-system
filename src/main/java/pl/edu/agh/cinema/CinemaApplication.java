@@ -159,11 +159,18 @@ public class CinemaApplication extends Application {
     public CommandLineRunner addShows(ShowRepository showRepository, MovieRepository movieRepository, RoomRepository roomRepository) {
         return args -> {
             Show show1 = new Show(Timestamp.valueOf("2022-11-12 11:00:03.123456789"), Timestamp.valueOf("2022-11-12 13:02:03.123456789"), Timestamp.valueOf("2018-11-12 01:02:03.123456789"), 12, 38);
+            Show show2 = new Show(Timestamp.valueOf("2022-11-12 15:00:03.123456789"), Timestamp.valueOf("2022-11-12 17:02:03.123456789"), Timestamp.valueOf("2018-11-12 01:02:03.123456789"), 40, 24);
+
             List<Movie> movies = movieRepository.findAll();
-            show1.setMovie(movies.get(0));
             List<Room> rooms = roomRepository.findAll();
+
+            show1.setMovie(movies.get(0));
             show1.setRoom(rooms.get(0));
-            showRepository.save(show1);
+
+            show2.setMovie(movies.get(1));
+            show2.setRoom(rooms.get(1));
+
+            showRepository.saveAll(List.of(show1, show2));
 //            System.out.println(showRepository.getShowsForMovie(movies.get(0).getId()));
 //            System.out.println(showRepository.getShowsForDateAndRoom(12, 11, 2022, rooms.get(0).getId()));
         };
