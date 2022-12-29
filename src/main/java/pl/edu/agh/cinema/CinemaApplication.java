@@ -1,10 +1,13 @@
 package pl.edu.agh.cinema;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -25,10 +28,9 @@ import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.UserRepository;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -127,18 +129,14 @@ public class CinemaApplication extends Application {
     List<Room> readRooms() {
         List<Room> rooms = new ArrayList<>();
         try {
-            String content = null;
-//            content = Files.readString(Paths.get(getClass().getResource("/resources/rooms.json").toURI()));
-            content = Files.readString(Path.of("src/main/resources/rooms.json"));
-            JSONObject jo = new JSONObject(content);
-//            System.out.println(jo.get("rooms"));
-            for (var r : (JSONArray) jo.get("rooms")) {
-                var name = (String) ((JSONObject) r).get("name");
-                var capacity = (String) ((JSONObject) r).get("capacity");
-                rooms.add(new Room(name, Integer.parseInt(capacity)));
-//                System.out.println(name+" "+Integer.parseInt(capacity));
-            }
+            JsonObject data = JsonParser.parseReader(new JsonReader(new BufferedReader(new FileReader("src/main/resources/rooms.json")))).getAsJsonObject();
+            JsonArray jsonRooms = data.getAsJsonArray("rooms");
 
+            for (JsonElement jsonRoom : jsonRooms) {
+                JsonObject jo = jsonRoom.getAsJsonObject();
+                Room room = new Room(jo.get("name").getAsString(), jo.get("capacity").getAsInt());
+                rooms.add(room);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

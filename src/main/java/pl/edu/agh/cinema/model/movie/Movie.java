@@ -2,7 +2,6 @@ package pl.edu.agh.cinema.model.movie;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import pl.edu.agh.cinema.model.show.Show;
 
 import javax.persistence.*;
@@ -10,6 +9,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.sql.Date;
 import java.util.Set;
+
 @Entity
 public class Movie {
 
@@ -24,6 +24,7 @@ public class Movie {
 
     @Getter
     String title;
+
     public void setTitle(String title) {
         String oldTitle = this.title;
         this.title = title;
@@ -33,6 +34,7 @@ public class Movie {
     @Getter
     @Column(columnDefinition = "TEXT")
     String description;
+
     public void setDescription(String description) {
         String oldDescription = this.description;
         this.description = description;
@@ -41,6 +43,7 @@ public class Movie {
 
     @Getter
     Date releaseDate;
+
     public void setReleaseDate(Date releaseDate) {
         Date oldReleaseDate = this.releaseDate;
         this.releaseDate = releaseDate;
@@ -49,14 +52,15 @@ public class Movie {
 
     @Getter
     int duration;
-    public void setDuration(int duration){
-        int oldDuration=this.duration;
-        this.duration=duration;
+
+    public void setDuration(int duration) {
+        int oldDuration = this.duration;
+        this.duration = duration;
         pcs.firePropertyChange("duration", oldDuration, duration);
     }
 
     @Getter
-    @OneToMany(mappedBy="movie")
+    @OneToMany(mappedBy = "movie")
     Set<Show> shows;
 
     public void setShows(Set<Show> shows) {
@@ -82,7 +86,7 @@ public class Movie {
         this.title = title;
         this.description = description;
         this.releaseDate = releaseDate;
-        this.duration=duration;
+        this.duration = duration;
     }
 
     @Override
