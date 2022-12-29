@@ -71,4 +71,9 @@ public class Movie {
         this.description = description;
         this.releaseDate = releaseDate;
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }
