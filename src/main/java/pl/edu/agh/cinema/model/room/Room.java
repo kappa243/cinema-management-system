@@ -53,4 +53,9 @@ public class Room {
         this.roomName=roomName;
         this.seatsNumber=seatsNumber;
     }
+
+    @Override
+    public String toString() {
+        return roomName;
+    }
 }

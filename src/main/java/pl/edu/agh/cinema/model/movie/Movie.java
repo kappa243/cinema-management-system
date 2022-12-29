@@ -85,4 +85,9 @@ public class Movie {
         this.releaseDate = releaseDate;
         this.duration=duration;
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }
