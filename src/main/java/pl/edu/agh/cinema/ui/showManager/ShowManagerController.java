@@ -1,12 +1,18 @@
 package pl.edu.agh.cinema.ui.showManager;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Setter;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import pl.edu.agh.cinema.StageManager;
 import pl.edu.agh.cinema.ViewManager;
@@ -15,7 +21,10 @@ import pl.edu.agh.cinema.model.room.Room;
 import pl.edu.agh.cinema.model.show.Show;
 import pl.edu.agh.cinema.model.show.ShowService;
 import pl.edu.agh.cinema.ui.StageAware;
+import pl.edu.agh.cinema.ui.showManager.editShowDialog.AddShowController;
+import pl.edu.agh.cinema.ui.showManager.editShowDialog.EditShowController;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,11 +35,11 @@ import java.util.List;
 public class ShowManagerController implements StageAware {
 
 
-    ApplicationEventPublisher publisher;
-    StageManager stageManager;
-    ViewManager viewManager;
+    private ApplicationEventPublisher publisher;
+    private StageManager stageManager;
+    private ViewManager viewManager;
 
-    ShowService showService;
+    private ShowService showService;
 
     @FXML
     private Button addNewShowButton;
@@ -222,7 +231,16 @@ public class ShowManagerController implements StageAware {
         });
 
         queryField.setOnKeyTyped(e -> this.setItems());
+        deleteShowButton.setOnAction(this::handleDeleteAction);
+        addNewShowButton.setOnAction(this::handleAddAction);
+        editShowButton.setOnAction(this::handleEditAction);
 
+        editShowButton.disableProperty().bind(
+                Bindings.size(showsTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
+        );
+        deleteShowButton.disableProperty().bind(
+                Bindings.size(showsTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
+        );
     }
 
     public void setItems() {
@@ -243,5 +261,62 @@ public class ShowManagerController implements StageAware {
             });
 
         }));
+    }
+
+    private void handleAddAction(ActionEvent event) {
+        try {
+            Stage stage = new Stage();
+
+            Pair<Parent, AddShowController> vmLoad = viewManager.load("/fxml/showManager/editShowDialog/addShow.fxml", stage);
+            Parent parent = vmLoad.getFirst();
+            AddShowController controller = vmLoad.getSecond();
+
+            stage.setScene(new Scene(parent));
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(this.stage);
+            stage.setResizable(false);
+            stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
+            stage.setTitle("Add new show");
+
+            controller.setStage(stage);
+
+            stage.showAndWait();
+            setItems();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleEditAction(ActionEvent event) {
+        try {
+            Stage stage = new Stage();
+            Pair<Parent, EditShowController> vmLoad = viewManager.load("/fxml/showManager/editShowDialog/editShow.fxml", stage);
+            Parent parent = vmLoad.getFirst();
+            EditShowController controller = vmLoad.getSecond();
+
+
+            stage.setScene(new Scene(parent));
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(this.stage);
+            stage.setResizable(false);
+            stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
+            stage.setTitle("Edit show");
+
+            Show show = showsTable.getSelectionModel().getSelectedItem();
+            controller.setData(show);
+            controller.setStage(stage);
+
+            stage.showAndWait();
+            setItems();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleDeleteAction(ActionEvent event) {
+        Show show = showsTable.getSelectionModel().getSelectedItem();
+        showService.deleteShow(show);
     }
 }

@@ -143,7 +143,9 @@ public class UserManagerController implements StageAware {
                 Bindings.size(usersTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
         );
         editUserButton.setOnAction(this::handleEditAction);
-
+        deleteUserButton.disableProperty().bind(
+                Bindings.size(usersTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
+        );
         deleteUserButton.setOnAction(this::handleDeleteAction);
 
         queryField.setOnKeyTyped(e -> this.setItems());

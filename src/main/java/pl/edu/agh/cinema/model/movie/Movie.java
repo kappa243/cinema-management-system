@@ -89,13 +89,5 @@ public class Movie {
         this.duration = duration;
     }
 
-    @Override
-    public String toString() {
-        return title;
-    }
 
-    @Override
-    public String toString() {
-        return title;
-    }
 }

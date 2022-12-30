@@ -5,14 +5,19 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import pl.edu.agh.cinema.model.user.Role;
+import pl.edu.agh.cinema.ui.StageAware;
 
 
 @Component
 @Scope("prototype")
-public class DialogFieldController {
+public class DialogFieldController implements StageAware {
+    @Setter
+    private Stage stage;
     @FXML
     public TextField firstName;
 

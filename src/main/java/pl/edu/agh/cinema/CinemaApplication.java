@@ -91,7 +91,7 @@ public class CinemaApplication extends Application {
     }
 
     @Bean
-    public CommandLineRunner addMovies(MovieService movieService) {
+    public CommandLineRunner addMovies(MovieRepository movieRepository) {
         return args -> {
 
             String movieData = """
@@ -121,7 +121,7 @@ public class CinemaApplication extends Application {
                 movieList.add(m);
             }
 
-            movieService.saveAll(movieList);
+            movieRepository.saveAll(movieList);
 
         };
     }

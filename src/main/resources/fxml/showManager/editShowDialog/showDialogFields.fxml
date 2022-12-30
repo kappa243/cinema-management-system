@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="424.0" prefWidth="280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.cinema.ui.showManager.editShowDialog.ShowDialogFieldController">
+    <Label prefHeight="20.0" prefWidth="280.0" text="Movie">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
+   <ComboBox fx:id="movieComboBox" prefHeight="26.0" prefWidth="280.0">
+      <VBox.margin>
+         <Insets bottom="25.0" />
+      </VBox.margin>
+   </ComboBox>
+    <Label prefHeight="20.0" prefWidth="280.0" text="Room">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
+   <ComboBox fx:id="roomComboBox" prefHeight="26.0" prefWidth="280.0">
+      <VBox.margin>
+         <Insets bottom="25.0" />
+      </VBox.margin>
+   </ComboBox>
+    <Label prefHeight="20.0" prefWidth="280.0" text="Start time">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
+    <fx:include fx:id="startTime" layoutX="106.0" layoutY="25.0" source="dateTimeInput.fxml" />
+    <Label prefHeight="20.0" prefWidth="280.0" text="End time">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
+    <fx:include fx:id="endTime" layoutX="106.0" layoutY="25.0" source="dateTimeInput.fxml" />
+    <Label prefHeight="20.0" prefWidth="280.0" text="Sell tickets from">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
+    <fx:include fx:id="sellTicketsFrom" layoutX="106.0" layoutY="25.0" source="dateTimeInput.fxml" />
+    <Label prefHeight="20.0" prefWidth="280.0" text="Ticket price">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
+    <TextField fx:id="ticketPrice" prefHeight="26.0" prefWidth="280.0">
+        <font>
+            <Font size="14.0" />
+        </font>
+        <VBox.margin>
+            <Insets bottom="25.0" />
+        </VBox.margin>
+    </TextField>
+    <Label prefHeight="20.0" prefWidth="280.0" text="Sold tickets">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
+    <TextField fx:id="soldTickets" prefHeight="26.0" prefWidth="280.0">
+        <font>
+            <Font size="14.0" />
+        </font>
+        <VBox.margin>
+            <Insets bottom="25.0" />
+        </VBox.margin>
+    </TextField>
+    <Label fx:id="warningMessage" alignment="TOP_LEFT" prefHeight="0.0" prefWidth="278.0" textFill="RED" wrapText="true">
+        <VBox.margin>
+            <Insets />
+        </VBox.margin>
+      <font>
+         <Font size="14.0" />
+      </font>
+    </Label>
+</VBox>
