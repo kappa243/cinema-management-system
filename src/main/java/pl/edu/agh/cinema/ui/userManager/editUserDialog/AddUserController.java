@@ -1,4 +1,4 @@
-package pl.edu.agh.cinema.ui.userManager.editDialog;
+package pl.edu.agh.cinema.ui.userManager.editUserDialog;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

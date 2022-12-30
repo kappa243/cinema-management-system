@@ -1,4 +1,4 @@
-package pl.edu.agh.cinema.ui.userManager.editDialog;
+package pl.edu.agh.cinema.ui.userManager.editUserDialog;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -15,7 +15,7 @@ import pl.edu.agh.cinema.ui.StageAware;
 
 @Component
 @Scope("prototype")
-public class DialogFieldController implements StageAware {
+public class UserDialogFieldController implements StageAware {
     @Setter
     private Stage stage;
     @FXML

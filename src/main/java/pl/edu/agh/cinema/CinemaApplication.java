@@ -25,6 +25,7 @@ import pl.edu.agh.cinema.model.show.ShowRepository;
 import pl.edu.agh.cinema.model.user.Role;
 import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.UserRepository;
+import pl.edu.agh.cinema.utils.ImageConverter;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

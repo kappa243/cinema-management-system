@@ -1,13 +1,13 @@
 package pl.edu.agh.cinema.model.movie;
 
 import lombok.Getter;
-import lombok.Setter;
 import pl.edu.agh.cinema.model.show.Show;
 
 import javax.persistence.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -19,8 +19,7 @@ public class Movie {
     @Id
     @GeneratedValue
     @Getter
-    @Setter
-    private Long id;
+    private int id;
 
     @Getter
     String title;
@@ -59,14 +58,31 @@ public class Movie {
         pcs.firePropertyChange("duration", oldDuration, duration);
     }
 
-    @Getter
-    @OneToMany(mappedBy = "movie")
-    Set<Show> shows;
 
-    public void setShows(Set<Show> shows) {
-        Set<Show> oldShows = this.shows;
-        this.shows = shows;
-        pcs.firePropertyChange("shows", oldShows, shows);
+    @Getter
+    @Lob
+    private byte[] cover;
+
+    public void setCover(byte[] cover) {
+        byte[] oldCover = this.cover;
+        this.cover = cover;
+        pcs.firePropertyChange("cover", oldCover, cover);
+    }
+
+
+    @OneToMany(mappedBy="movie")
+    Set<Show> shows = new HashSet<>();
+
+    public void addShow(Show show){
+        this.shows.add(show);
+
+        pcs.firePropertyChange("shows", null, shows);
+    }
+
+    public void removeShow(Show show){
+        this.shows.remove(show);
+
+        pcs.firePropertyChange("shows", null, shows);
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -81,13 +97,12 @@ public class Movie {
         pcs = new PropertyChangeSupport(this);
     }
 
-    public Movie(String title, String description, Date releaseDate, int duration) {
+    public Movie(String title, String description, Date releaseDate, int duration,  byte[] cover) {
         this();
         this.title = title;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
+        this.cover = cover;
     }
-
-
 }

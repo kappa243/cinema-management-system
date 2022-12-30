@@ -32,6 +32,18 @@
             </font>
             <graphic>
                 <ImageView fitHeight="79.0" fitWidth="94.0" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@../static/img/shows-icon.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="movieManagerButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
+                prefWidth="179.0"
+                text="Movies management" textAlignment="CENTER">
+            <font>
+                <Font size="16.0"/>
+            </font>
+            <graphic>
+                <ImageView fitHeight="79.0" fitWidth="94.0" pickOnBounds="true" preserveRatio="true">
                     <Image url="@../static/img/movie-icon.png"/>
                 </ImageView>
             </graphic>

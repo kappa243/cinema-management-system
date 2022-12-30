@@ -33,6 +33,9 @@ public class MainController implements StageAware {
     private Button showManagerButton;
 
     @FXML
+    private Button movieManagerButton;
+
+    @FXML
     private Button ticketManagerButton;
 
     @FXML
@@ -55,7 +58,7 @@ public class MainController implements StageAware {
             pane.getChildren().remove(userManagerButton);
         }
         if(!authenticationService.isAuthorized("movies")){
-            pane.getChildren().remove(showManagerButton);
+            pane.getChildren().remove(movieManagerButton);
         }
         if(!authenticationService.isAuthorized("tickets")){
             pane.getChildren().remove(ticketManagerButton);
@@ -70,7 +73,7 @@ public class MainController implements StageAware {
 
                 stage.initModality(Modality.WINDOW_MODAL);
                 stage.initOwner(this.stage);
-                stage.setTitle("User management");
+                stage.setTitle("Users management");
                 stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
 
                 stage.show();
@@ -79,20 +82,16 @@ public class MainController implements StageAware {
                 e.printStackTrace();
             }
         });
-
-
-
-        // TODO - implement movie management
 
         showManagerButton.setOnAction(event -> {
             try {
                 Stage stage = new Stage();
-                Pair<Parent, ShowManagerController> vmLoad = viewManager.load("/fxml/showManager/showManager.fxml", stage);
+                Pair<Parent, UserManagerController> vmLoad = viewManager.load("/fxml/showManager/showManager.fxml", stage);
                 stage.setScene(new Scene(vmLoad.getFirst()));
 
                 stage.initModality(Modality.WINDOW_MODAL);
                 stage.initOwner(this.stage);
-                stage.setTitle("Show management");
+                stage.setTitle("Shows management");
                 stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
 
                 stage.show();
@@ -101,7 +100,25 @@ public class MainController implements StageAware {
                 e.printStackTrace();
             }
         });
-        // TODO - implement ticket sales
+
+        movieManagerButton.setOnAction(event -> {
+
+            try {
+                Stage stage = new Stage();
+                Pair<Parent, UserManagerController> vmLoad = viewManager.load("/fxml/movieManager/movieManager.fxml", stage);
+                stage.setScene(new Scene(vmLoad.getFirst()));
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(this.stage);
+                stage.setTitle("Movies management");
+                stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
+
+                stage.show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
         ticketManagerButton.setOnAction(event -> {
             try {
                 Stage stage = new Stage();
@@ -119,6 +136,7 @@ public class MainController implements StageAware {
                 e.printStackTrace();
             }
         });
+
         logoutButton.setOnAction(event -> {
             authenticationService.logout();
             stageManager.getPrimaryStage().show();

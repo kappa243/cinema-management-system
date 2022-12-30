@@ -1,4 +1,4 @@
-package pl.edu.agh.cinema.ui.userManager.editDialog;
+package pl.edu.agh.cinema.ui.userManager.editUserDialog;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,7 +19,7 @@ abstract class CommonUserController implements StageAware {
     @FXML
     private VBox dialogFields;
     @FXML
-    protected DialogFieldController dialogFieldsController;
+    protected UserDialogFieldController dialogFieldsController;
 
     @Setter
     protected Stage stage;

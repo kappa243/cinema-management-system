@@ -15,7 +15,7 @@ public class Room {
     @Id
     @GeneratedValue
     @Getter
-    private Long id;
+    private int id;
 
     @Getter
     private String roomName;
@@ -50,12 +50,8 @@ public class Room {
 
     public Room(String roomName, int seatsNumber) {
         this();
+
         this.roomName=roomName;
         this.seatsNumber=seatsNumber;
     }
-
-//    @Override
-//    public String toString() {
-//        return roomName;
-//    }
 }

@@ -7,6 +7,7 @@ import pl.edu.agh.cinema.model.room.Room;
 import javax.persistence.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
@@ -31,13 +32,13 @@ public class Show {
     Room room;
 
     @Getter
-    Timestamp startTime;
+    Date startTime;
 
     @Getter
-    Timestamp endTime;
+    Date endTime;
 
     @Getter
-    Timestamp sellTicketsFrom;
+    Date sellTicketsFrom;
 
     @Getter
     double ticketPrice;
@@ -48,29 +49,31 @@ public class Show {
     public void setMovie(Movie movie) {
         Movie oldMovie = this.movie;
         this.movie = movie;
+        movie.addShow(this);
+
         pcs.firePropertyChange("movie", oldMovie, movie);
     }
 
     public void setRoom(Room room) {
         Room oldRoom = this.room;
         this.room = room;
-        pcs.firePropertyChange("room", oldRoom, movie);
+        pcs.firePropertyChange("room", oldRoom, room);
     }
 
-    public void setStartTime(Timestamp startTime) {
-        Timestamp oldStartTime = this.startTime;
+    public void setStartTime(Date startTime) {
+        Date oldStartTime = this.startTime;
         this.startTime = startTime;
         pcs.firePropertyChange("startTime", oldStartTime, startTime);
     }
 
-    public void setEndTime(Timestamp endTime) {
-        Timestamp oldEndTime = this.endTime;
+    public void setEndTime(Date endTime) {
+        Date oldEndTime = this.endTime;
         this.endTime = endTime;
         pcs.firePropertyChange("endTime", oldEndTime, endTime);
     }
 
-    public void setSellTicketsFrom(Timestamp sellTicketsFrom) {
-        Timestamp oldSellTicketsFrom = this.sellTicketsFrom;
+    public void setSellTicketsFrom(Date sellTicketsFrom) {
+        Date oldSellTicketsFrom = this.sellTicketsFrom;
         this.sellTicketsFrom = sellTicketsFrom;
         pcs.firePropertyChange("sellTicketsFrom", oldSellTicketsFrom, sellTicketsFrom);
     }
@@ -100,13 +103,13 @@ public class Show {
         pcs.removePropertyChangeListener(listener);
     }
 
-    public Show(Timestamp startTime, Timestamp endTime, Timestamp sellTicketsFrom, double ticketPrice, int soldTickets){
+    public Show(Date startTime, Date endTime, Date sellTicketsFrom, double ticketPrice, int soldTickets) {
         this();
-        this.startTime=startTime;
-        this.endTime=endTime;
-        this.sellTicketsFrom=sellTicketsFrom;
-        this.ticketPrice=ticketPrice;
-        this.soldTickets=soldTickets;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.sellTicketsFrom = sellTicketsFrom;
+        this.ticketPrice = ticketPrice;
+        this.soldTickets = soldTickets;
 
     }
 }

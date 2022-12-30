@@ -1,4 +1,4 @@
-package pl.edu.agh.cinema.ui.userManager.editDialog;
+package pl.edu.agh.cinema.ui.userManager.editUserDialog;
 
 import javafx.fxml.FXML;
 import org.springframework.context.annotation.Scope;
