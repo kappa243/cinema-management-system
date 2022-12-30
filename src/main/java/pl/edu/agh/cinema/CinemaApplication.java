@@ -27,12 +27,12 @@ import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.UserRepository;
 import pl.edu.agh.cinema.utils.ImageConverter;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.StringReader;
+import javax.transaction.Transactional;
+import java.io.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -77,8 +77,9 @@ public class CinemaApplication extends Application {
     }
 
     @Bean
-    public CommandLineRunner demo(UserRepository userRepository) {
+    public CommandLineRunner demo(UserRepository userRepository, MovieRepository movieRepository, RoomRepository roomRepository, ShowRepository showRepository) {
         return args -> {
+            // users
             String password = "admin";
             String hashed = BCrypt.hashpw(password, BCrypt.gensalt());
             User admin = new User("admin", "admin", "admin", hashed, Role.ADMINISTRATOR);
@@ -86,14 +87,8 @@ public class CinemaApplication extends Application {
             User p2 = new User("Adam", "Nowak", "anowak@example.com", hashed, Role.ASSISTANT);
             User p3 = new User("Anna", "Kowalska", "akowalska@example.com", hashed, Role.MODERATOR);
 
-            userRepository.saveAll(List.of(admin, p1, p2, p3));
-        };
-    }
 
-    @Bean
-    public CommandLineRunner addMovies(MovieRepository movieRepository) {
-        return args -> {
-
+            // movies
             String movieData = """
                     Triangle of Sadness; In Ruben Östlund's wickedly funny Palme d'Or winner, social hierarchy is turned upside down, revealing the tawdry relationship between power and beauty. Celebrity model couple, Carl (Harris Dickinson) and Yaya (Charlbi Dean), are invited on a luxury cruise for the uber-rich, helmed by an unhinged boat captain (Woody Harrelson). What first appeared instagrammable ends catastrophically, leaving the survivors stranded on a desert island and fighting for survival.; 2023-01-06; 147
                     Avatar: The Way of Water; Jake Sully lives with his newfound family formed on the extrasolar moon Pandora. Once a familiar threat returns to finish what was previously started, Jake must work with Neytiri and the army of the Na'vi race to protect their home.; 2022-12-16; 192
@@ -107,7 +102,7 @@ public class CinemaApplication extends Application {
                     """;
 
             BufferedReader r = new BufferedReader(new StringReader(movieData));
-            List<Movie> movieList = new ArrayList<>();
+            List<Movie> movies = new ArrayList<>();
             for (; ; ) {
                 String line = r.readLine();
                 if (line == null) break;
@@ -115,16 +110,39 @@ public class CinemaApplication extends Application {
 
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 Date dateStr = formatter.parse(movieTab[2]);
-                java.sql.Date sqlDate = new java.sql.Date(dateStr.getTime());
-                Movie m = new Movie(movieTab[0], movieTab[1], sqlDate, Integer.parseInt(movieTab[3]));
+                LocalDateTime localDate = dateStr.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                Movie m = new Movie(movieTab[0], movieTab[1], localDate, Integer.parseInt(movieTab[3]), ImageConverter.fileToByte(new File("src/main/resources/static/img/movie-icon.png")));
                 System.out.println(m);
-                movieList.add(m);
+                movies.add(m);
             }
 
-            movieRepository.saveAll(movieList);
 
+
+            // rooms
+            List<Room> rooms = readRooms();
+
+            // shows
+            Show show1 = new Show(Timestamp.valueOf("2023-11-12 11:00:03.123456789").toLocalDateTime(), Timestamp.valueOf("2023-11-12 13:02:03.123456789").toLocalDateTime(), Timestamp.valueOf("2018-11-12 01:02:03.123456789").toLocalDateTime(), 12, 38);
+            Show show2 = new Show(Timestamp.valueOf("2023-11-12 15:00:03.123456789").toLocalDateTime(), Timestamp.valueOf("2023-11-12 17:02:03.123456789").toLocalDateTime(), Timestamp.valueOf("2018-11-12 01:02:03.123456789").toLocalDateTime(), 40, 24);
+            Show show3 = new Show(Timestamp.valueOf("2023-01-12 15:00:03.123456789").toLocalDateTime(), Timestamp.valueOf("2023-01-12 17:25:03.123456789").toLocalDateTime(), Timestamp.valueOf("2022-12-10 11:20:00.123456789").toLocalDateTime(), 32, 10);
+
+            show1.setMovie(movies.get(0));
+            show1.setRoom(rooms.get(0));
+
+            show2.setMovie(movies.get(1));
+            show2.setRoom(rooms.get(1));
+
+            show3.setMovie(movies.get(2));
+            show3.setRoom(rooms.get(2));
+
+
+            userRepository.saveAll(List.of(admin, p1, p2, p3));
+            roomRepository.saveAll(rooms);
+            movieRepository.saveAll(movies);
+            showRepository.saveAll(List.of(show1, show2, show3));
         };
     }
+
 
     List<Room> readRooms() {
         List<Room> rooms = new ArrayList<>();
@@ -142,36 +160,5 @@ public class CinemaApplication extends Application {
         }
 
         return rooms;
-    }
-
-    @Bean
-    public CommandLineRunner addRooms(RoomRepository roomRepository) {
-        return args -> {
-            List<Room> rooms = readRooms();
-            roomRepository.saveAll(rooms);
-        };
-    }
-
-
-    @Bean
-    public CommandLineRunner addShows(ShowRepository showRepository, MovieRepository movieRepository, RoomRepository roomRepository) {
-        return args -> {
-            Show show1 = new Show(Timestamp.valueOf("2022-11-12 11:00:03.123456789"), Timestamp.valueOf("2022-11-12 13:02:03.123456789"), Timestamp.valueOf("2018-11-12 01:02:03.123456789"), 12, 38);
-            Show show2 = new Show(Timestamp.valueOf("2022-11-12 15:00:03.123456789"), Timestamp.valueOf("2022-11-12 17:02:03.123456789"), Timestamp.valueOf("2018-11-12 01:02:03.123456789"), 40, 24);
-            Show show3 = new Show(Timestamp.valueOf("2023-01-12 15:00:03.123456789"), Timestamp.valueOf("2022-01-12 17:25:03.0"), Timestamp.valueOf("2022-12-10 11:20:00.0"), 32, 10);
-            List<Movie> movies = movieRepository.findAll();
-            List<Room> rooms = roomRepository.findAll();
-
-            show1.setMovie(movies.get(0));
-            show1.setRoom(rooms.get(0));
-
-            show2.setMovie(movies.get(1));
-            show2.setRoom(rooms.get(1));
-
-            show3.setMovie(movies.get(2));
-            show3.setRoom(rooms.get(2));
-            showRepository.saveAll(List.of(show1, show2, show3));
-
-        };
     }
 }

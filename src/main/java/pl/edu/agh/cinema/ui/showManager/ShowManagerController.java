@@ -25,8 +25,11 @@ import pl.edu.agh.cinema.ui.showManager.editShowDialog.AddShowController;
 import pl.edu.agh.cinema.ui.showManager.editShowDialog.EditShowController;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,13 +61,13 @@ public class ShowManagerController implements StageAware {
     private TableColumn<Show, Movie> movieColumn;
 
     @FXML
-    private TableColumn<Show, Timestamp> startTimeColumn;
+    private TableColumn<Show, LocalDateTime> startTimeColumn;
 
     @FXML
-    private TableColumn<Show, Timestamp> endTimeColumn;
+    private TableColumn<Show, LocalDateTime> endTimeColumn;
 
     @FXML
-    private TableColumn<Show, Timestamp> sellTicketsFromColumn;
+    private TableColumn<Show, LocalDateTime> sellTicketsFromColumn;
     @FXML
     private TableColumn<Show, Integer> ticketPriceColumn;
 
@@ -112,6 +115,7 @@ public class ShowManagerController implements StageAware {
 
         roomColumn.setCellValueFactory(cellData -> {
             try {
+                //noinspection unchecked
                 return JavaBeanObjectPropertyBuilder.create()
                         .bean(cellData.getValue())
                         .name("room")
@@ -138,6 +142,7 @@ public class ShowManagerController implements StageAware {
         });
         movieColumn.setCellValueFactory(cellData -> {
             try {
+                //noinspection unchecked
                 return JavaBeanObjectPropertyBuilder.create()
                         .bean(cellData.getValue())
                         .name("movie")
@@ -148,11 +153,11 @@ public class ShowManagerController implements StageAware {
         });
 
         startTimeColumn.setCellFactory(column -> {
-            TableCell<Show, Timestamp> cell = new TableCell<Show, Timestamp>() {
-                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+            TableCell<Show, LocalDateTime> cell = new TableCell<Show, LocalDateTime>() {
+                private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
 
                 @Override
-                protected void updateItem(Timestamp item, boolean empty) {
+                protected void updateItem(LocalDateTime item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty || item == null) {
                         setText(null);
@@ -177,11 +182,11 @@ public class ShowManagerController implements StageAware {
         });
 
         endTimeColumn.setCellFactory(column -> {
-            TableCell<Show, Timestamp> cell = new TableCell<Show, Timestamp>() {
-                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+            TableCell<Show, LocalDateTime> cell = new TableCell<Show, LocalDateTime>() {
+                private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
 
                 @Override
-                protected void updateItem(Timestamp item, boolean empty) {
+                protected void updateItem(LocalDateTime item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty || item == null) {
                         setText(null);
@@ -206,11 +211,11 @@ public class ShowManagerController implements StageAware {
             }
         });
         sellTicketsFromColumn.setCellFactory(column -> {
-            TableCell<Show, Timestamp> cell = new TableCell<Show, Timestamp>() {
-                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+            TableCell<Show, LocalDateTime> cell = new TableCell<Show, LocalDateTime>() {
+                private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
 
                 @Override
-                protected void updateItem(Timestamp item, boolean empty) {
+                protected void updateItem(LocalDateTime item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty || item == null) {
                         setText(null);

@@ -58,7 +58,7 @@ abstract class CommonMovieController implements StageAware {
         }
         movie.setTitle(movieDialogFieldsController.title.getText());
         movie.setDescription(movieDialogFieldsController.description.getText());
-        movie.setReleaseDate(Date.valueOf(movieDialogFieldsController.releaseDate.getValue()));
+        movie.setReleaseDate(movieDialogFieldsController.releaseDate.getValue().atStartOfDay());
     }
 
     @FXML

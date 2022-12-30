@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import pl.edu.agh.cinema.ViewManager;
 import pl.edu.agh.cinema.model.movie.Movie;
 import pl.edu.agh.cinema.model.movie.MovieService;
+import pl.edu.agh.cinema.model.show.Show;
 import pl.edu.agh.cinema.ui.StageAware;
 import pl.edu.agh.cinema.ui.movieManager.editMovieDialog.AddMovieController;
 import pl.edu.agh.cinema.ui.movieManager.editMovieDialog.EditMovieController;
@@ -26,6 +27,8 @@ import pl.edu.agh.cinema.utils.ImageConverter;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +48,7 @@ public class MovieManagerController implements StageAware {
     @FXML
     private TableColumn<Movie, String> descriptionColumn;
     @FXML
-    private TableColumn<Movie, Date> releaseDateColumn;
+    private TableColumn<Movie, LocalDateTime> releaseDateColumn;
     @FXML
     private TableColumn<Movie, byte[]> coverColumn;
     @FXML
@@ -98,6 +101,23 @@ public class MovieManagerController implements StageAware {
             } catch (NoSuchMethodException e) {
                 throw new RuntimeException(e);
             }
+        });
+        releaseDateColumn.setCellFactory(column -> {
+            TableCell<Movie, LocalDateTime> cell = new TableCell<Movie, LocalDateTime>() {
+                private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+                @Override
+                protected void updateItem(LocalDateTime item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(format.format(item));
+                    }
+                }
+            };
+
+            return cell;
         });
 
         // set cell factory for cover as imageview from image
@@ -177,7 +197,7 @@ public class MovieManagerController implements StageAware {
             stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
             stage.setTitle("Add new movie");
 
-            Movie movie = new Movie("", "", Date.valueOf(LocalDate.now()), null);
+            Movie movie = new Movie("", "", LocalDateTime.now(), 0, null);
             controller.setData(movie);
             controller.setStage(stage);
 

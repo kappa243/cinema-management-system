@@ -7,8 +7,7 @@ import pl.edu.agh.cinema.model.room.Room;
 import javax.persistence.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 public class Show {
@@ -32,13 +31,13 @@ public class Show {
     Room room;
 
     @Getter
-    Date startTime;
+    LocalDateTime startTime;
 
     @Getter
-    Date endTime;
+    LocalDateTime endTime;
 
     @Getter
-    Date sellTicketsFrom;
+    LocalDateTime sellTicketsFrom;
 
     @Getter
     double ticketPrice;
@@ -60,20 +59,20 @@ public class Show {
         pcs.firePropertyChange("room", oldRoom, room);
     }
 
-    public void setStartTime(Date startTime) {
-        Date oldStartTime = this.startTime;
+    public void setStartTime(LocalDateTime startTime) {
+        LocalDateTime oldStartTime = this.startTime;
         this.startTime = startTime;
         pcs.firePropertyChange("startTime", oldStartTime, startTime);
     }
 
-    public void setEndTime(Date endTime) {
-        Date oldEndTime = this.endTime;
+    public void setEndTime(LocalDateTime endTime) {
+        LocalDateTime oldEndTime = this.endTime;
         this.endTime = endTime;
         pcs.firePropertyChange("endTime", oldEndTime, endTime);
     }
 
-    public void setSellTicketsFrom(Date sellTicketsFrom) {
-        Date oldSellTicketsFrom = this.sellTicketsFrom;
+    public void setSellTicketsFrom(LocalDateTime sellTicketsFrom) {
+        LocalDateTime oldSellTicketsFrom = this.sellTicketsFrom;
         this.sellTicketsFrom = sellTicketsFrom;
         pcs.firePropertyChange("sellTicketsFrom", oldSellTicketsFrom, sellTicketsFrom);
     }
@@ -103,7 +102,7 @@ public class Show {
         pcs.removePropertyChangeListener(listener);
     }
 
-    public Show(Date startTime, Date endTime, Date sellTicketsFrom, double ticketPrice, int soldTickets) {
+    public Show(LocalDateTime startTime, LocalDateTime endTime, LocalDateTime sellTicketsFrom, double ticketPrice, int soldTickets) {
         this();
         this.startTime = startTime;
         this.endTime = endTime;

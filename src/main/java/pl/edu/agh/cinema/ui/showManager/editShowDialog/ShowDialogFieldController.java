@@ -1,7 +1,10 @@
 package pl.edu.agh.cinema.ui.showManager.editShowDialog;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -14,8 +17,7 @@ import pl.edu.agh.cinema.model.room.Room;
 import pl.edu.agh.cinema.model.room.RoomService;
 import pl.edu.agh.cinema.ui.StageAware;
 
-import java.sql.Timestamp;
-
+import java.time.LocalDateTime;
 
 
 @Component
@@ -84,35 +86,45 @@ public class ShowDialogFieldController implements StageAware {
             warningMessage.setText("Sold tickets must be a number!");
             return false;
         }
-        if (!getEndTime().after(getStartTime())) {
+        if (!getEndTime().isAfter(getStartTime())) {
             warningMessage.setText("Start time must be before end time!");
             return false;
         }
-        if (!getStartTime().after(getSellTicketsFrom())) {
+        if(!movieComboBox.getSelectionModel().isEmpty()){
+            if(!getStartTime().isAfter(movieComboBox.getSelectionModel().getSelectedItem().getReleaseDate())){
+                warningMessage.setText("Start time must be after release date!");
+                return false;
+            }
+        }
+        if (!getStartTime().isAfter(getSellTicketsFrom())) {
             warningMessage.setText("Selling tickets must start before the show!");
             return false;
         }
         return true;
     }
 
-    public void setStartTime(Timestamp time) {
+    public void setStartTime(LocalDateTime time) {
         startTimeController.setDateTime(time);
     }
-    public void setEndTime(Timestamp time) {
+
+    public void setEndTime(LocalDateTime time) {
         endTimeController.setDateTime(time);
     }
-    public void setSellTicketsFrom(Timestamp time) {
+
+    public void setSellTicketsFrom(LocalDateTime time) {
         sellTicketsFromController.setDateTime(time);
     }
 
-    public Timestamp getStartTime() {
-        return startTimeController.getTimestamp();
+    public LocalDateTime getStartTime() {
+        return startTimeController.getDate();
     }
-    public Timestamp getEndTime() {
-        return endTimeController.getTimestamp();
+
+    public LocalDateTime getEndTime() {
+        return endTimeController.getDate();
     }
-    public Timestamp getSellTicketsFrom() {
-        return sellTicketsFromController.getTimestamp();
+
+    public LocalDateTime getSellTicketsFrom() {
+        return sellTicketsFromController.getDate();
     }
 
     @FXML

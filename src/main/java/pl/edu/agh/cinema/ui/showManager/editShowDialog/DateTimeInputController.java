@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import pl.edu.agh.cinema.ui.StageAware;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -29,17 +29,15 @@ public class DateTimeInputController implements StageAware {
     @FXML
     public TextField minute;
 
-    public void setDateTime(Timestamp time) {
-        LocalDateTime dateTime = time.toLocalDateTime();
-        date.setValue(dateTime.toLocalDate());
-        hour.setText(Integer.toString(dateTime.getHour()));
-        minute.setText(Integer.toString(dateTime.getMinute()));
+    public void setDateTime(LocalDateTime time) {
+        date.setValue(time.toLocalDate());
+        hour.setText(Integer.toString(time.getHour()));
+        minute.setText(Integer.toString(time.getMinute()));
     }
-    public Timestamp getTimestamp() {
+    public LocalDateTime getDate() {
         LocalTime time = LocalTime.of(Integer.parseInt(hour.getText()),
                 Integer.parseInt(minute.getText()));
-        LocalDateTime dateTime = LocalDateTime.of(date.getValue(), time);
-        return Timestamp.valueOf(dateTime);
+        return LocalDateTime.of(date.getValue(), time);
     }
     public boolean validateInput(Label warningMessage) {
         if (date.getValue() == null) {

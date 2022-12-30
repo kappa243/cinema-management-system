@@ -6,7 +6,7 @@ import pl.edu.agh.cinema.model.show.Show;
 import javax.persistence.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,10 +41,10 @@ public class Movie {
     }
 
     @Getter
-    Date releaseDate;
+    LocalDateTime releaseDate;
 
-    public void setReleaseDate(Date releaseDate) {
-        Date oldReleaseDate = this.releaseDate;
+    public void setReleaseDate(LocalDateTime releaseDate) {
+        LocalDateTime oldReleaseDate = this.releaseDate;
         this.releaseDate = releaseDate;
         pcs.firePropertyChange("releaseDate", oldReleaseDate, releaseDate);
     }
@@ -70,16 +70,16 @@ public class Movie {
     }
 
 
-    @OneToMany(mappedBy="movie")
-    Set<Show> shows = new HashSet<>();
+    @OneToMany(mappedBy = "movie")
+    Set<Show> shows;
 
-    public void addShow(Show show){
+    public void addShow(Show show) {
         this.shows.add(show);
 
         pcs.firePropertyChange("shows", null, shows);
     }
 
-    public void removeShow(Show show){
+    public void removeShow(Show show) {
         this.shows.remove(show);
 
         pcs.firePropertyChange("shows", null, shows);
@@ -97,12 +97,14 @@ public class Movie {
         pcs = new PropertyChangeSupport(this);
     }
 
-    public Movie(String title, String description, Date releaseDate, int duration,  byte[] cover) {
+    public Movie(String title, String description, LocalDateTime releaseDate, int duration, byte[] cover) {
         this();
+
         this.title = title;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
+        this.shows = new HashSet<>();
         this.cover = cover;
     }
 }

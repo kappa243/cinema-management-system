@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,13 +53,13 @@ public class TicketsManagerController implements StageAware {
     private TableColumn<Show, Movie> movieColumn;
 
     @FXML
-    private TableColumn<Show, Timestamp> startTimeColumn;
+    private TableColumn<Show, LocalDateTime> startTimeColumn;
 
     @FXML
-    private TableColumn<Show, Timestamp> endTimeColumn;
+    private TableColumn<Show, LocalDateTime> endTimeColumn;
 
     @FXML
-    private TableColumn<Show, Timestamp> sellTicketsFromColumn;
+    private TableColumn<Show, LocalDateTime> sellTicketsFromColumn;
     @FXML
     private TableColumn<Show, Integer> ticketPriceColumn;
 
@@ -87,8 +88,8 @@ public class TicketsManagerController implements StageAware {
     @FXML
     public void initialize() {
         showsTable.setItems(showService.getShows().filtered(show -> {
-            return show.getStartTime().after(Timestamp.valueOf(LocalDateTime.now())) &&
-                    show.getSellTicketsFrom().before(Timestamp.valueOf(LocalDateTime.now()));
+            return show.getStartTime().isAfter(LocalDateTime.now()) &&
+                    show.getSellTicketsFrom().isBefore(LocalDateTime.now());
         }));
 
 
@@ -136,6 +137,7 @@ public class TicketsManagerController implements StageAware {
         });
         movieColumn.setCellValueFactory(cellData -> {
             try {
+                //noinspection unchecked
                 return JavaBeanObjectPropertyBuilder.create()
                         .bean(cellData.getValue())
                         .name("movie")
@@ -146,11 +148,11 @@ public class TicketsManagerController implements StageAware {
         });
 
         startTimeColumn.setCellFactory(column -> {
-            TableCell<Show, Timestamp> cell = new TableCell<Show, Timestamp>() {
-                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+            TableCell<Show, LocalDateTime> cell = new TableCell<Show, LocalDateTime>() {
+                private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
 
                 @Override
-                protected void updateItem(Timestamp item, boolean empty) {
+                protected void updateItem(LocalDateTime item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty || item == null) {
                         setText(null);
@@ -175,11 +177,11 @@ public class TicketsManagerController implements StageAware {
         });
 
         endTimeColumn.setCellFactory(column -> {
-            TableCell<Show, Timestamp> cell = new TableCell<Show, Timestamp>() {
-                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+            TableCell<Show, LocalDateTime> cell = new TableCell<Show, LocalDateTime>() {
+                private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
 
                 @Override
-                protected void updateItem(Timestamp item, boolean empty) {
+                protected void updateItem(LocalDateTime item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty || item == null) {
                         setText(null);
@@ -204,11 +206,11 @@ public class TicketsManagerController implements StageAware {
             }
         });
         sellTicketsFromColumn.setCellFactory(column -> {
-            TableCell<Show, Timestamp> cell = new TableCell<Show, Timestamp>() {
-                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+            TableCell<Show, LocalDateTime> cell = new TableCell<Show, LocalDateTime>() {
+                private DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
 
                 @Override
-                protected void updateItem(Timestamp item, boolean empty) {
+                protected void updateItem(LocalDateTime item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty || item == null) {
                         setText(null);
@@ -273,6 +275,7 @@ public class TicketsManagerController implements StageAware {
         });
         maxSeatsColumn.setCellValueFactory(cellData -> {
             try {
+                //noinspection unchecked
                 return JavaBeanObjectPropertyBuilder.create()
                         .bean(cellData.getValue())
                         .name("room")
@@ -292,8 +295,8 @@ public class TicketsManagerController implements StageAware {
 
     public void setItems() {
         showsTable.setItems(showService.getShows().filtered(show -> {
-            return show.getStartTime().after(Timestamp.valueOf(LocalDateTime.now())) &&
-                    show.getSellTicketsFrom().before(Timestamp.valueOf(LocalDateTime.now()));
+            return show.getStartTime().isAfter(LocalDateTime.now()) &&
+                    show.getSellTicketsFrom().isBefore(LocalDateTime.now());
         }).filtered(show -> {
             List<String> queries = new ArrayList<>(List.of(queryField.getText().split(" ")));
 
