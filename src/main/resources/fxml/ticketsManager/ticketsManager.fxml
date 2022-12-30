@@ -25,6 +25,7 @@
                     <TableColumn fx:id="sellTicketsFromColumn" prefWidth="75.0" text="Sell tickets from"/>
                     <TableColumn fx:id="ticketPriceColumn" prefWidth="75.0" text="Ticket price"/>
                     <TableColumn fx:id="soldTicketsColumn" prefWidth="75.0" text="Sold tickets"/>
+                    <TableColumn fx:id="maxSeatsColumn" prefWidth="75.0" text="Max number of seats"/>
                 </columns>
                 <VBox.margin>
                     <Insets/>

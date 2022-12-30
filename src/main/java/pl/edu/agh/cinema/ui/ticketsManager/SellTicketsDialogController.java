@@ -41,10 +41,14 @@ public class SellTicketsDialogController implements StageAware {
     }
     public boolean validateInput() {
         if (!ticketsNumber.getText().matches("\\d+")) {
-            warningMessage.setText("Must be a number!");
+            warningMessage.setText("Must be a positive number!");
             return false;
         } else {
             int numberToSell = Integer.parseInt(ticketsNumber.getText());
+            if (numberToSell <= 0) {
+                warningMessage.setText("Must be a positive number!");
+                return false;
+            }
             if (numberToSell + show.getSoldTickets() > show.getRoom().getSeatsNumber()) {
                 warningMessage.setText("Not enough seats available!");
                 return false;

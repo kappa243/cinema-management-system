@@ -64,7 +64,8 @@ public class TicketsManagerController implements StageAware {
 
     @FXML
     private TableColumn<Show, Integer> soldTicketsColumn;
-
+    @FXML
+    private TableColumn<Show, Room> maxSeatsColumn;
     @FXML
     private TextField queryField;
 
@@ -249,6 +250,32 @@ public class TicketsManagerController implements StageAware {
                 return JavaBeanObjectPropertyBuilder.create()
                         .bean(cellData.getValue())
                         .name("soldTickets")
+                        .build();
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        maxSeatsColumn.setCellFactory(column -> {
+            TableCell<Show, Room> cell = new TableCell<Show, Room>() {
+
+                @Override
+                protected void updateItem(Room item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(Integer.toString(item.getSeatsNumber()));
+                    }
+                }
+            };
+            return cell;
+        });
+        maxSeatsColumn.setCellValueFactory(cellData -> {
+            try {
+                return JavaBeanObjectPropertyBuilder.create()
+                        .bean(cellData.getValue())
+                        .name("room")
                         .build();
             } catch (NoSuchMethodException e) {
                 throw new RuntimeException(e);
