@@ -18,7 +18,6 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import pl.edu.agh.cinema.model.movie.Movie;
 import pl.edu.agh.cinema.model.movie.MovieRepository;
-import pl.edu.agh.cinema.model.movie.MovieService;
 import pl.edu.agh.cinema.model.room.Room;
 import pl.edu.agh.cinema.model.room.RoomRepository;
 import pl.edu.agh.cinema.model.show.Show;
@@ -158,7 +157,7 @@ public class CinemaApplication extends Application {
         return args -> {
             Show show1 = new Show(Timestamp.valueOf("2022-11-12 11:00:03.123456789"), Timestamp.valueOf("2022-11-12 13:02:03.123456789"), Timestamp.valueOf("2018-11-12 01:02:03.123456789"), 12, 38);
             Show show2 = new Show(Timestamp.valueOf("2022-11-12 15:00:03.123456789"), Timestamp.valueOf("2022-11-12 17:02:03.123456789"), Timestamp.valueOf("2018-11-12 01:02:03.123456789"), 40, 24);
-
+            Show show3 = new Show(Timestamp.valueOf("2023-01-12 15:00:03.123456789"), Timestamp.valueOf("2022-01-12 17:25:03.0"), Timestamp.valueOf("2022-12-10 11:20:00.0"), 32, 10);
             List<Movie> movies = movieRepository.findAll();
             List<Room> rooms = roomRepository.findAll();
 
@@ -168,9 +167,10 @@ public class CinemaApplication extends Application {
             show2.setMovie(movies.get(1));
             show2.setRoom(rooms.get(1));
 
-            showRepository.saveAll(List.of(show1, show2));
-//            System.out.println(showRepository.getShowsForMovie(movies.get(0).getId()));
-//            System.out.println(showRepository.getShowsForDateAndRoom(12, 11, 2022, rooms.get(0).getId()));
+            show3.setMovie(movies.get(2));
+            show3.setRoom(rooms.get(2));
+            showRepository.saveAll(List.of(show1, show2, show3));
+
         };
     }
 }

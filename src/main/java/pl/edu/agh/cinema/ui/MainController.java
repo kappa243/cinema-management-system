@@ -15,6 +15,7 @@ import pl.edu.agh.cinema.StageManager;
 import pl.edu.agh.cinema.ViewManager;
 import pl.edu.agh.cinema.auth.AuthenticationService;
 import pl.edu.agh.cinema.ui.showManager.ShowManagerController;
+import pl.edu.agh.cinema.ui.ticketsManager.TicketsManagerController;
 import pl.edu.agh.cinema.ui.userManager.UserManagerController;
 
 @Component
@@ -101,7 +102,23 @@ public class MainController implements StageAware {
             }
         });
         // TODO - implement ticket sales
+        ticketManagerButton.setOnAction(event -> {
+            try {
+                Stage stage = new Stage();
+                Pair<Parent, TicketsManagerController> vmLoad = viewManager.load("/fxml/ticketsManager/ticketsManager.fxml", stage);
+                stage.setScene(new Scene(vmLoad.getFirst()));
 
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(this.stage);
+                stage.setTitle("Ticket sales management");
+                stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
+
+                stage.show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         logoutButton.setOnAction(event -> {
             authenticationService.logout();
             stageManager.getPrimaryStage().show();
