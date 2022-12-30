@@ -20,6 +20,7 @@
                         <TableColumn fx:id="movieColumn" prefWidth="75.0" text="Movie"/>
                         <TableColumn fx:id="startTimeColumn" prefWidth="75.0" text="Start time"/>
                         <TableColumn fx:id="endTimeColumn" prefWidth="75.0" text="End time"/>
+                        <TableColumn fx:id="sellTicketsFromColumn" prefWidth="75.0" text="Sell tickets from"/>
                         <TableColumn fx:id="ticketPriceColumn" prefWidth="75.0" text="Ticket price"/>
                         <TableColumn fx:id="soldTicketsColumn" prefWidth="75.0" text="Sold tickets"/>
                     </columns>

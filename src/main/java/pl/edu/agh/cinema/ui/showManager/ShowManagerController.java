@@ -33,8 +33,6 @@ import java.util.List;
 @Component
 @Scope("prototype")
 public class ShowManagerController implements StageAware {
-
-
     private ApplicationEventPublisher publisher;
     private StageManager stageManager;
     private ViewManager viewManager;
@@ -65,6 +63,8 @@ public class ShowManagerController implements StageAware {
     @FXML
     private TableColumn<Show, Timestamp> endTimeColumn;
 
+    @FXML
+    private TableColumn<Show, Timestamp> sellTicketsFromColumn;
     @FXML
     private TableColumn<Show, Integer> ticketPriceColumn;
 
@@ -205,7 +205,35 @@ public class ShowManagerController implements StageAware {
                 throw new RuntimeException(e);
             }
         });
+        sellTicketsFromColumn.setCellFactory(column -> {
+            TableCell<Show, Timestamp> cell = new TableCell<Show, Timestamp>() {
+                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm");
 
+                @Override
+                protected void updateItem(Timestamp item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(format.format(item));
+                    }
+                }
+            };
+
+            return cell;
+        });
+
+        sellTicketsFromColumn.setCellValueFactory(cellData -> {
+            try {
+                //noinspection unchecked
+                return JavaBeanObjectPropertyBuilder.create()
+                        .bean(cellData.getValue())
+                        .name("sellTicketsFrom")
+                        .build();
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        });
         ticketPriceColumn.setCellValueFactory(cellData -> {
             try {
                 //noinspection unchecked
