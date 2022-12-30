@@ -4,8 +4,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="636.0" prefWidth="493.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.cinema.ui.movieManager.editMovieDialog.AddMovieController">
-    <Button fx:id="confirmButton" layoutX="195.0" layoutY="576.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="102.0" text="Add Movie" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="195.0" AnchorPane.topAnchor="576.0">
+<AnchorPane prefHeight="655.0" prefWidth="493.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.cinema.ui.movieManager.editMovieDialog.AddMovieController">
+    <Button fx:id="confirmButton" layoutX="195.0" layoutY="603.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="102.0" text="Add Movie" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="195.0" AnchorPane.topAnchor="603.0">
         <font>
             <Font size="14.0" />
         </font>

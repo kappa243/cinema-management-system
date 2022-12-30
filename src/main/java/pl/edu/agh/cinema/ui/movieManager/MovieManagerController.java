@@ -7,10 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Setter;
@@ -23,6 +21,7 @@ import pl.edu.agh.cinema.model.movie.MovieService;
 import pl.edu.agh.cinema.ui.StageAware;
 import pl.edu.agh.cinema.ui.movieManager.editMovieDialog.AddMovieController;
 import pl.edu.agh.cinema.ui.movieManager.editMovieDialog.EditMovieController;
+import pl.edu.agh.cinema.utils.ImageConverter;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -47,6 +46,8 @@ public class MovieManagerController implements StageAware {
     private TableColumn<Movie, String> descriptionColumn;
     @FXML
     private TableColumn<Movie, Date> releaseDateColumn;
+    @FXML
+    private TableColumn<Movie, byte[]> coverColumn;
     @FXML
     private Button addNewMovieButton;
     @FXML
@@ -89,12 +90,45 @@ public class MovieManagerController implements StageAware {
         });
         releaseDateColumn.setCellValueFactory(cellData -> {
             try {
+                //noinspection unchecked
                 return JavaBeanObjectPropertyBuilder.create()
                         .bean(cellData.getValue())
                         .name("releaseDate")
                         .build();
             } catch (NoSuchMethodException e) {
                 throw new RuntimeException(e);
+            }
+        });
+
+        // set cell factory for cover as imageview from image
+        coverColumn.setCellValueFactory(cellData -> {
+            try {
+                //noinspection unchecked
+                return JavaBeanObjectPropertyBuilder.create()
+                        .bean(cellData.getValue())
+                        .name("cover")
+                        .build();
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        coverColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(byte[] item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    ImageView imageView = new ImageView(ImageConverter.byteToImage(item));
+//                        imageView.setFitHeight(200);
+//                        imageView.setFitWidth(120);
+                    imageView.fitWidthProperty().bind(column.widthProperty());
+                    imageView.fitHeightProperty().bind(column.widthProperty().multiply(2.0 / 3.0));
+                    imageView.setPreserveRatio(true);
+                    setGraphic(imageView);
+                }
             }
         });
 
