@@ -4,15 +4,15 @@
 
 # Wymagania
 
-##Role
-W projekcie zdefiniowanoe 3 role:
+## Role
+W projekcie zdefiniowane 3 role:
 1. Assistant (sprzedaż biletów)
 2. Moderator (definiowanie filmów i seansów oraz uprawnienia assistanta)
 3. Administrator (definiowanie użytkowników oraz uprawnienia moderatora)
 
 ![Role](./assets/role.png)
 
-##Przypadki użycia
+## Przypadki użycia
 
 Zdefiniowano cztery pakiety przypadków użycia:
 1. Sales
@@ -41,9 +41,9 @@ Pakiet zawiera operacje CRUD dodawanie, edycja, usuwanie, przeglądanie użytkow
 # Architektura aplikacji
 
 Aplikacja została zrealizowana z użyciem trzech frameworków:
-*Hibernate - obsługa bazy danych
-*Spring - szkielet aplikacji
-*JavaFX - interfejs użytkownika
+- Hibernate - obsługa bazy danych
+- Spring - szkielet aplikacji
+- JavaFX - interfejs użytkownika
 
 Zastosowanie frameworka Spring zdominowało architekturę aplikacji. Zastosowane zostały gotowe wzorce: klasy encji, repository
 odpowiadające za zapis i odczyt z bazy danych poprzez ORM Hibernate oraz serwisy (logika biznesowa i przechowywanie 
@@ -54,10 +54,10 @@ tymczasowych danych na potrzeby interfejsu użytkownika).
 Na powyższym rysunku pokazano zbiór klas związanych z obsługą obiektu danego typu (przez entity należy tu rozumieć klasy typu
 User, Movie, Show).
 
-Entity - jest to klasa modelująca encje obsługiwane i składowane w systemie. Atrybuty klasy są opatrzone adnotacjami Hibernate,
+**Entity** - jest to klasa modelująca encje obsługiwane i składowane w systemie. Atrybuty klasy są opatrzone adnotacjami Hibernate,
 które umożliwiają mapowanie klas entity jako rekordów w bazie danych.
 
-EntityRepository - klasa zapewniająca interfejs dostępu do bazy danych, jej metody mogą być wygenerowane automatycznie przez Spring,
+**EntityRepository** - klasa zapewniająca interfejs dostępu do bazy danych, jej metody mogą być wygenerowane automatycznie przez Spring,
 ale można też zdefiniować własne, dostarczając w formie adnotacji kod SQLa np:
 
 <code>
@@ -65,27 +65,27 @@ ale można też zdefiniować własne, dostarczając w formie adnotacji kod SQLa 
 List<Show> getShowsForMovie(Long id);
 </code>
 
-EntityService - komunikuje się z EntityRepository, a także przechowuje na potrzeby interfejsu listę dostępnych obiektów.
+**EntityService** - komunikuje się z EntityRepository, a także przechowuje na potrzeby interfejsu listę dostępnych obiektów.
 Są one obserwowano przez kontrolery JavaFX.
 
-EntityManagerController - jest klasą kontrolera obsługującą widok w interfejsie użytkownika. Reaguje ona na akcje użytkownika,
+**EntityManagerController** - jest klasą kontrolera obsługującą widok w interfejsie użytkownika. Reaguje ona na akcje użytkownika,
 oraz zmiany w obserwowanych obiektach.
 
-Entity View - ma postać pliku w formacie xml, definiującą kontrolki interfejsu użytkownika. W trakcie
+**Entity View** - ma postać pliku w formacie xml, definiującą kontrolki interfejsu użytkownika. W trakcie
 inicjalizacji widoku plik xml jest ładowany i jego elementy są wiązane z atrybutami klasy EnityManagerController.
 
-#Struktura kodu w projekcie
+# Struktura kodu w projekcie
 
 Projekt ma strukturę jak na poniższym rysunku. Wewnątrz pakietu model umieszczono encje oraz obok klasy repository i service.
 Analogiczny podział zastosowano dla pakietu UI, gdzie zdefiniowano podpakiety, zawierające klasy do obsługi okien dialogowych
 powiązanych z encją danego typu.
 
-Definicje widoków znajdują sięw katalogu resources fxml.
+Definicje widoków znajdują się w katalogu resources fxml.
 
 
 ![Struktura kodu w projekcie](./assets/strukturakodu.png)
 
-#Projekt bazy danych
+# Projekt bazy danych
 
 Schemat bazy danych został wygenerowany na podstawie adnotacji Hibernate w klasach modelu.
 Modele danych są mapowane na tabele w bazie danych przy użyciu JPA.
@@ -112,7 +112,7 @@ Zawiera spektakle. Spektakl posiada czas rozpoczęcia, czas zakończenia, film, 
 
 
 
-## Główna aplikacja
+# Główna aplikacja
 
 Jej głównym zadaniem jest inicjalizacja JavaFX i Spring, z odpowiednimi ustawieniami. Proces ten zaczyna się w *CinemaApplication.java*. Uruchamia on event odpowiedzialny za utworzonie głównego okna aplikacji oraz rejestruje beany dające dostęp do aplikacji.
 
