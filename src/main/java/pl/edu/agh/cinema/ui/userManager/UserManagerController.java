@@ -1,4 +1,4 @@
-package pl.edu.agh.cinema.ui;
+package pl.edu.agh.cinema.ui.userManager;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
@@ -10,35 +10,38 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lombok.Setter;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
-import pl.edu.agh.cinema.ApplicationCloseEvent;
 import pl.edu.agh.cinema.StageManager;
 import pl.edu.agh.cinema.ViewManager;
-import pl.edu.agh.cinema.model.person.Person;
-import pl.edu.agh.cinema.model.person.PersonService;
-import pl.edu.agh.cinema.model.person.Role;
+import pl.edu.agh.cinema.model.user.Role;
+import pl.edu.agh.cinema.model.user.User;
+import pl.edu.agh.cinema.model.user.UserService;
+import pl.edu.agh.cinema.ui.StageAware;
+import pl.edu.agh.cinema.ui.userManager.editUserDialog.AddUserController;
+import pl.edu.agh.cinema.ui.userManager.editUserDialog.EditUserController;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Scope("prototype")
-public class ApplicationController {
+public class UserManagerController implements StageAware {
+
 
     ApplicationEventPublisher publisher;
     StageManager stageManager;
     ViewManager viewManager;
-
-    PersonService personService;
-
-    @FXML
-    private Button exitButton;
+    UserService userService;
 
     @FXML
     private Button addNewUserButton;
@@ -50,36 +53,44 @@ public class ApplicationController {
     private Button deleteUserButton;
 
     @FXML
-    private TableView<Person> usersTable;
+    private TableView<User> usersTable;
 
     @FXML
-    private TableColumn<Person, String> firstNameColumn;
+    private TableColumn<User, String> firstNameColumn;
 
     @FXML
-    private TableColumn<Person, String> lastNameColumn;
+    private TableColumn<User, String> lastNameColumn;
 
     @FXML
-    private TableColumn<Person, String> emailColumn;
+    private TableColumn<User, String> emailColumn;
+
+    @FXML
+    private TextField queryField;
+
 
     @FXML
     @Enumerated(EnumType.STRING)
-    private TableColumn<Person, Role> roleColumn;
+    private TableColumn<User, Role> roleColumn;
+
+    @Setter
+    private Stage stage;
 
 
-    public ApplicationController(ApplicationEventPublisher publisher,
+    public UserManagerController(ApplicationEventPublisher publisher,
                                  StageManager stageManager,
                                  ViewManager viewManager,
-                                 PersonService personService) {
+                                 UserService userService) {
         this.publisher = publisher;
         this.viewManager = viewManager;
         this.stageManager = stageManager;
 
-        this.personService = personService;
+        this.userService = userService;
     }
 
     @FXML
     public void initialize() {
-        usersTable.setItems(personService.getPersons());
+
+        setItems();
 
         firstNameColumn.setCellValueFactory(cellData -> {
             try {
@@ -115,6 +126,7 @@ public class ApplicationController {
         });
         roleColumn.setCellValueFactory(cellData -> {
             try {
+                //noinspection unchecked
                 return JavaBeanObjectPropertyBuilder.create()
                         .bean(cellData.getValue())
                         .name("role")
@@ -124,7 +136,6 @@ public class ApplicationController {
             }
         });
 
-        exitButton.setOnAction(event -> publisher.publishEvent(new ApplicationCloseEvent(this)));
 
         addNewUserButton.setOnAction(this::handleAddAction);
 
@@ -132,37 +143,58 @@ public class ApplicationController {
                 Bindings.size(usersTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
         );
         editUserButton.setOnAction(this::handleEditAction);
-
+        deleteUserButton.disableProperty().bind(
+                Bindings.size(usersTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
+        );
         deleteUserButton.setOnAction(this::handleDeleteAction);
+
+        queryField.setOnKeyTyped(e -> this.setItems());
     }
 
+    public void setItems() {
+        usersTable.setItems(userService.getUsers().filtered(user -> {
+            List<String> queries = new ArrayList<>(List.of(queryField.getText().split(" ")));
+
+            // remove empty queries
+            queries.removeIf(String::isEmpty);
+
+            if (queries.isEmpty()) {
+                return true;
+            }
+
+            return queries.stream().allMatch(query -> {
+                String lowerCaseQuery = query.toLowerCase();
+                return user.getFirstName().toLowerCase().contains(lowerCaseQuery) ||
+                        user.getLastName().toLowerCase().contains(lowerCaseQuery) ||
+                        user.getEmail().toLowerCase().contains(lowerCaseQuery) ||
+                        user.getRole().toString().toLowerCase().contains(lowerCaseQuery);
+            });
+
+        }));
+    }
 
     private void handleAddAction(ActionEvent event) {
         try {
             Stage stage = new Stage();
 
-            Pair<Parent, EditUserController> vmLoad = viewManager.load("/fxml/editUser.fxml", stage);
+            Pair<Parent, AddUserController> vmLoad = viewManager.load("/fxml/userManager/editMovieDialog/addUser.fxml", stage);
             Parent parent = vmLoad.getFirst();
-            EditUserController controller = vmLoad.getSecond();
+            AddUserController controller = vmLoad.getSecond();
 
             stage.setScene(new Scene(parent));
             stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(stageManager.getPrimaryStage());
+            stage.initOwner(this.stage);
             stage.setResizable(false);
+            stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
             stage.setTitle("Add new user");
 
-            Person person = new Person("", "", "", Role.ASSISTANT);
-            controller.setData(person);
+            User user = new User("", "", "", "", Role.ASSISTANT);
+            controller.setData(user);
             controller.setStage(stage);
 
-            // TODO - temporary solution
-            controller.renameButton("Add user");
-
             stage.showAndWait();
+            setItems();
 
-            if (controller.isConfirmed()) {
-                personService.addPerson(person);
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -171,32 +203,32 @@ public class ApplicationController {
     private void handleEditAction(ActionEvent event) {
         try {
             Stage stage = new Stage();
-            Pair<Parent, EditUserController> vmLoad = viewManager.load("/fxml/editUser.fxml", stage);
+            Pair<Parent, EditUserController> vmLoad = viewManager.load("/fxml/userManager/editMovieDialog/editUser.fxml", stage);
             Parent parent = vmLoad.getFirst();
             EditUserController controller = vmLoad.getSecond();
 
 
             stage.setScene(new Scene(parent));
             stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(stageManager.getPrimaryStage());
+            stage.initOwner(this.stage);
             stage.setResizable(false);
+            stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
             stage.setTitle("Edit user");
 
-            Person person = usersTable.getSelectionModel().getSelectedItem();
-            controller.setData(person);
+            User user = usersTable.getSelectionModel().getSelectedItem();
+            controller.setData(user);
+            controller.setStage(stage);
 
             stage.showAndWait();
+            setItems();
 
-            if (controller.isConfirmed()) {
-                personService.updatePerson(person);
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void handleDeleteAction(ActionEvent event) {
-        Person person = usersTable.getSelectionModel().getSelectedItem();
-        personService.deletePerson(person);
+        User user = usersTable.getSelectionModel().getSelectedItem();
+        userService.deleteUser(user);
     }
 }

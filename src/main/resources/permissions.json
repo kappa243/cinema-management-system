@@ -1,0 +1,26 @@
+{
+    "ASSISTANT": {
+        "base": [
+        ],
+        "permissions": [
+            "tickets"
+        ]
+    },
+    "MODERATOR": {
+        "base": [
+            "ASSISTANT"
+        ],
+        "permissions": [
+            "movies",
+            "shows"
+        ]
+    },
+    "ADMINISTRATOR": {
+        "base": [
+            "MODERATOR"
+        ],
+        "permissions": [
+            "users"
+        ]
+    }
+}

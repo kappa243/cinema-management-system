@@ -43,8 +43,11 @@ public class StageManager {
         primaryStage.setValue(stage);
 
         try {
-            Parent parent = viewManager.loadObject("/fxml/main.fxml", stage);
+            Parent parent = viewManager.loadObject("/fxml/login.fxml", stage);
+
             stage.setScene(new Scene(parent));
+            stage.setTitle("Login");
+            stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -35,7 +35,7 @@ public class ShowService {
         showRepository.save(show);
     }
 
-    public void deletePerson(Show show) {
+    public void deleteShow(Show show) {
         showRepository.delete(show);
         shows.remove(show); // remove from observable list, but we are not fetching from database again
     }

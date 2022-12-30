@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class MovieService {
 
@@ -15,13 +16,13 @@ public class MovieService {
 
     private ObservableList<Movie> movies;
 
-    public void fetchPersons() {
+    public void fetchMovies() {
         this.movies = FXCollections.observableArrayList(movieRepository.findAll());
     }
 
     public ObservableList<Movie> getMovies() {
         if (movies == null) {
-            fetchPersons();
+            fetchMovies();
         }
         return movies;
     }
@@ -37,6 +38,6 @@ public class MovieService {
 
     public void deleteMovie(Movie movie) {
         movieRepository.delete(movie);
-        movies.remove(movie); // remove from observable list, but we are not fetching from database again
+//        movies.remove(movie); // remove from observable list, but we are not fetching from database again
     }
 }
