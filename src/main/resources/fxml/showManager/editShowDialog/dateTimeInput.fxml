@@ -4,27 +4,27 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-
-<HBox prefHeight="26.0" prefWidth="280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.cinema.ui.showManager.editShowDialog.DateTimeInputController">
-   <children>
-      <DatePicker fx:id="date" prefHeight="26.0" prefWidth="175.0">
-         <HBox.margin>
-            <Insets bottom="25.0" />
-         </HBox.margin>
-      </DatePicker>
-      <TextField fx:id="hour" prefHeight="26.0" prefWidth="45.0">
-         <HBox.margin>
-            <Insets bottom="25.0" left="10.0" />
-         </HBox.margin>
-      </TextField>
-      <Label prefHeight="26.0" prefWidth="0.0" text=":">
-         <HBox.margin>
-            <Insets bottom="25.0" />
-         </HBox.margin></Label>
-      <TextField fx:id="minute" prefHeight="26.0" prefWidth="45.0">
-         <HBox.margin>
-            <Insets bottom="25.0" />
-         </HBox.margin></TextField>
-   </children>
+<?import javafx.scene.layout.*?>
+<HBox prefHeight="26.0" prefWidth="280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="pl.edu.agh.cinema.ui.showManager.editShowDialog.DateTimeInputController">
+    <DatePicker fx:id="date" prefHeight="26.0" prefWidth="175.0">
+        <HBox.margin>
+            <Insets bottom="25.0"/>
+        </HBox.margin>
+    </DatePicker>
+    <TextField fx:id="hour" prefHeight="26.0" prefWidth="45.0">
+        <HBox.margin>
+            <Insets bottom="25.0" left="10.0"/>
+        </HBox.margin>
+    </TextField>
+    <Label prefHeight="26.0" prefWidth="0.0" text=":">
+        <HBox.margin>
+            <Insets bottom="25.0"/>
+        </HBox.margin>
+    </Label>
+    <TextField fx:id="minute" prefHeight="26.0" prefWidth="45.0">
+        <HBox.margin>
+            <Insets bottom="25.0"/>
+        </HBox.margin>
+    </TextField>
 </HBox>

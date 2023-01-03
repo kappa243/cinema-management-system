@@ -52,6 +52,7 @@ public class UserManagerController implements StageAware {
     @FXML
     private Button deleteUserButton;
 
+
     @FXML
     private TableView<User> usersTable;
 
@@ -91,6 +92,7 @@ public class UserManagerController implements StageAware {
     public void initialize() {
 
         setItems();
+
 
         firstNameColumn.setCellValueFactory(cellData -> {
             try {
@@ -140,11 +142,11 @@ public class UserManagerController implements StageAware {
         addNewUserButton.setOnAction(this::handleAddAction);
 
         editUserButton.disableProperty().bind(
-                Bindings.size(usersTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
+                Bindings.size(usersTable.getSelectionModel().getSelectedCells()).isNotEqualTo(1)
         );
         editUserButton.setOnAction(this::handleEditAction);
         deleteUserButton.disableProperty().bind(
-                Bindings.size(usersTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
+                Bindings.size(usersTable.getSelectionModel().getSelectedCells()).isNotEqualTo(1)
         );
         deleteUserButton.setOnAction(this::handleDeleteAction);
 

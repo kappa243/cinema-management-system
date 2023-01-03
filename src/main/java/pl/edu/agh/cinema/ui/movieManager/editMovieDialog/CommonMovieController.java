@@ -19,7 +19,7 @@ abstract class CommonMovieController implements StageAware {
     protected Button confirmButton;
 
     @FXML
-    private VBox dialogFields;
+    private VBox movieDialogFields;
     @FXML
     protected MovieDialogFieldController movieDialogFieldsController;
 
