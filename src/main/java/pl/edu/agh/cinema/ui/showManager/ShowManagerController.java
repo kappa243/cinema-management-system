@@ -311,10 +311,16 @@ public class ShowManagerController implements StageAware {
             stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
             stage.setTitle("Add new show");
 
+            Show show = new Show();
             controller.setStage(stage);
+            controller.setData(show);
 
             stage.showAndWait();
-            setItems();
+
+            if (controller.isConfirmed()){
+                showService.addShow(show);
+            }
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -341,7 +347,10 @@ public class ShowManagerController implements StageAware {
             controller.setStage(stage);
 
             stage.showAndWait();
-            setItems();
+
+            if (controller.isConfirmed()) {
+                showService.updateShow(show);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,6 +1,7 @@
 package pl.edu.agh.cinema.model.movie;
 
 import lombok.Getter;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.cinema.model.show.Show;
 
 import javax.persistence.*;
@@ -70,8 +71,12 @@ public class Movie {
     }
 
 
-    @OneToMany(mappedBy = "movie")
-    Set<Show> shows;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<Show> shows = new HashSet<>();
+
+    public Set<Show> getShows(){
+        return shows;
+    }
 
     public void addShow(Show show) {
         this.shows.add(show);
@@ -104,7 +109,6 @@ public class Movie {
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
-        this.shows = new HashSet<>();
         this.cover = cover;
     }
 }

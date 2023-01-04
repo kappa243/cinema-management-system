@@ -16,6 +16,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.cinema.model.movie.Movie;
 import pl.edu.agh.cinema.model.movie.MovieRepository;
 import pl.edu.agh.cinema.model.room.Room;
@@ -27,7 +28,6 @@ import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.UserRepository;
 import pl.edu.agh.cinema.utils.ImageConverter;
 
-import javax.transaction.Transactional;
 import java.io.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -77,6 +77,7 @@ public class CinemaApplication extends Application {
     }
 
     @Bean
+    @Transactional
     public CommandLineRunner demo(UserRepository userRepository, MovieRepository movieRepository, RoomRepository roomRepository, ShowRepository showRepository) {
         return args -> {
             // users
@@ -112,7 +113,7 @@ public class CinemaApplication extends Application {
                 Date dateStr = formatter.parse(movieTab[2]);
                 LocalDateTime localDate = dateStr.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                 Movie m = new Movie(movieTab[0], movieTab[1], localDate, Integer.parseInt(movieTab[3]), ImageConverter.fileToByte(new File("src/main/resources/static/img/movie-icon.png")));
-                System.out.println(m);
+//                System.out.println(m);
                 movies.add(m);
             }
 

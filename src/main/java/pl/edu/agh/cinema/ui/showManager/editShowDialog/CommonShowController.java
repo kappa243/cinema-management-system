@@ -63,7 +63,8 @@ abstract class CommonShowController implements StageAware {
 
     protected void handleConfirmAction(ActionEvent event) {
         if (showDialogFieldsController.validateInput()) {
-            updateModel();
+            updateModel()
+            ;
             confirmed = true;
             stage.close();
         }

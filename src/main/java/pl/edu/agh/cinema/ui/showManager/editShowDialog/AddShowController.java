@@ -26,9 +26,8 @@ public class AddShowController extends CommonShowController {
     @Override
     protected void handleConfirmAction(ActionEvent event) {
         if (showDialogFieldsController.validateInput()) {
-            show = new Show();
             updateModel();
-            showService.addShow(show);
+
             confirmed = true;
             stage.close();
         }

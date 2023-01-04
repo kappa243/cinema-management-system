@@ -75,6 +75,7 @@ abstract class CommonMovieController implements StageAware {
                 movieDialogFieldsController.warningMessage.setText("Error while reading image");
                 return;
             }
+
             confirmed = true;
             stage.close();
         }

@@ -195,7 +195,9 @@ public class UserManagerController implements StageAware {
             controller.setStage(stage);
 
             stage.showAndWait();
-            setItems();
+
+            // user registered in controller
+//            if (controller.isConfirmed())
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -222,7 +224,10 @@ public class UserManagerController implements StageAware {
             controller.setStage(stage);
 
             stage.showAndWait();
-            setItems();
+
+            if (controller.isConfirmed()) {
+                userService.updateUser(user);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

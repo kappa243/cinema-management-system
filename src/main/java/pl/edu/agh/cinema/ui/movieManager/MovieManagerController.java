@@ -18,15 +18,12 @@ import org.springframework.stereotype.Component;
 import pl.edu.agh.cinema.ViewManager;
 import pl.edu.agh.cinema.model.movie.Movie;
 import pl.edu.agh.cinema.model.movie.MovieService;
-import pl.edu.agh.cinema.model.show.Show;
 import pl.edu.agh.cinema.ui.StageAware;
 import pl.edu.agh.cinema.ui.movieManager.editMovieDialog.AddMovieController;
 import pl.edu.agh.cinema.ui.movieManager.editMovieDialog.EditMovieController;
 import pl.edu.agh.cinema.utils.ImageConverter;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -203,6 +200,10 @@ public class MovieManagerController implements StageAware {
 
             stage.showAndWait();
 
+            if (controller.isConfirmed()) {
+                movieService.addMovie(movie);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -229,6 +230,10 @@ public class MovieManagerController implements StageAware {
 
             stage.showAndWait();
 
+            if (controller.isConfirmed()) {
+                movieService.updateMovie(movie);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -236,7 +241,13 @@ public class MovieManagerController implements StageAware {
 
     private void handleDeleteAction(ActionEvent event) {
         Movie movie = moviesTable.getSelectionModel().getSelectedItem();
-        movieService.deleteMovie(movie);
+        if (!movieService.deleteMovie(movie)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error while deleting movie");
+            alert.setContentText("Movie could not be deleted, because there are still screenings of this movie.");
+            alert.showAndWait();
+        }
     }
 }
 

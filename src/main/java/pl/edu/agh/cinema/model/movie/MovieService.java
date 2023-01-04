@@ -2,7 +2,15 @@ package pl.edu.agh.cinema.model.movie;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.hibernate.Hibernate;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import pl.edu.agh.cinema.model.show.Show;
+
+import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -32,12 +40,18 @@ public class MovieService {
         movies.add(movie); // add to observable list, but we are not fetching from database again
     }
 
-    public void updateMovie(Movie movie) {
-        movieRepository.save(movie);
+    @Transactional
+    public boolean deleteMovie(Movie movie) {
+        
+        if (movieRepository.getReferenceById(movie.getId()).getShows().isEmpty()) {
+            movieRepository.delete(movie);
+            movies.remove(movie);  // remove from observable list, but we are not fetching from database again
+            return true;
+        }
+        return false;
     }
 
-    public void deleteMovie(Movie movie) {
-        movieRepository.delete(movie);
-//        movies.remove(movie); // remove from observable list, but we are not fetching from database again
+    public void updateMovie(Movie movie) {
+        movieRepository.save(movie);
     }
 }

@@ -47,6 +47,10 @@ public class Show {
 
     public void setMovie(Movie movie) {
         Movie oldMovie = this.movie;
+        if(oldMovie != null) {
+            oldMovie.removeShow(this);
+        }
+
         this.movie = movie;
         movie.addShow(this);
 
@@ -55,6 +59,7 @@ public class Show {
 
     public void setRoom(Room room) {
         Room oldRoom = this.room;
+
         this.room = room;
         pcs.firePropertyChange("room", oldRoom, room);
     }
