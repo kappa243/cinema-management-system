@@ -1,0 +1,65 @@
+//www.plantuml.com/plantuml/png/JSixheD038NXtgkmw2c0Mr_1VPGfMO0ruv1HvX7PHXHHzfwWH6YwN-VJ6TL8R4qH8fyDhQ24vMBeWx2pK3AGio8u-HGoaYB1ZToL5iPPMKwKNvau6zu1SLLsf8pDv3rctlP1clqs_tQr__jWDVOr_d5auvg7cd-aRFfc_VWNF82mRR_tFgexgZzgW96pNrDy0W00
+
+//www.plantuml.com/plantuml/png/7Ssn3S9040J0_AfOENT00yY84YmAMBqFy_BXHt_h2D4xY6oocLBiEfvXuNT13Rsk3s6ftOjgsur5hUEIMLFS1IPeBvQDgsDcUE9jm95Uc8vXzWYebisL0vYuNK_sCM8SptzFlY-_y0i0
+
+@startuml
+actor Admin as ad
+actor Moderator as m
+actor Assistant as as
+
+as <|-- m
+m <|-- ad
+@enduml
+
+
+
+@startuml
+left to right direction
+actor Admin as a
+package UserManagement {
+  usecase "Add new user" as UC1
+  usecase "Edit user" as UC2
+  usecase "Delete user" as UC3
+  usecase "Browse users" as UC4
+}
+
+a --> UC4
+a --> UC1
+a --> UC2
+a --> UC3
+@enduml
+
+
+
+
+@startuml
+left to right direction
+actor Moderator as m
+package MovieManagement {
+  usecase "Add new movie" as UC1
+  usecase "Edit movie" as UC2
+  usecase "Delete movie" as UC3
+  usecase "Browse movies" as UC4
+}
+
+package ShowManagement {
+  usecase "Add new show" as UC5
+  usecase "Edit show" as UC6
+  usecase "Delete show" as UC7
+  usecase "Browse shows" as UC8
+}
+
+package Statistics{
+  usecase "Display sales statistics" as UC9
+}
+
+m --> UC1
+m --> UC2
+m --> UC3
+m --> UC4
+m --> UC5
+m --> UC6
+m --> UC7
+m --> UC8
+m --> UC9
+@enduml

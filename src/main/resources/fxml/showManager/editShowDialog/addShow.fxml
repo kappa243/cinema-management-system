@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="620.0" prefWidth="492.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="pl.edu.agh.cinema.ui.showManager.editShowDialog.AddShowController">
+    <Button fx:id="confirmButton" layoutX="195.0" layoutY="571.0" mnemonicParsing="false" prefHeight="30.0"
+            prefWidth="102.0" text="Add Show" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="195.0"
+            AnchorPane.topAnchor="570.0">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Button>
+    <fx:include fx:id="showDialogFields" layoutX="106.0" layoutY="25.0" source="showDialogFields.fxml"
+                AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="106.0" AnchorPane.topAnchor="25.0"/>
+</AnchorPane>
