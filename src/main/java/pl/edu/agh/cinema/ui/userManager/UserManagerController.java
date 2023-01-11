@@ -1,5 +1,8 @@
 package pl.edu.agh.cinema.ui.userManager;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.MFXTooltip;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
@@ -7,10 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Setter;
@@ -44,17 +45,17 @@ public class UserManagerController implements StageAware {
     UserService userService;
 
     @FXML
-    private Button addNewUserButton;
+    private MFXButton addNewUserButton;
 
     @FXML
-    private Button editUserButton;
+    private MFXButton editUserButton;
 
     @FXML
-    private Button deleteUserButton;
+    private MFXButton deleteUserButton;
+
 
     @FXML
     private TableView<User> usersTable;
-
     @FXML
     private TableColumn<User, String> firstNameColumn;
 
@@ -65,7 +66,7 @@ public class UserManagerController implements StageAware {
     private TableColumn<User, String> emailColumn;
 
     @FXML
-    private TextField queryField;
+    private MFXTextField queryField;
 
 
     @FXML
@@ -91,6 +92,7 @@ public class UserManagerController implements StageAware {
     public void initialize() {
 
         setItems();
+
 
         firstNameColumn.setCellValueFactory(cellData -> {
             try {
@@ -140,19 +142,25 @@ public class UserManagerController implements StageAware {
         addNewUserButton.setOnAction(this::handleAddAction);
 
         editUserButton.disableProperty().bind(
-                Bindings.size(usersTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
+                Bindings.size(usersTable.getSelectionModel().getSelectedCells()).isNotEqualTo(1)
         );
         editUserButton.setOnAction(this::handleEditAction);
         deleteUserButton.disableProperty().bind(
-                Bindings.size(usersTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
+                Bindings.size(usersTable.getSelectionModel().getSelectedCells()).isNotEqualTo(1)
         );
         deleteUserButton.setOnAction(this::handleDeleteAction);
 
-        queryField.setOnKeyTyped(e -> this.setItems());
+        MFXTooltip.of(
+                queryField,
+                "You can search multiple queries by separating them with a space"
+        ).install();
+        queryField.setOnKeyPressed(e -> this.setItems());
+
     }
 
     public void setItems() {
         usersTable.setItems(userService.getUsers().filtered(user -> {
+            System.out.println(queryField.getText());
             List<String> queries = new ArrayList<>(List.of(queryField.getText().split(" ")));
 
             // remove empty queries
@@ -193,7 +201,9 @@ public class UserManagerController implements StageAware {
             controller.setStage(stage);
 
             stage.showAndWait();
-            setItems();
+
+            // user registered in controller
+//            if (controller.isConfirmed())
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -220,7 +230,10 @@ public class UserManagerController implements StageAware {
             controller.setStage(stage);
 
             stage.showAndWait();
-            setItems();
+
+            if (controller.isConfirmed()) {
+                userService.updateUser(user);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,5 +1,6 @@
 package pl.edu.agh.cinema.ui;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Component;
 import pl.edu.agh.cinema.StageManager;
 import pl.edu.agh.cinema.ViewManager;
 import pl.edu.agh.cinema.auth.AuthenticationService;
-import pl.edu.agh.cinema.ui.showManager.ShowManagerController;
+import pl.edu.agh.cinema.model.movie.MovieService;
+import pl.edu.agh.cinema.model.sales.SalesService;
+import pl.edu.agh.cinema.ui.stats.StatsDialog;
 import pl.edu.agh.cinema.ui.ticketsManager.TicketsManagerController;
 import pl.edu.agh.cinema.ui.userManager.UserManagerController;
 
@@ -23,29 +26,39 @@ import pl.edu.agh.cinema.ui.userManager.UserManagerController;
 public class MainController implements StageAware {
 
     private final AuthenticationService authenticationService;
+    private final MovieService movieService;
+    private final SalesService salesService;
     private final ViewManager viewManager;
     private final StageManager stageManager;
 
     @FXML
-    private Button userManagerButton;
+    private MFXButton userManagerButton;
 
     @FXML
-    private Button showManagerButton;
+    private MFXButton showManagerButton;
 
     @FXML
-    private Button movieManagerButton;
+    private MFXButton movieManagerButton;
 
     @FXML
-    private Button ticketManagerButton;
+    private MFXButton ticketManagerButton;
 
     @FXML
-    private Button logoutButton;
+    private MFXButton emailManagerButton;
+
+    @FXML
+    private MFXButton statsButton;
+
+    @FXML
+    private MFXButton logoutButton;
 
     @Setter
     private Stage stage;
 
-    public MainController(AuthenticationService authenticationService, ViewManager viewManager, StageManager stageManager) {
+    public MainController(AuthenticationService authenticationService, MovieService movieService, SalesService salesService, ViewManager viewManager, StageManager stageManager) {
         this.authenticationService = authenticationService;
+        this.movieService = movieService;
+        this.salesService = salesService;
         this.viewManager = viewManager;
         this.stageManager = stageManager;
     }
@@ -54,17 +67,23 @@ public class MainController implements StageAware {
     public void initialize() {
         // permissions
         Pane pane = (Pane) userManagerButton.getParent();
-        if(!authenticationService.isAuthorized("users")){
+        if (!authenticationService.isAuthorized("users")) {
             pane.getChildren().remove(userManagerButton);
         }
-        if(!authenticationService.isAuthorized("movies")){
+        if (!authenticationService.isAuthorized("movies")) {
             pane.getChildren().remove(movieManagerButton);
         }
-        if(!authenticationService.isAuthorized("tickets")){
+        if (!authenticationService.isAuthorized("tickets")) {
             pane.getChildren().remove(ticketManagerButton);
         }
-        if(!authenticationService.isAuthorized("shows")){
+        if (!authenticationService.isAuthorized("shows")) {
             pane.getChildren().remove(showManagerButton);
+        }
+        if (!authenticationService.isAuthorized("emails")) {
+            pane.getChildren().remove(emailManagerButton);
+        }
+        if (!authenticationService.isAuthorized("stats")) {
+            pane.getChildren().remove(statsButton);
         }
 
         // events
@@ -140,6 +159,27 @@ public class MainController implements StageAware {
             }
         });
 
+        statsButton.setOnAction(event -> {
+            new StatsDialog(movieService, salesService).display();
+        });
+
+        emailManagerButton.setOnAction(event -> {
+
+            try {
+                Stage stage = new Stage();
+                Pair<Parent, UserManagerController> vmLoad = viewManager.load("/fxml/emailManager/receiverManager.fxml", stage);
+                stage.setScene(new Scene(vmLoad.getFirst()));
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(this.stage);
+                stage.setTitle("Movies management");
+                stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
+
+                stage.show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         logoutButton.setOnAction(event -> {
             authenticationService.logout();
             stageManager.getPrimaryStage().show();

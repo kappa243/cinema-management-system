@@ -25,15 +25,15 @@ public class AddUserController extends CommonUserController {
 
     @Override
     protected void handleConfirmAction(ActionEvent event) {
-        if (dialogFieldsController.validateInput(true)) {
+        if (userDialogFieldsController.validateInput(true)) {
             try {
-                authenticationService.registerUser(dialogFieldsController.firstName.getText(),
-                        dialogFieldsController.lastName.getText(),
-                        dialogFieldsController.email.getText(),
-                        dialogFieldsController.password.getText(),
-                        dialogFieldsController.roleChoiceBox.getValue());
+                authenticationService.registerUser(userDialogFieldsController.firstName.getText(),
+                        userDialogFieldsController.lastName.getText(),
+                        userDialogFieldsController.email.getText(),
+                        userDialogFieldsController.password.getText(),
+                        userDialogFieldsController.roleChoiceBox.getValue());
             } catch (IllegalArgumentException e) {
-                dialogFieldsController.warningMessage.setText(e.getMessage());
+                userDialogFieldsController.warningMessage.setText(e.getMessage());
                 return;
             }
 

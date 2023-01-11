@@ -1,6 +1,7 @@
 package pl.edu.agh.cinema.model.movie;
 
 import lombok.Getter;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.cinema.model.show.Show;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -70,8 +72,12 @@ public class Movie {
     }
 
 
-    @OneToMany(mappedBy = "movie")
-    Set<Show> shows;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<Show> shows = new HashSet<>();
+
+    public Set<Show> getShows(){
+        return shows;
+    }
 
     public void addShow(Show show) {
         this.shows.add(show);
@@ -104,7 +110,24 @@ public class Movie {
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
-        this.shows = new HashSet<>();
         this.cover = cover;
+    }
+
+    @Override
+    public String toString() {
+        return getTitle();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return id == movie.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

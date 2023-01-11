@@ -1,5 +1,6 @@
 package pl.edu.agh.cinema.ui.movieManager.editMovieDialog;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,10 +17,10 @@ import java.sql.Date;
 abstract class CommonMovieController implements StageAware {
 
     @FXML
-    protected Button confirmButton;
+    protected MFXButton confirmButton;
 
     @FXML
-    private VBox dialogFields;
+    private VBox movieDialogFields;
     @FXML
     protected MovieDialogFieldController movieDialogFieldsController;
 
@@ -75,6 +76,7 @@ abstract class CommonMovieController implements StageAware {
                 movieDialogFieldsController.warningMessage.setText("Error while reading image");
                 return;
             }
+
             confirmed = true;
             stage.close();
         }

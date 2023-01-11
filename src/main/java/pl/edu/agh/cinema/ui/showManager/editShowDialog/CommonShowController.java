@@ -1,5 +1,6 @@
 package pl.edu.agh.cinema.ui.showManager.editShowDialog;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -15,12 +16,12 @@ abstract class CommonShowController implements StageAware {
     protected Stage stage;
 
     @FXML
-    protected Button confirmButton;
+    protected MFXButton confirmButton;
 
     @FXML
-    private VBox showDialogField;
+    private VBox showDialogFields;
     @FXML
-    protected ShowDialogFieldController showDialogFieldController;
+    protected ShowDialogFieldController showDialogFieldsController;
 
     protected Show show;
 
@@ -39,31 +40,38 @@ abstract class CommonShowController implements StageAware {
     }
 
     protected void updateContent() {
-        showDialogFieldController.movieComboBox.setValue(show.getMovie());
-        showDialogFieldController.roomComboBox.setValue(show.getRoom());
-        showDialogFieldController.setStartTime(show.getStartTime());
-        showDialogFieldController.setEndTime(show.getEndTime());
-        showDialogFieldController.setSellTicketsFrom(show.getSellTicketsFrom());
-        showDialogFieldController.ticketPrice.setText(Double.toString(show.getTicketPrice()));
-        showDialogFieldController.soldTickets.setText(Integer.toString(show.getSoldTickets()));
+        if (show.getMovie() != null) {
+            showDialogFieldsController.movieComboBox.selectItem(show.getMovie());
+            showDialogFieldsController.movieComboBox.setText(show.getMovie().getTitle());
+        }
+        if (show.getRoom() != null) {
+            showDialogFieldsController.roomComboBox.selectItem(show.getRoom());
+            showDialogFieldsController.roomComboBox.setText(show.getRoom().getRoomName());
+        }
+        showDialogFieldsController.setStartTime(show.getStartTime());
+        showDialogFieldsController.setEndTime(show.getEndTime());
+        showDialogFieldsController.setSellTicketsFrom(show.getSellTicketsFrom());
+        showDialogFieldsController.ticketPrice.setText(Double.toString(show.getTicketPrice()));
+        showDialogFieldsController.soldTickets.setText(Integer.toString(show.getSoldTickets()));
     }
 
     protected void updateModel() {
-        show.setMovie(showDialogFieldController.movieComboBox.getValue());
-        show.setRoom(showDialogFieldController.roomComboBox.getValue());
-        show.setStartTime(showDialogFieldController.getStartTime());
-        show.setEndTime(showDialogFieldController.getEndTime());
-        show.setSellTicketsFrom(showDialogFieldController.getSellTicketsFrom());
-        show.setTicketPrice(Double.parseDouble(showDialogFieldController.ticketPrice.getText()));
-        show.setSoldTickets(Integer.parseInt(showDialogFieldController.soldTickets.getText()));
+        show.setMovie(showDialogFieldsController.movieComboBox.getValue());
+        show.setRoom(showDialogFieldsController.roomComboBox.getValue());
+        show.setStartTime(showDialogFieldsController.getStartTime());
+        show.setEndTime(showDialogFieldsController.getEndTime());
+        show.setSellTicketsFrom(showDialogFieldsController.getSellTicketsFrom());
+        show.setTicketPrice(Double.parseDouble(showDialogFieldsController.ticketPrice.getText()));
+        show.setSoldTickets(Integer.parseInt(showDialogFieldsController.soldTickets.getText()));
     }
 
     @FXML
     protected void initialize() {}
 
     protected void handleConfirmAction(ActionEvent event) {
-        if (showDialogFieldController.validateInput()) {
-            updateModel();
+        if (showDialogFieldsController.validateInput()) {
+            updateModel()
+            ;
             confirmed = true;
             stage.close();
         }

@@ -16,10 +16,14 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.transaction.annotation.Transactional;
+import pl.edu.agh.cinema.generator.ShowsGenerator;
 import pl.edu.agh.cinema.model.movie.Movie;
 import pl.edu.agh.cinema.model.movie.MovieRepository;
 import pl.edu.agh.cinema.model.room.Room;
 import pl.edu.agh.cinema.model.room.RoomRepository;
+import pl.edu.agh.cinema.model.sales.Sales;
+import pl.edu.agh.cinema.model.sales.SalesRepository;
 import pl.edu.agh.cinema.model.show.Show;
 import pl.edu.agh.cinema.model.show.ShowRepository;
 import pl.edu.agh.cinema.model.user.Role;
@@ -27,9 +31,7 @@ import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.UserRepository;
 import pl.edu.agh.cinema.utils.ImageConverter;
 
-import javax.transaction.Transactional;
 import java.io.*;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -77,13 +79,14 @@ public class CinemaApplication extends Application {
     }
 
     @Bean
-    public CommandLineRunner demo(UserRepository userRepository, MovieRepository movieRepository, RoomRepository roomRepository, ShowRepository showRepository) {
+    @Transactional
+    public CommandLineRunner demo(UserRepository userRepository, MovieRepository movieRepository, RoomRepository roomRepository, ShowRepository showRepository, SalesRepository salesRepository) {
         return args -> {
             // users
             String password = "admin";
             String hashed = BCrypt.hashpw(password, BCrypt.gensalt());
             User admin = new User("admin", "admin", "admin", hashed, Role.ADMINISTRATOR);
-            User p1 = new User("Jan", "Kowalski", "jkowalski@example.com", hashed, Role.ASSISTANT);
+            User p1 = new User("Jan", "Kowalski", "cinemaManagement2022@gmail.com", hashed, Role.ASSISTANT);
             User p2 = new User("Adam", "Nowak", "anowak@example.com", hashed, Role.ASSISTANT);
             User p3 = new User("Anna", "Kowalska", "akowalska@example.com", hashed, Role.MODERATOR);
 
@@ -112,34 +115,36 @@ public class CinemaApplication extends Application {
                 Date dateStr = formatter.parse(movieTab[2]);
                 LocalDateTime localDate = dateStr.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                 Movie m = new Movie(movieTab[0], movieTab[1], localDate, Integer.parseInt(movieTab[3]), ImageConverter.fileToByte(new File("src/main/resources/static/img/movie-icon.png")));
-                System.out.println(m);
                 movies.add(m);
             }
-
 
 
             // rooms
             List<Room> rooms = readRooms();
 
             // shows
-            Show show1 = new Show(Timestamp.valueOf("2023-11-12 11:00:03.123456789").toLocalDateTime(), Timestamp.valueOf("2023-11-12 13:02:03.123456789").toLocalDateTime(), Timestamp.valueOf("2018-11-12 01:02:03.123456789").toLocalDateTime(), 12, 38);
-            Show show2 = new Show(Timestamp.valueOf("2023-11-12 15:00:03.123456789").toLocalDateTime(), Timestamp.valueOf("2023-11-12 17:02:03.123456789").toLocalDateTime(), Timestamp.valueOf("2018-11-12 01:02:03.123456789").toLocalDateTime(), 40, 24);
-            Show show3 = new Show(Timestamp.valueOf("2023-01-12 15:00:03.123456789").toLocalDateTime(), Timestamp.valueOf("2023-01-12 17:25:03.123456789").toLocalDateTime(), Timestamp.valueOf("2022-12-10 11:20:00.123456789").toLocalDateTime(), 32, 10);
+//            Show show1 = new Show(Timestamp.valueOf("2023-11-12 11:00:03.123456789").toLocalDateTime(), Timestamp.valueOf("2023-11-12 13:02:03.123456789").toLocalDateTime(), Timestamp.valueOf("2018-11-12 01:02:03.123456789").toLocalDateTime(), 12, 38);
+//            Show show2 = new Show(Timestamp.valueOf("2023-11-12 15:00:03.123456789").toLocalDateTime(), Timestamp.valueOf("2023-11-12 17:02:03.123456789").toLocalDateTime(), Timestamp.valueOf("2018-11-12 01:02:03.123456789").toLocalDateTime(), 40, 24);
+//            Show show3 = new Show(Timestamp.valueOf("2023-01-12 15:00:03.123456789").toLocalDateTime(), Timestamp.valueOf("2023-01-12 17:25:03.123456789").toLocalDateTime(), Timestamp.valueOf("2022-12-10 11:20:00.123456789").toLocalDateTime(), 32, 10);
+//
+//            show1.setMovie(movies.get(0));
+//            show1.setRoom(rooms.get(0));
+//
+//            show2.setMovie(movies.get(1));
+//            show2.setRoom(rooms.get(1));
+//
+//            show3.setMovie(movies.get(2));
+//            show3.setRoom(rooms.get(2));
 
-            show1.setMovie(movies.get(0));
-            show1.setRoom(rooms.get(0));
-
-            show2.setMovie(movies.get(1));
-            show2.setRoom(rooms.get(1));
-
-            show3.setMovie(movies.get(2));
-            show3.setRoom(rooms.get(2));
-
+            List<Show> shows = ShowsGenerator.generateShow(movies, rooms);
+            List<Sales> sales = ShowsGenerator.generateSales(shows);
 
             userRepository.saveAll(List.of(admin, p1, p2, p3));
             roomRepository.saveAll(rooms);
             movieRepository.saveAll(movies);
-            showRepository.saveAll(List.of(show1, show2, show3));
+//            showRepository.saveAll(List.of(show1, show2, show3));
+            showRepository.saveAll(shows);
+            salesRepository.saveAll(sales);
         };
     }
 

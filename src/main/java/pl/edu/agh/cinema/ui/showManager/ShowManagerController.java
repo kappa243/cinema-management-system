@@ -1,12 +1,17 @@
 package pl.edu.agh.cinema.ui.showManager;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.MFXTooltip;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Setter;
@@ -25,9 +30,6 @@ import pl.edu.agh.cinema.ui.showManager.editShowDialog.AddShowController;
 import pl.edu.agh.cinema.ui.showManager.editShowDialog.EditShowController;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -43,13 +45,13 @@ public class ShowManagerController implements StageAware {
     private ShowService showService;
 
     @FXML
-    private Button addNewShowButton;
+    private MFXButton addNewShowButton;
 
     @FXML
-    private Button editShowButton;
+    private MFXButton editShowButton;
 
     @FXML
-    private Button deleteShowButton;
+    private MFXButton deleteShowButton;
 
     @FXML
     private TableView<Show> showsTable;
@@ -75,7 +77,7 @@ public class ShowManagerController implements StageAware {
     private TableColumn<Show, Integer> soldTicketsColumn;
 
     @FXML
-    private TextField queryField;
+    private MFXTextField queryField;
 
     @Setter
     private Stage stage;
@@ -263,7 +265,6 @@ public class ShowManagerController implements StageAware {
             }
         });
 
-        queryField.setOnKeyTyped(e -> this.setItems());
         deleteShowButton.setOnAction(this::handleDeleteAction);
         addNewShowButton.setOnAction(this::handleAddAction);
         editShowButton.setOnAction(this::handleEditAction);
@@ -274,6 +275,12 @@ public class ShowManagerController implements StageAware {
         deleteShowButton.disableProperty().bind(
                 Bindings.size(showsTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
         );
+
+        queryField.setOnKeyPressed(e -> this.setItems());
+        MFXTooltip.of(
+                queryField,
+                "You can search multiple queries by separating them with a space"
+        ).install();
     }
 
     public void setItems() {
@@ -311,10 +318,20 @@ public class ShowManagerController implements StageAware {
             stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
             stage.setTitle("Add new show");
 
+            Show show = new Show();
+            show.setStartTime(LocalDateTime.now());
+            show.setEndTime(LocalDateTime.now());
+            show.setSellTicketsFrom(LocalDateTime.now());
+
             controller.setStage(stage);
+            controller.setData(show);
 
             stage.showAndWait();
-            setItems();
+
+            if (controller.isConfirmed()) {
+                showService.addShow(show);
+            }
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -341,7 +358,10 @@ public class ShowManagerController implements StageAware {
             controller.setStage(stage);
 
             stage.showAndWait();
-            setItems();
+
+            if (controller.isConfirmed()) {
+                showService.updateShow(show);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

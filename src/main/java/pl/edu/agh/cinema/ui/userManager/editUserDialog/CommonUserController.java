@@ -1,5 +1,6 @@
 package pl.edu.agh.cinema.ui.userManager.editUserDialog;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,12 +15,12 @@ import pl.edu.agh.cinema.ui.StageAware;
 abstract class CommonUserController implements StageAware {
 
     @FXML
-    protected Button confirmButton;
+    protected MFXButton confirmButton;
 
     @FXML
-    private VBox dialogFields;
+    private VBox userDialogFields;
     @FXML
-    protected UserDialogFieldController dialogFieldsController;
+    protected UserDialogFieldController userDialogFieldsController;
 
     @Setter
     protected Stage stage;
@@ -30,6 +31,7 @@ abstract class CommonUserController implements StageAware {
 
     public void setData(User user) {
         this.user = user;
+
         updateContent();
     }
 
@@ -41,31 +43,33 @@ abstract class CommonUserController implements StageAware {
     }
 
     protected void updateContent() {
-        dialogFieldsController.firstName.setText(user.getFirstName());
-        dialogFieldsController.lastName.setText(user.getLastName());
-        dialogFieldsController.email.setText(user.getEmail());
-        dialogFieldsController.roleChoiceBox.setValue(user.getRole());
+        userDialogFieldsController.firstName.setText(user.getFirstName());
+        userDialogFieldsController.lastName.setText(user.getLastName());
+        userDialogFieldsController.email.setText(user.getEmail());
+        userDialogFieldsController.roleChoiceBox.setValue(user.getRole());
+        userDialogFieldsController.roleChoiceBox.selectItem(user.getRole());
+        userDialogFieldsController.roleChoiceBox.setText(user.getRole().toString());
     }
 
     protected void updateModel(boolean updatePassword) {
-        user.setFirstName(dialogFieldsController.firstName.getText());
-        user.setLastName(dialogFieldsController.lastName.getText());
-        user.setEmail(dialogFieldsController.email.getText());
+        user.setFirstName(userDialogFieldsController.firstName.getText());
+        user.setLastName(userDialogFieldsController.lastName.getText());
+        user.setEmail(userDialogFieldsController.email.getText());
         if (updatePassword) {
-            String hashed = BCrypt.hashpw(dialogFieldsController.password.getText(), BCrypt.gensalt());
+            String hashed = BCrypt.hashpw(userDialogFieldsController.password.getText(), BCrypt.gensalt());
             user.setPassword(hashed);
         }
-        user.setRole(dialogFieldsController.roleChoiceBox.getValue());
+        user.setRole(userDialogFieldsController.roleChoiceBox.getValue());
     }
 
     @FXML
     protected void initialize() {
-        dialogFieldsController.roleChoiceBox.getItems().addAll(Role.values());
+        userDialogFieldsController.roleChoiceBox.getItems().addAll(Role.values());
     }
 
     protected void handleConfirmAction(ActionEvent event) {
-        boolean validatePassword = !dialogFieldsController.password.getText().isEmpty();
-        if (dialogFieldsController.validateInput(validatePassword)) {
+        boolean validatePassword = !userDialogFieldsController.password.getText().isEmpty();
+        if (userDialogFieldsController.validateInput(validatePassword)) {
             updateModel(validatePassword);
 
             confirmed = true;

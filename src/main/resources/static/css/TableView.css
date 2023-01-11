@@ -1,0 +1,82 @@
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #d7d7d7;
+    -fx-border-radius: 5px 5px 0 0;
+}
+
+.table-view .corner {
+    /*-fx-background-color: transparent;*/
+    -fx-background-insets: 0 0 0 0;
+}
+
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: white;
+    -fx-border-color: rgba(255, 255, 255, 0.99);
+    -fx-border-radius: 5px 5px 0 0;
+    -fx-background-insets: 0 0 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #d7d7d7;
+    -fx-background-insets: 0 0 0 0;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical,
+.table-view .virtual-flow .scroll-bar:vertical .track,
+.table-view .virtual-flow .scroll-bar:vertical .track-background,
+.table-view .virtual-flow .scroll-bar:horizontal,
+.table-view .virtual-flow .scroll-bar:horizontal .track,
+.table-view .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .virtual-flow .scroll-bar .increment-button,
+.table-view .virtual-flow .scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 2;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color: #737373;
+}
+.table-view .virtual-flow .scroll-bar:horizontal .thumb {
+    -fx-background-color:  #737373;
+}
+
+
+.table-view .table-cell{
+    -fx-padding: 2 0 2 10px;
+    -fx-border-width: 1px;
+    -fx-border-color: rgb(245, 245, 245);
+}
+
+.table-view .table-cell:selected {
+    -fx-border-width: 1px;
+    -fx-border-color: transparent;
+}
+
+.table-row-cell {
+    /*-fx-background-insets: 0, 0 0 1 0;*/
+    -fx-padding: 0.0em;
+}
+
+.table-row-cell:hover  {
+    -fx-background-color: rgb(255, 0, 0);
+}
+.table-row-cell:odd{
+    -fx-background-color: rgba(255, 255, 255, 0.07);
+}
+.table-row-cell:even{
+    -fx-background-color: rgba(197, 197, 197, 0.07);
+}
+
+.table-row-cell:selected {
+    -fx-background-color: rgba(149, 103, 185, 0.15);
+    -fx-text-background-color: black;
+}

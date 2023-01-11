@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.TextArea?>
+<AnchorPane prefHeight="498.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.cinema.ui.emailManager.SendEmailController">
+    <MFXTextField fx:id="subject" floatMode="DISABLED" layoutX="57.0" layoutY="73.0" prefHeight="26.0" prefWidth="170.0" AnchorPane.leftAnchor="57.0" AnchorPane.rightAnchor="372.6" AnchorPane.topAnchor="73.0" />
+    <TextArea fx:id="text" stylesheets="@../../static/css/TextArea.css" layoutX="57.0" layoutY="140.0" prefHeight="200.0" prefWidth="486.0" AnchorPane.leftAnchor="57.0" AnchorPane.rightAnchor="56.60000000000002" AnchorPane.topAnchor="140.0" />
+    <Label layoutX="57.0" layoutY="53.0" text="Subject" AnchorPane.leftAnchor="57.0" AnchorPane.topAnchor="53.0">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
+    <Label layoutX="57.0" layoutY="120.0" text="Text" AnchorPane.leftAnchor="57.0" AnchorPane.rightAnchor="516.6" AnchorPane.topAnchor="120.0">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
+    <MFXButton fx:id="sendButton" style="-fx-background-color: #8e32da; -fx-text-fill: white" layoutX="492.0" layoutY="356.0" mnemonicParsing="false" text="Send" AnchorPane.bottomAnchor="14.399999999999999" AnchorPane.rightAnchor="57.6">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </MFXButton>
+    <Label fx:id="warningMessage" layoutX="215.0" layoutY="424.0" prefWidth="170.0" text="No subject!  Do you want to send an empty message? " textAlignment="CENTER" textFill="RED" wrapText="true" AnchorPane.bottomAnchor="14.0">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
+    <MFXButton fx:id="attachButton" layoutX="422.0" layoutY="363.0" mnemonicParsing="false" text="Add attachment">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </MFXButton>
+    <Label fx:id="attach" layoutX="60.0" layoutY="368.0" text="Attachments: " AnchorPane.bottomAnchor="110.0" AnchorPane.leftAnchor="60.0">
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
+</AnchorPane>

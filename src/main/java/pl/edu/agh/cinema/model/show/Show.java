@@ -1,6 +1,7 @@
 package pl.edu.agh.cinema.model.show;
 
 import lombok.Getter;
+import lombok.Setter;
 import pl.edu.agh.cinema.model.movie.Movie;
 import pl.edu.agh.cinema.model.room.Room;
 
@@ -8,6 +9,7 @@ import javax.persistence.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 public class Show {
@@ -45,8 +47,16 @@ public class Show {
     @Getter
     int soldTickets;
 
+    @Getter
+    @Setter
+    private boolean recommended = false;
+
     public void setMovie(Movie movie) {
         Movie oldMovie = this.movie;
+        if(oldMovie != null) {
+            oldMovie.removeShow(this);
+        }
+
         this.movie = movie;
         movie.addShow(this);
 
@@ -55,6 +65,7 @@ public class Show {
 
     public void setRoom(Room room) {
         Room oldRoom = this.room;
+
         this.room = room;
         pcs.firePropertyChange("room", oldRoom, room);
     }
@@ -109,6 +120,18 @@ public class Show {
         this.sellTicketsFrom = sellTicketsFrom;
         this.ticketPrice = ticketPrice;
         this.soldTickets = soldTickets;
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Show show = (Show) o;
+        return Objects.equals(id, show.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

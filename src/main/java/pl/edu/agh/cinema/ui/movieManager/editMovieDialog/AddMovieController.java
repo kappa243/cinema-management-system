@@ -35,8 +35,6 @@ public class AddMovieController extends CommonMovieController{
                 return;
             }
 
-            movieService.addMovie(movie);
-
             confirmed = true;
             stage.close();
         }

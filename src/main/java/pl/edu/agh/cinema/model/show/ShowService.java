@@ -31,12 +31,12 @@ public class ShowService {
         shows.add(show); // add to observable list, but we are not fetching from database again
     }
 
-    public void updateShow(Show show) {
-        showRepository.save(show);
-    }
-
     public void deleteShow(Show show) {
         showRepository.delete(show);
         shows.remove(show); // remove from observable list, but we are not fetching from database again
+    }
+
+    public void updateShow(Show show) {
+        showRepository.save(show);
     }
 }

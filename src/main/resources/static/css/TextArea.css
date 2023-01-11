@@ -1,0 +1,13 @@
+.text-area:focused, .text-area:selected {
+    -fx-border-color: #8e32da;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.text-area {
+    -fx-border-radius: 5px;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}

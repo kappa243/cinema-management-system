@@ -1,5 +1,8 @@
 package pl.edu.agh.cinema.ui;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXPasswordField;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -28,19 +31,19 @@ public class LoginController implements StageAware {
     private final ViewManager viewManager;
 
     @FXML
-    private TextField email;
+    private MFXTextField email;
 
     @FXML
-    private PasswordField password;
+    private MFXPasswordField password;
 
     @FXML
-    private Button loginButton;
+    private MFXButton loginButton;
 
     @FXML
     private Label errorLabel;
 
     @FXML
-    private Button bypassLogin;
+    private MFXButton bypassLogin;
 
     @Setter
     private Stage stage;

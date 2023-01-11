@@ -7,7 +7,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
-
-//    @Query(value="select CASE WHEN (select count(*) from movie) > 0 THEN (select MAX(id) from movie)+1 ELSE  1 END;", nativeQuery = true)
-//    Long getFreeId();
 }

@@ -1,5 +1,8 @@
 package pl.edu.agh.cinema.ui.movieManager;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.MFXTooltip;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
@@ -7,7 +10,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -18,15 +24,12 @@ import org.springframework.stereotype.Component;
 import pl.edu.agh.cinema.ViewManager;
 import pl.edu.agh.cinema.model.movie.Movie;
 import pl.edu.agh.cinema.model.movie.MovieService;
-import pl.edu.agh.cinema.model.show.Show;
 import pl.edu.agh.cinema.ui.StageAware;
 import pl.edu.agh.cinema.ui.movieManager.editMovieDialog.AddMovieController;
 import pl.edu.agh.cinema.ui.movieManager.editMovieDialog.EditMovieController;
 import pl.edu.agh.cinema.utils.ImageConverter;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -52,14 +55,14 @@ public class MovieManagerController implements StageAware {
     @FXML
     private TableColumn<Movie, byte[]> coverColumn;
     @FXML
-    private Button addNewMovieButton;
+    private MFXButton addNewMovieButton;
     @FXML
-    private Button editMovieButton;
+    private MFXButton editMovieButton;
     @FXML
-    private Button deleteMovieButton;
+    private MFXButton deleteMovieButton;
 
     @FXML
-    private TextField queryField;
+    private MFXTextField queryField;
 
     public MovieManagerController(ViewManager viewManager,
                                   MovieService movieService) {
@@ -152,14 +155,22 @@ public class MovieManagerController implements StageAware {
             }
         });
 
-        editMovieButton.disableProperty().bind(
-                Bindings.size(moviesTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
-        );
         editMovieButton.setOnAction(this::handleEditAction);
         addNewMovieButton.setOnAction(this::handleAddAction);
         deleteMovieButton.setOnAction(this::handleDeleteAction);
 
-        queryField.setOnKeyTyped(e -> this.setItems());
+        editMovieButton.disableProperty().bind(
+                Bindings.size(moviesTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
+        );
+        deleteMovieButton.disableProperty().bind(
+                Bindings.size(moviesTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
+        );
+
+        queryField.setOnKeyPressed(e -> this.setItems());
+        MFXTooltip.of(
+                queryField,
+                "You can search multiple queries by separating them with a space"
+        ).install();
     }
 
     public void setItems() {
@@ -203,6 +214,10 @@ public class MovieManagerController implements StageAware {
 
             stage.showAndWait();
 
+            if (controller.isConfirmed()) {
+                movieService.addMovie(movie);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -229,6 +244,10 @@ public class MovieManagerController implements StageAware {
 
             stage.showAndWait();
 
+            if (controller.isConfirmed()) {
+                movieService.updateMovie(movie);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -236,7 +255,13 @@ public class MovieManagerController implements StageAware {
 
     private void handleDeleteAction(ActionEvent event) {
         Movie movie = moviesTable.getSelectionModel().getSelectedItem();
-        movieService.deleteMovie(movie);
+        if (!movieService.deleteMovie(movie)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Error while deleting movie");
+            alert.setContentText("Movie could not be deleted, because there are still screenings of this movie.");
+            alert.showAndWait();
+        }
     }
 }
 

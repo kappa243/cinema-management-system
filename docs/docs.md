@@ -1,37 +1,41 @@
 # Cinema
 
-> Poniższa dokumentacja jest oparta na ostatnim pełnym stanie projektu **M2**.
+> Poniższa dokumentacja jest oparta na ostatnim pełnym stanie projektu **M3**.
 
 # Wymagania
 
 ## Role
 W projekcie zdefiniowane 3 role:
 1. Assistant (sprzedaż biletów)
-2. Moderator (definiowanie filmów i seansów oraz uprawnienia assistanta)
+2. Moderator (definiowanie filmów i seansów, wyświetlanie statystyk oraz uprawnienia assistanta)
 3. Administrator (definiowanie użytkowników oraz uprawnienia moderatora)
 
 ![Role](./assets/role.png)
 
 ## Przypadki użycia
 
-Zdefiniowano cztery pakiety przypadków użycia:
+Zdefiniowano pięć pakietów przypadków użycia:
 1. Sales
 Pakiet zawiera przypadek użycia sprzedaż biletów na dany seans.
    
 ![Use Case Assistant](./assets/assistantUC.png)
-3. MovieManagement
+2. MovieManagement
 Pakiet zawiera operacje CRUD dodawanie, edycja, usuwanie, przeglądanie filmów.
 Ograniczenie: nie można usunąć filmu jeżeli jest seans.
 
-4. ShowManagement
-Pakiet zawiera operacje CRUD dodawanie, edycja, usuwanie, przeglądanie seansów.
+3. ShowManagement
+Pakiet zawiera operacje CRUD dodawanie, edycja, usuwanie, przeglądanie seansów oraz generowanie statystyk.
 Ograniczenie: nie można usunąć seansu jeżeli ma sprzedane bilety.
 Ograniczenie: nie można dodać dwóch seansów pokrywających się w czasie na tej samej sali.
  
 ![Use Case Moderator](./assets/moderatorUC.png)
 
-6. UserManagement
+4. Statistics
+Pakiet zawiera operację wyświetlania statystyk.
+
+5. UserManagement
 Pakiet zawiera operacje CRUD dodawanie, edycja, usuwanie, przeglądanie użytkowników.
+
 
 
 ![Use Case Admin](./assets/adminUC.png)
@@ -153,3 +157,35 @@ Zaimplementowano:
 przy dodawaniu seansu trzeba wybrać film i salę z rozwijanej listy, oraz datę i godzinę rozpoczęcia i zakończenia pokazu.
 4. Odczyt sal z pliku JSON i zapis w bazie danych
 5. System sprzedaży biletów
+
+## Kamień milowy M3
+
+Zaimplementowano:
+1. Statystyki dotyczące sprzedaży biletów (ilość i cena).
+2. Dodano system wysyłania maili do pracowników i rekomendacji filmów.
+3. Zmieniono design aplikacji na nowoczesny.
+
+# Statystyki
+
+W kolejnym etapie prac nad projektem zaimplementowano statystyki sprzedaży.
+W projekcie nie jest przetwarzana informacja o sprzedawanych biletach, a jedynie ich aktualna liczba jest atrybutem seansu. Na potrzeby
+statystyk dodano do bazy danych tabelę sales, której przeznaczeniem jest zbieranie informacji o liczbie sprzedanych biletów w danym
+przedziale czasu (zwykle jednej godziny). Tym samym tabela sales przechowuje dane historyczne, a nie transakcyjne i w zasadzie powinna
+być elementem hurtowni danych.
+
+Rozszerzono generator danych (kod w klasie `ShowsGenerator`).
+* Automatycznie generowane są seanse w ciągu ostatnich 45 dni. W ten sposób w programie generowanych jest 900 seansów.
+* Następnie w okresie 31 dni co godzinę od 8:00 do 22:00 generowane są rekordy tabeli sales z symulowaną wartością sprzedaży na poszczególne
+aktywne seanse (seans w danym momencie jest aktywny jeśli sprzedaż biletów już się rozpoczęła i nie osiągnięto jeszcze czasu wyświetlana filmu)
+W dniu seansu sprzedaż jest większa niż w dniach poprzedzających.
+
+W ten sposób generuje się około 62000 rekordów sales.
+
+![App diagram](./assets/db_schema.png)
+
+Do projektu dodano klasę `SalesRepository` z metodami pozwalającymi na wyznaczenie liczby sprzedanych biletów oraz wartości sprzedaży
+w danym dniu dla wybranego lub wszystkich filmów. Kolejną klasą jest `SalesService`, która zwraca informację o liczbie sprzedanych biletów lub wartości sprzedaży dla kolejnych dni z wybranego
+przedziału.
+
+Dodano okno dialogowe statystyk pozwalające na wybór filmu, przedziału czasu (ostatni tydzień lub ostatni miesiąc) oraz typu danych (liczby sprzedanych biletów, lub
+ich wartości). Statystyki są wyświetlane w postaci wykresu liniowego.

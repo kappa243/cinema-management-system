@@ -12,7 +12,10 @@
         ],
         "permissions": [
             "movies",
-            "shows"
+            "shows",
+            "emails",
+            "shows",
+            "stats"
         ]
     },
     "ADMINISTRATOR": {
