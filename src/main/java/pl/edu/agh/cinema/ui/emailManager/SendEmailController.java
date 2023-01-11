@@ -1,11 +1,11 @@
 package pl.edu.agh.cinema.ui.emailManager;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.Setter;
@@ -27,16 +27,16 @@ public class SendEmailController implements StageAware {
     private EmailService emailService;
 
     @FXML
-    private TextField subject;
+    private MFXTextField subject;
 
     @FXML
     private TextArea text;
     @FXML
-    private Button sendButton;
+    private MFXButton sendButton;
     @FXML
     private Label warningMessage;
     @FXML
-    private Button attachButton;
+    private MFXButton attachButton;
     @FXML
     private Label attach;
 
@@ -55,6 +55,7 @@ public class SendEmailController implements StageAware {
         sendButton.setOnAction(this::send);
         attachButton.setOnAction(this::setFile);
     }
+
     public void setFile(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(stage);
@@ -63,6 +64,7 @@ public class SendEmailController implements StageAware {
             attach.setText(attach.getText().concat(file.getName() + " "));
         }
     }
+
     public void send(ActionEvent event) {
         if (!warned) {
             if (subject.getText().isEmpty()) {

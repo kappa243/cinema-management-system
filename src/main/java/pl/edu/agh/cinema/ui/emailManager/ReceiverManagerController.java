@@ -1,5 +1,7 @@
 package pl.edu.agh.cinema.ui.emailManager;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
@@ -52,9 +54,6 @@ public class ReceiverManagerController implements StageAware {
     @Autowired
     private EmailService mailSender;
 
-    @Qualifier("recommendedShowsSimpleMessage")
-    @Autowired
-    private SimpleMailMessage recommendedShowsMessage;
 
     @FXML
     private TableView<User> receiversTable;
@@ -72,17 +71,20 @@ public class ReceiverManagerController implements StageAware {
     @FXML
     private TableColumn<User, String> emailColumn;
     @FXML
-    private Button sendEmailButton;
+    private MFXButton sendEmailButton;
     @FXML
     private Label warningMessage;
 
     private final HashMap<User, CheckBox> checkBoxMap = new HashMap<>();
 
     @FXML
-    private TextField queryField;
+    private MFXTextField queryField;
     @FXML
-    private Button recommendedButton;
+    private MFXButton recommendedButton;
 
+    @Qualifier("recommendedShowsSimpleMessage")
+    @Autowired
+    private SimpleMailMessage recommendedShowsMessage;
 
     public ReceiverManagerController(ApplicationEventPublisher publisher,
                                      StageManager stageManager,
