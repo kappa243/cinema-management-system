@@ -42,12 +42,12 @@ public class MainController implements StageAware {
 
     @FXML
     private MFXButton ticketManagerButton;
-    private Button ticketManagerButton;
-    @FXML
-    private Button emailManagerButton;
 
     @FXML
-    private Button statsButton;
+    private MFXButton emailManagerButton;
+
+    @FXML
+    private MFXButton statsButton;
 
     @FXML
     private MFXButton logoutButton;

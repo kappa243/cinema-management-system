@@ -61,7 +61,7 @@
                 </ImageView>
             </graphic>
         </MFXButton>
-        <Button fx:id="statsButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
+        <MFXButton fx:id="statsButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
                 prefWidth="179.0"
                 text="Statistics" textAlignment="CENTER">
             <font>
@@ -72,8 +72,8 @@
                     <Image url="@../static/img/stats.png"/>
                 </ImageView>
             </graphic>
-        </Button>
-        <Button fx:id="emailManagerButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
+        </MFXButton>
+        <MFXButton fx:id="emailManagerButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
                 prefWidth="179.0"
                 text="Mail" textAlignment="CENTER">
             <font>
@@ -84,7 +84,7 @@
                     <Image url="@../static/img/mail-icon.png"/>
                 </ImageView>
             </graphic>
-        </Button>
+        </MFXButton>
     </TilePane>
     <MFXButton fx:id="logoutButton" layoutX="499.0" layoutY="317.0" mnemonicParsing="false" prefHeight="40.0"
                prefWidth="87.0" style="-fx-background-color: #f12f2f; -fx-text-fill: white" text="Logout">

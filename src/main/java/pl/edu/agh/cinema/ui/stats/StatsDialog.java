@@ -45,16 +45,6 @@ public class StatsDialog {
 
     LineChart<String, Number> salesChart = new LineChart<String, Number>(new CategoryAxis(), new NumberAxis());
 
-    static int width = 80;
-    static int height = 60;
-    static double startEnergy = 200;
-    static double moveEnergy = 5;
-    static double plantEnergy = 200;
-    static double jungleRatio = 0.5;
-    static int initialNumberOfAnimals = 100;
-    static boolean returnValue = false;
-    static boolean nwMapMagic = false;
-    static boolean wMapMagic = false;
 
     public StatsDialog(MovieService movieService, SalesService salesService) {
         this.movieService = movieService;
@@ -74,7 +64,7 @@ public class StatsDialog {
         gridPane.add(dataLabel, 0, 3);
 
         ObservableList<Movie> movies = movieService.getMovies();
-        movies.add(0, null);
+//        movies.add(0, null); ???
         movieComboBox.setItems(movies);
         movieComboBox.getSelectionModel().select(0);
         movieComboBox.setCellFactory(cellData -> {
