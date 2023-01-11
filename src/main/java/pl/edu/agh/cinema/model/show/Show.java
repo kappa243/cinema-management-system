@@ -1,6 +1,7 @@
 package pl.edu.agh.cinema.model.show;
 
 import lombok.Getter;
+import lombok.Setter;
 import pl.edu.agh.cinema.model.movie.Movie;
 import pl.edu.agh.cinema.model.room.Room;
 
@@ -44,6 +45,10 @@ public class Show {
 
     @Getter
     int soldTickets;
+
+    @Getter
+    @Setter
+    private boolean recommended = false;
 
     public void setMovie(Movie movie) {
         Movie oldMovie = this.movie;
@@ -114,6 +119,5 @@ public class Show {
         this.sellTicketsFrom = sellTicketsFrom;
         this.ticketPrice = ticketPrice;
         this.soldTickets = soldTickets;
-
     }
 }

@@ -72,6 +72,18 @@
                 </ImageView>
             </graphic>
         </Button>
+        <Button fx:id="emailManagerButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
+                prefWidth="179.0"
+                text="Mail" textAlignment="CENTER">
+            <font>
+                <Font size="16.0"/>
+            </font>
+            <graphic>
+                <ImageView fitHeight="79.0" fitWidth="94.0" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@../static/img/mail-icon.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
     </TilePane>
     <Button fx:id="logoutButton" layoutX="499.0" layoutY="317.0" mnemonicParsing="false" prefHeight="40.0"
             prefWidth="87.0" text="Logout">

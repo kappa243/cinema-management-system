@@ -41,6 +41,8 @@ public class MainController implements StageAware {
 
     @FXML
     private Button ticketManagerButton;
+    @FXML
+    private Button emailManagerButton;
 
     @FXML
     private Button statsButton;
@@ -75,7 +77,9 @@ public class MainController implements StageAware {
         if (!authenticationService.isAuthorized("shows")) {
             pane.getChildren().remove(showManagerButton);
         }
-
+        if (!authenticationService.isAuthorized("emails")) {
+            pane.getChildren().remove(emailManagerButton);
+        }
         if (!authenticationService.isAuthorized("stats")) {
             pane.getChildren().remove(statsButton);
         }
@@ -157,6 +161,23 @@ public class MainController implements StageAware {
             new StatsDialog(movieService, salesService).display();
         });
 
+        emailManagerButton.setOnAction(event -> {
+
+            try {
+                Stage stage = new Stage();
+                Pair<Parent, UserManagerController> vmLoad = viewManager.load("/fxml/emailManager/receiverManager.fxml", stage);
+                stage.setScene(new Scene(vmLoad.getFirst()));
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(this.stage);
+                stage.setTitle("Movies management");
+                stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
+
+                stage.show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         logoutButton.setOnAction(event -> {
             authenticationService.logout();
             stageManager.getPrimaryStage().show();

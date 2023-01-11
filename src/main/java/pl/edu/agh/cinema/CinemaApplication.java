@@ -32,7 +32,6 @@ import pl.edu.agh.cinema.model.user.UserRepository;
 import pl.edu.agh.cinema.utils.ImageConverter;
 
 import java.io.*;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -87,7 +86,7 @@ public class CinemaApplication extends Application {
             String password = "admin";
             String hashed = BCrypt.hashpw(password, BCrypt.gensalt());
             User admin = new User("admin", "admin", "admin", hashed, Role.ADMINISTRATOR);
-            User p1 = new User("Jan", "Kowalski", "jkowalski@example.com", hashed, Role.ASSISTANT);
+            User p1 = new User("Jan", "Kowalski", "cinemaManagement2022@gmail.com", hashed, Role.ASSISTANT);
             User p2 = new User("Adam", "Nowak", "anowak@example.com", hashed, Role.ASSISTANT);
             User p3 = new User("Anna", "Kowalska", "akowalska@example.com", hashed, Role.MODERATOR);
 
@@ -116,10 +115,8 @@ public class CinemaApplication extends Application {
                 Date dateStr = formatter.parse(movieTab[2]);
                 LocalDateTime localDate = dateStr.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                 Movie m = new Movie(movieTab[0], movieTab[1], localDate, Integer.parseInt(movieTab[3]), ImageConverter.fileToByte(new File("src/main/resources/static/img/movie-icon.png")));
-//                System.out.println(m);
                 movies.add(m);
             }
-
 
 
             // rooms
@@ -139,8 +136,8 @@ public class CinemaApplication extends Application {
 //            show3.setMovie(movies.get(2));
 //            show3.setRoom(rooms.get(2));
 
-            List<Show> shows= ShowsGenerator.generateShow(movies, rooms);
-            List<Sales> sales=ShowsGenerator.generateSales(shows);
+            List<Show> shows = ShowsGenerator.generateShow(movies, rooms);
+            List<Sales> sales = ShowsGenerator.generateSales(shows);
 
             userRepository.saveAll(List.of(admin, p1, p2, p3));
             roomRepository.saveAll(rooms);
