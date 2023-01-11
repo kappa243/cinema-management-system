@@ -55,7 +55,6 @@ public class UserManagerController implements StageAware {
 
     @FXML
     private TableView<User> usersTable;
-
     @FXML
     private TableColumn<User, String> firstNameColumn;
 

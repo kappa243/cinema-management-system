@@ -84,7 +84,7 @@ public class CinemaApplication extends Application {
             String password = "admin";
             String hashed = BCrypt.hashpw(password, BCrypt.gensalt());
             User admin = new User("admin", "admin", "admin", hashed, Role.ADMINISTRATOR);
-            User p1 = new User("Jan", "Kowalski", "jkowalski@example.com", hashed, Role.ASSISTANT);
+            User p1 = new User("Jan", "Kowalski", "cinemaManagement2022@gmail.com", hashed, Role.ASSISTANT);
             User p2 = new User("Adam", "Nowak", "anowak@example.com", hashed, Role.ASSISTANT);
             User p3 = new User("Anna", "Kowalska", "akowalska@example.com", hashed, Role.MODERATOR);
 
@@ -113,7 +113,6 @@ public class CinemaApplication extends Application {
                 Date dateStr = formatter.parse(movieTab[2]);
                 LocalDateTime localDate = dateStr.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                 Movie m = new Movie(movieTab[0], movieTab[1], localDate, Integer.parseInt(movieTab[3]), ImageConverter.fileToByte(new File("src/main/resources/static/img/movie-icon.png")));
-//                System.out.println(m);
                 movies.add(m);
             }
 
@@ -162,4 +161,6 @@ public class CinemaApplication extends Application {
 
         return rooms;
     }
+
+
 }
