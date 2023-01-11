@@ -189,3 +189,9 @@ przedziału.
 
 Dodano okno dialogowe statystyk pozwalające na wybór filmu, przedziału czasu (ostatni tydzień lub ostatni miesiąc) oraz typu danych (liczby sprzedanych biletów, lub
 ich wartości). Statystyki są wyświetlane w postaci wykresu liniowego.
+
+# Emaile
+Do projektu dodano klasę EmailConfig służącą do konfiguracji serwera SMTP - użyto Gmail SMTP.
+Klasa EmailService odpowiada za wysyłanie wiadomości. ReceiverManagerController odpowiada za widok listy użytkowników, których można wybrać jako odbiorców nowej wiadomości,
+a SendEmailController za widok umożliwiający podanie treści wiadomości - tematu, tekstu, załączników.
+Dodatkowo z widoku listy odbiorców można wybrać opcję automatycznego wysłania do wszystkich pracowników zajmujących się biletami listy aktualnie polecanych seansów.
