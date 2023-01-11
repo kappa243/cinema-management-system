@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 import pl.edu.agh.cinema.StageManager;
 import pl.edu.agh.cinema.ViewManager;
 import pl.edu.agh.cinema.auth.AuthenticationService;
-import pl.edu.agh.cinema.ui.showManager.ShowManagerController;
+import pl.edu.agh.cinema.model.movie.MovieService;
+import pl.edu.agh.cinema.model.sales.SalesService;
+import pl.edu.agh.cinema.ui.stats.StatsDialog;
 import pl.edu.agh.cinema.ui.ticketsManager.TicketsManagerController;
 import pl.edu.agh.cinema.ui.userManager.UserManagerController;
 
@@ -23,6 +25,8 @@ import pl.edu.agh.cinema.ui.userManager.UserManagerController;
 public class MainController implements StageAware {
 
     private final AuthenticationService authenticationService;
+    private final MovieService movieService;
+    private final SalesService salesService;
     private final ViewManager viewManager;
     private final StageManager stageManager;
 
@@ -39,13 +43,18 @@ public class MainController implements StageAware {
     private Button ticketManagerButton;
 
     @FXML
+    private Button statsButton;
+
+    @FXML
     private Button logoutButton;
 
     @Setter
     private Stage stage;
 
-    public MainController(AuthenticationService authenticationService, ViewManager viewManager, StageManager stageManager) {
+    public MainController(AuthenticationService authenticationService, MovieService movieService, SalesService salesService, ViewManager viewManager, StageManager stageManager) {
         this.authenticationService = authenticationService;
+        this.movieService = movieService;
+        this.salesService = salesService;
         this.viewManager = viewManager;
         this.stageManager = stageManager;
     }
@@ -54,17 +63,21 @@ public class MainController implements StageAware {
     public void initialize() {
         // permissions
         Pane pane = (Pane) userManagerButton.getParent();
-        if(!authenticationService.isAuthorized("users")){
+        if (!authenticationService.isAuthorized("users")) {
             pane.getChildren().remove(userManagerButton);
         }
-        if(!authenticationService.isAuthorized("movies")){
+        if (!authenticationService.isAuthorized("movies")) {
             pane.getChildren().remove(movieManagerButton);
         }
-        if(!authenticationService.isAuthorized("tickets")){
+        if (!authenticationService.isAuthorized("tickets")) {
             pane.getChildren().remove(ticketManagerButton);
         }
-        if(!authenticationService.isAuthorized("shows")){
+        if (!authenticationService.isAuthorized("shows")) {
             pane.getChildren().remove(showManagerButton);
+        }
+
+        if (!authenticationService.isAuthorized("stats")) {
+            pane.getChildren().remove(statsButton);
         }
 
         // events
@@ -138,6 +151,10 @@ public class MainController implements StageAware {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        });
+
+        statsButton.setOnAction(event -> {
+            new StatsDialog(movieService, salesService).display();
         });
 
         logoutButton.setOnAction(event -> {

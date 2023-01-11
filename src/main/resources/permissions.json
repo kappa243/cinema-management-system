@@ -12,7 +12,8 @@
         ],
         "permissions": [
             "movies",
-            "shows"
+            "shows",
+            "stats"
         ]
     },
     "ADMINISTRATOR": {
