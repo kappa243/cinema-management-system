@@ -52,6 +52,9 @@ package ShowManagement {
 package Statistics{
   usecase "Display sales statistics" as UC9
 }
+package Emails{
+  usecase "Send emails to workers" as UC10
+}
 
 m --> UC1
 m --> UC2
@@ -62,4 +65,5 @@ m --> UC6
 m --> UC7
 m --> UC8
 m --> UC9
+m --> UC10
 @enduml
