@@ -1,10 +1,10 @@
 package pl.edu.agh.cinema.ui.movieManager.editMovieDialog;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXDatePicker;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import pl.edu.agh.cinema.ui.StageAware;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 
 @Component
@@ -24,14 +23,14 @@ public class MovieDialogFieldController implements StageAware {
     public Stage stage;
 
     @FXML
-    public TextField title;
+    public MFXTextField title;
     @FXML
-    public TextField description;
+    public MFXTextField description;
     @FXML
-    public DatePicker releaseDate;
+    public MFXDatePicker releaseDate;
 
     @FXML
-    public Button imageButton;
+    public MFXButton imageButton;
 
     @FXML
     public ImageView imageView;
@@ -59,22 +58,22 @@ public class MovieDialogFieldController implements StageAware {
     }
 
     public boolean validateInput(boolean updateImage) {
-        if (title.getText().isEmpty()){
+        if (title.getText().isEmpty()) {
             warningMessage.setText("Title cannot be empty");
             return false;
         }
 
-        if (description.getText().isEmpty()){
+        if (description.getText().isEmpty()) {
             warningMessage.setText("Description cannot be empty");
             return false;
         }
 
-        if (releaseDate.getValue() == null){
+        if (releaseDate.getValue() == null) {
             warningMessage.setText("Release date cannot be empty");
             return false;
         }
 
-        if (updateImage && selectedFile == null){
+        if (updateImage && selectedFile == null) {
             warningMessage.setText("Choose correct cover image");
             return false;
         }

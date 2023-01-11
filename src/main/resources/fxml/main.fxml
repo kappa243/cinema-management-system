@@ -7,10 +7,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.text.*?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
 <AnchorPane prefHeight="370.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="pl.edu.agh.cinema.ui.MainController">
     <TilePane layoutX="-1.0" prefHeight="300.0" prefWidth="600.0">
-        <Button fx:id="ticketManagerButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
+        <MFXButton fx:id="ticketManagerButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
                 prefWidth="179.0" text="Tickets selling" textAlignment="CENTER">
             <TilePane.margin>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
@@ -23,8 +24,8 @@
                     <Image url="@../static/img/ticket-icon.png"/>
                 </ImageView>
             </graphic>
-        </Button>
-        <Button fx:id="showManagerButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
+        </MFXButton>
+        <MFXButton fx:id="showManagerButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
                 prefWidth="179.0"
                 text="Shows management" textAlignment="CENTER">
             <font>
@@ -35,8 +36,8 @@
                     <Image url="@../static/img/shows-icon.png"/>
                 </ImageView>
             </graphic>
-        </Button>
-        <Button fx:id="movieManagerButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
+        </MFXButton>
+        <MFXButton fx:id="movieManagerButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
                 prefWidth="179.0"
                 text="Movies management" textAlignment="CENTER">
             <font>
@@ -47,8 +48,8 @@
                     <Image url="@../static/img/movie-icon.png"/>
                 </ImageView>
             </graphic>
-        </Button>
-        <Button fx:id="userManagerButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
+        </MFXButton>
+        <MFXButton fx:id="userManagerButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
                 prefWidth="179.0"
                 text="User management" textAlignment="CENTER">
             <font>
@@ -59,7 +60,7 @@
                     <Image url="@../static/img/users-icon.png"/>
                 </ImageView>
             </graphic>
-        </Button>
+        </MFXButton>
         <Button fx:id="statsButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
                 prefWidth="179.0"
                 text="Statistics" textAlignment="CENTER">
@@ -85,10 +86,10 @@
             </graphic>
         </Button>
     </TilePane>
-    <Button fx:id="logoutButton" layoutX="499.0" layoutY="317.0" mnemonicParsing="false" prefHeight="40.0"
-            prefWidth="87.0" text="Logout">
+    <MFXButton fx:id="logoutButton" layoutX="499.0" layoutY="317.0" mnemonicParsing="false" prefHeight="40.0"
+               prefWidth="87.0" style="-fx-background-color: #f12f2f; -fx-text-fill: white" text="Logout">
         <font>
             <Font size="14.0"/>
         </font>
-    </Button>
+    </MFXButton>
 </AnchorPane>

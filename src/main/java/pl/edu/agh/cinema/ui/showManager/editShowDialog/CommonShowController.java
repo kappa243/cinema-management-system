@@ -1,5 +1,6 @@
 package pl.edu.agh.cinema.ui.showManager.editShowDialog;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -15,7 +16,7 @@ abstract class CommonShowController implements StageAware {
     protected Stage stage;
 
     @FXML
-    protected Button confirmButton;
+    protected MFXButton confirmButton;
 
     @FXML
     private VBox showDialogFields;
@@ -39,8 +40,14 @@ abstract class CommonShowController implements StageAware {
     }
 
     protected void updateContent() {
-        showDialogFieldsController.movieComboBox.setValue(show.getMovie());
-        showDialogFieldsController.roomComboBox.setValue(show.getRoom());
+        if (show.getMovie() != null) {
+            showDialogFieldsController.movieComboBox.selectItem(show.getMovie());
+            showDialogFieldsController.movieComboBox.setText(show.getMovie().getTitle());
+        }
+        if (show.getRoom() != null) {
+            showDialogFieldsController.roomComboBox.selectItem(show.getRoom());
+            showDialogFieldsController.roomComboBox.setText(show.getRoom().getRoomName());
+        }
         showDialogFieldsController.setStartTime(show.getStartTime());
         showDialogFieldsController.setEndTime(show.getEndTime());
         showDialogFieldsController.setSellTicketsFrom(show.getSellTicketsFrom());

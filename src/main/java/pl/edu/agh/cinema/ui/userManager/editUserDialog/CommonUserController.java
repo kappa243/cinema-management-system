@@ -1,5 +1,6 @@
 package pl.edu.agh.cinema.ui.userManager.editUserDialog;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,7 +15,7 @@ import pl.edu.agh.cinema.ui.StageAware;
 abstract class CommonUserController implements StageAware {
 
     @FXML
-    protected Button confirmButton;
+    protected MFXButton confirmButton;
 
     @FXML
     private VBox userDialogFields;
@@ -30,6 +31,7 @@ abstract class CommonUserController implements StageAware {
 
     public void setData(User user) {
         this.user = user;
+
         updateContent();
     }
 
@@ -45,6 +47,8 @@ abstract class CommonUserController implements StageAware {
         userDialogFieldsController.lastName.setText(user.getLastName());
         userDialogFieldsController.email.setText(user.getEmail());
         userDialogFieldsController.roleChoiceBox.setValue(user.getRole());
+        userDialogFieldsController.roleChoiceBox.selectItem(user.getRole());
+        userDialogFieldsController.roleChoiceBox.setText(user.getRole().toString());
     }
 
     protected void updateModel(boolean updatePassword) {

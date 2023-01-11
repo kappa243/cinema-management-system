@@ -1,5 +1,8 @@
 package pl.edu.agh.cinema.ui.userManager;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.MFXTooltip;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
@@ -7,10 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Setter;
@@ -44,13 +45,13 @@ public class UserManagerController implements StageAware {
     UserService userService;
 
     @FXML
-    private Button addNewUserButton;
+    private MFXButton addNewUserButton;
 
     @FXML
-    private Button editUserButton;
+    private MFXButton editUserButton;
 
     @FXML
-    private Button deleteUserButton;
+    private MFXButton deleteUserButton;
 
 
     @FXML
@@ -65,7 +66,7 @@ public class UserManagerController implements StageAware {
     private TableColumn<User, String> emailColumn;
 
     @FXML
-    private TextField queryField;
+    private MFXTextField queryField;
 
 
     @FXML
@@ -149,11 +150,17 @@ public class UserManagerController implements StageAware {
         );
         deleteUserButton.setOnAction(this::handleDeleteAction);
 
-        queryField.setOnKeyTyped(e -> this.setItems());
+        MFXTooltip.of(
+                queryField,
+                "You can search multiple queries by separating them with a space"
+        ).install();
+        queryField.setOnKeyPressed(e -> this.setItems());
+
     }
 
     public void setItems() {
         usersTable.setItems(userService.getUsers().filtered(user -> {
+            System.out.println(queryField.getText());
             List<String> queries = new ArrayList<>(List.of(queryField.getText().split(" ")));
 
             // remove empty queries

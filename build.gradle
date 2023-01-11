@@ -25,6 +25,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    // materialfx
+    implementation 'io.github.palexdev:materialfx:11.13.8'
+
 //    implementation 'org.controlsfx:controlsfx:11.1.2'
 
     runtimeOnly 'com.h2database:h2'
