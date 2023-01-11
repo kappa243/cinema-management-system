@@ -1,5 +1,8 @@
 package pl.edu.agh.cinema.ui.userManager.editUserDialog;
 
+import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXPasswordField;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -19,19 +22,19 @@ public class UserDialogFieldController implements StageAware {
     @Setter
     private Stage stage;
     @FXML
-    public TextField firstName;
+    public MFXTextField firstName;
 
     @FXML
-    public TextField lastName;
+    public MFXTextField lastName;
 
     @FXML
-    public TextField email;
+    public MFXTextField email;
 
     @FXML
-    public PasswordField password;
+    public MFXPasswordField password;
 
     @FXML
-    public ChoiceBox<Role> roleChoiceBox;
+    public MFXComboBox<Role> roleChoiceBox;
 
     @FXML
     public Label warningMessage;
@@ -65,7 +68,7 @@ public class UserDialogFieldController implements StageAware {
             return false;
         }
 
-        if (roleChoiceBox.getSelectionModel().isEmpty()) {
+        if (roleChoiceBox.getSelectionModel().getSelectedItem() == null) {
             warningMessage.setText("Role not set!");
             return false;
         }

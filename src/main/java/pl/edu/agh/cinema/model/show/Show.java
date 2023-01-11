@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 public class Show {
@@ -115,5 +116,18 @@ public class Show {
         this.ticketPrice = ticketPrice;
         this.soldTickets = soldTickets;
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Show show = (Show) o;
+        return Objects.equals(id, show.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

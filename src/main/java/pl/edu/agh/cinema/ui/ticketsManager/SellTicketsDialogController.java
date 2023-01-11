@@ -1,5 +1,7 @@
 package pl.edu.agh.cinema.ui.ticketsManager;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,10 +23,10 @@ public class SellTicketsDialogController implements StageAware {
 
     private Show show;
     @FXML
-    private Button sellButton;
+    private MFXButton sellButton;
 
     @FXML
-    private TextField ticketsNumber;
+    private MFXTextField ticketsNumber;
 
     @FXML
     private Label warningMessage;

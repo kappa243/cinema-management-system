@@ -1,6 +1,11 @@
 package pl.edu.agh.cinema.ui.showManager.editShowDialog;
 
+import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.cell.MFXComboBoxCell;
+import io.github.palexdev.virtualizedfx.cell.Cell;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -28,7 +33,7 @@ public class ShowDialogFieldController implements StageAware {
     private Stage stage;
 
     @FXML
-    public ComboBox<Movie> movieComboBox;
+    public MFXComboBox<Movie> movieComboBox;
 
     @FXML
     public HBox startTime;
@@ -41,14 +46,14 @@ public class ShowDialogFieldController implements StageAware {
     public DateTimeInputController sellTicketsFromController;
 
     @FXML
-    public ComboBox<Room> roomComboBox;
+    public MFXComboBox<Room> roomComboBox;
 
 
     @FXML
-    public TextField ticketPrice;
+    public MFXTextField ticketPrice;
 
     @FXML
-    public TextField soldTickets;
+    public MFXTextField soldTickets;
     @FXML
     private Label warningMessage;
     private MovieService movieService;
@@ -90,7 +95,7 @@ public class ShowDialogFieldController implements StageAware {
             warningMessage.setText("Start time must be before end time!");
             return false;
         }
-        if(!movieComboBox.getSelectionModel().isEmpty()){
+        if(!(movieComboBox.getSelectionModel().getSelectedItem() == null)) {
             if(!getStartTime().isAfter(movieComboBox.getSelectionModel().getSelectedItem().getReleaseDate())){
                 warningMessage.setText("Start time must be after release date!");
                 return false;
@@ -130,20 +135,6 @@ public class ShowDialogFieldController implements StageAware {
     @FXML
     private void initialize() {
         movieComboBox.setItems(movieService.getMovies());
-        movieComboBox.setCellFactory(cellData -> {
-            ListCell<Movie> cell = new ListCell<Movie>() {
-                @Override
-                protected void updateItem(Movie item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-                        setText(item.getTitle());
-                    }
-                }
-            };
-            return cell;
-        });
         movieComboBox.setConverter(new StringConverter<Movie>() {
             @Override
             public String toString(Movie movie) {
@@ -158,21 +149,8 @@ public class ShowDialogFieldController implements StageAware {
                         .orElse(null);
             }
         });
+
         roomComboBox.setItems(roomService.getRooms());
-        roomComboBox.setCellFactory(cellData -> {
-            ListCell<Room> cell = new ListCell<Room>() {
-                @Override
-                protected void updateItem(Room item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-                        setText(item.getRoomName());
-                    }
-                }
-            };
-            return cell;
-        });
         roomComboBox.setConverter(new StringConverter<Room>() {
             @Override
             public String toString(Room room) {

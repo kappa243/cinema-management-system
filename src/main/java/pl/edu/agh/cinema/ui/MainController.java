@@ -1,5 +1,6 @@
 package pl.edu.agh.cinema.ui;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -27,19 +28,19 @@ public class MainController implements StageAware {
     private final StageManager stageManager;
 
     @FXML
-    private Button userManagerButton;
+    private MFXButton userManagerButton;
 
     @FXML
-    private Button showManagerButton;
+    private MFXButton showManagerButton;
 
     @FXML
-    private Button movieManagerButton;
+    private MFXButton movieManagerButton;
 
     @FXML
-    private Button ticketManagerButton;
+    private MFXButton ticketManagerButton;
 
     @FXML
-    private Button logoutButton;
+    private MFXButton logoutButton;
 
     @Setter
     private Stage stage;

@@ -1,12 +1,17 @@
 package pl.edu.agh.cinema.ui.ticketsManager;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.MFXTooltip;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Setter;
@@ -23,8 +28,6 @@ import pl.edu.agh.cinema.model.show.ShowService;
 import pl.edu.agh.cinema.ui.StageAware;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -41,7 +44,7 @@ public class TicketsManagerController implements StageAware {
     private ShowService showService;
 
     @FXML
-    private Button sellButton;
+    private MFXButton sellButton;
 
     @FXML
     private TableView<Show> showsTable;
@@ -68,16 +71,16 @@ public class TicketsManagerController implements StageAware {
     @FXML
     private TableColumn<Show, Room> maxSeatsColumn;
     @FXML
-    private TextField queryField;
+    private MFXTextField queryField;
 
     @Setter
     private Stage stage;
 
 
     public TicketsManagerController(ApplicationEventPublisher publisher,
-                                 StageManager stageManager,
-                                 ViewManager viewManager,
-                                 ShowService showService) {
+                                    StageManager stageManager,
+                                    ViewManager viewManager,
+                                    ShowService showService) {
         this.publisher = publisher;
         this.viewManager = viewManager;
         this.stageManager = stageManager;
@@ -285,12 +288,16 @@ public class TicketsManagerController implements StageAware {
             }
         });
 
-        queryField.setOnKeyTyped(e -> this.setItems());
         sellButton.setOnAction(this::handleSellAction);
         sellButton.disableProperty().bind(
                 Bindings.size(showsTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
         );
 
+        queryField.setOnKeyPressed(e -> this.setItems());
+        MFXTooltip.of(
+                queryField,
+                "You can search multiple queries by separating them with a space"
+        ).install();
     }
 
     public void setItems() {

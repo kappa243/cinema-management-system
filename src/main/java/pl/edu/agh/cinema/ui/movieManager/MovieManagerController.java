@@ -1,5 +1,8 @@
 package pl.edu.agh.cinema.ui.movieManager;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.MFXTooltip;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
@@ -7,7 +10,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -49,14 +55,14 @@ public class MovieManagerController implements StageAware {
     @FXML
     private TableColumn<Movie, byte[]> coverColumn;
     @FXML
-    private Button addNewMovieButton;
+    private MFXButton addNewMovieButton;
     @FXML
-    private Button editMovieButton;
+    private MFXButton editMovieButton;
     @FXML
-    private Button deleteMovieButton;
+    private MFXButton deleteMovieButton;
 
     @FXML
-    private TextField queryField;
+    private MFXTextField queryField;
 
     public MovieManagerController(ViewManager viewManager,
                                   MovieService movieService) {
@@ -149,14 +155,22 @@ public class MovieManagerController implements StageAware {
             }
         });
 
-        editMovieButton.disableProperty().bind(
-                Bindings.size(moviesTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
-        );
         editMovieButton.setOnAction(this::handleEditAction);
         addNewMovieButton.setOnAction(this::handleAddAction);
         deleteMovieButton.setOnAction(this::handleDeleteAction);
 
-        queryField.setOnKeyTyped(e -> this.setItems());
+        editMovieButton.disableProperty().bind(
+                Bindings.size(moviesTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
+        );
+        deleteMovieButton.disableProperty().bind(
+                Bindings.size(moviesTable.getSelectionModel().getSelectedItems()).isNotEqualTo(1)
+        );
+
+        queryField.setOnKeyPressed(e -> this.setItems());
+        MFXTooltip.of(
+                queryField,
+                "You can search multiple queries by separating them with a space"
+        ).install();
     }
 
     public void setItems() {
