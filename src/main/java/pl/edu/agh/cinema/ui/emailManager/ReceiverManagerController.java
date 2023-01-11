@@ -9,15 +9,22 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.util.Pair;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 import pl.edu.agh.cinema.StageManager;
 import pl.edu.agh.cinema.ViewManager;
+import pl.edu.agh.cinema.mail.EmailService;
+import pl.edu.agh.cinema.model.show.Show;
+import pl.edu.agh.cinema.model.show.ShowService;
 import pl.edu.agh.cinema.model.user.Role;
 import pl.edu.agh.cinema.model.user.User;
 import pl.edu.agh.cinema.model.user.UserService;
@@ -41,6 +48,13 @@ public class ReceiverManagerController implements StageAware {
     StageManager stageManager;
     ViewManager viewManager;
     UserService userService;
+    ShowService showService;
+    @Autowired
+    private EmailService mailSender;
+
+    @Qualifier("recommendedShowsSimpleMessage")
+    @Autowired
+    private SimpleMailMessage recommendedShowsMessage;
 
     @FXML
     private TableView<User> receiversTable;
@@ -66,15 +80,20 @@ public class ReceiverManagerController implements StageAware {
 
     @FXML
     private TextField queryField;
+    @FXML
+    private Button recommendedButton;
+
 
     public ReceiverManagerController(ApplicationEventPublisher publisher,
                                      StageManager stageManager,
                                      ViewManager viewManager,
-                                     UserService userService) {
+                                     UserService userService,
+                                     ShowService showService) {
         this.publisher = publisher;
         this.stageManager = stageManager;
         this.viewManager = viewManager;
         this.userService = userService;
+        this.showService = showService;
     }
 
     @FXML
@@ -140,6 +159,8 @@ public class ReceiverManagerController implements StageAware {
         queryField.setOnKeyTyped(e -> this.setItems());
 
         warningMessage.setVisible(false);
+
+        recommendedButton.setOnAction(this::sendRecommendedShows);
     }
 
     public ArrayList<String> getReceivers() {
@@ -169,7 +190,7 @@ public class ReceiverManagerController implements StageAware {
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(this.stage);
             stage.setResizable(false);
-            stage.getIcons().add(new javafx.scene.image.Image("/static/img/app-icon.png"));
+            stage.getIcons().add(new Image("/static/img/app-icon.png"));
             stage.setTitle("Edit user");
 
             controller.setEmails(emails);
@@ -203,5 +224,21 @@ public class ReceiverManagerController implements StageAware {
 
         });
         receiversTable.setItems(receivers);
+    }
+
+
+
+    public void sendRecommendedShows(ActionEvent event) {
+        List<User> assistants = userService.getUsers().filtered(user -> user.getRole().equals(Role.ASSISTANT));
+        List<Show> shows = showService.getShows().filtered(Show::isRecommended);
+        String showsString = "";
+        for (Show show: shows) {
+            showsString = showsString.concat("\n- " + show.getMovie().getTitle() + ", " + show.getRoom().getRoomName());
+        }
+        recommendedShowsMessage.setText(recommendedShowsMessage.getText().concat(showsString));
+        for (User assistant: assistants) {
+            recommendedShowsMessage.setTo(assistant.getEmail());
+            mailSender.sendSimpleMessage(recommendedShowsMessage);
+        }
     }
 }

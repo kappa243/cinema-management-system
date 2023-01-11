@@ -45,7 +45,21 @@
                     <VBox.margin>
                         <Insets top="5.0" />
                     </VBox.margin>
+               <font>
+                  <Font size="13.0" />
+               </font>
                 </Button>
+            <Button fx:id="recommendedButton" mnemonicParsing="false" text="Send recommended shows info" textAlignment="CENTER" wrapText="true">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Button>
             </VBox>
         </HBox>
     </center>

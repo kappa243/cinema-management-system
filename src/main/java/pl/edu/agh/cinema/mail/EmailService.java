@@ -1,6 +1,7 @@
 package pl.edu.agh.cinema.mail;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -31,7 +32,9 @@ public class EmailService {
 
 
     }
-
+    public void sendSimpleMessage(SimpleMailMessage message) {
+        mailSender.send(message);
+    }
     public void sendMessageWithAttachment(
             ArrayList<String> receivers, String subject, String text, ArrayList<File> files) throws MessagingException {
 
@@ -52,6 +55,16 @@ public class EmailService {
             helper.setTo(receiver);
             mailSender.send(message);
         }
+    }
 
+
+    @Bean
+    public SimpleMailMessage recommendedShowsSimpleMessage() {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("cinemamanagement2022@gmail.com");
+        message.setSubject("Recommended Shows");
+        message.setText(
+                "Hi, recommended shows are:\n");
+        return message;
     }
 }

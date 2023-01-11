@@ -62,13 +62,13 @@
         </Button>
         <Button fx:id="emailManagerButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="128.0"
                 prefWidth="179.0"
-                text="User management" textAlignment="CENTER">
+                text="Mail" textAlignment="CENTER">
             <font>
                 <Font size="16.0"/>
             </font>
             <graphic>
                 <ImageView fitHeight="79.0" fitWidth="94.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@../static/img/users-icon.png"/>
+                    <Image url="@../static/img/mail-icon.png"/>
                 </ImageView>
             </graphic>
         </Button>

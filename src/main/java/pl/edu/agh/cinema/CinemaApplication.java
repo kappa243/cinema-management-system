@@ -135,6 +135,8 @@ public class CinemaApplication extends Application {
             show3.setMovie(movies.get(2));
             show3.setRoom(rooms.get(2));
 
+            show3.setRecommended(true);
+            show2.setRecommended(true);
 
             userRepository.saveAll(List.of(admin, p1, p2, p3));
             roomRepository.saveAll(rooms);

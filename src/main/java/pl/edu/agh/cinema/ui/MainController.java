@@ -67,6 +67,9 @@ public class MainController implements StageAware {
         if(!authenticationService.isAuthorized("shows")){
             pane.getChildren().remove(showManagerButton);
         }
+        if(!authenticationService.isAuthorized("emails")){
+            pane.getChildren().remove(emailManagerButton);
+        }
 
         // events
         userManagerButton.setOnAction(event -> {
