@@ -1,6 +1,6 @@
 # Cinema
 
-> Poniższa dokumentacja jest oparta na ostatnim pełnym stanie projektu **M2**.
+> Poniższa dokumentacja jest oparta na ostatnim pełnym stanie projektu **M3**.
 
 # Wymagania
 
@@ -160,7 +160,12 @@ przy dodawaniu seansu trzeba wybrać film i salę z rozwijanej listy, oraz datę
 
 ## Kamień milowy M3
 
-#Statystyki
+Zaimplementowano:
+1. Statystyki dotyczące sprzedaży biletów (ilość i cena).
+2. Dodano system wysyłania maili do pracowników i rekomendacji filmów.
+3. Zmieniono design aplikacji na nowoczesny.
+
+# Statystyki
 
 W kolejnym etapie prac nad projektem zaimplementowano statystyki sprzedaży.
 W projekcie nie jest przetwarzana informacja o sprzedawanych biletach, a jedynie ich aktualna liczba jest atrybutem seansu. Na potrzeby

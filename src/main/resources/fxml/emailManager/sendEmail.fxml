@@ -20,7 +20,7 @@
             <Font size="14.0" />
         </font>
     </Label>
-    <MFXButton fx:id="sendButton" layoutX="492.0" layoutY="356.0" mnemonicParsing="false" text="Send" AnchorPane.bottomAnchor="14.399999999999999" AnchorPane.rightAnchor="57.6">
+    <MFXButton fx:id="sendButton" style="-fx-background-color: #8e32da; -fx-text-fill: white" layoutX="492.0" layoutY="356.0" mnemonicParsing="false" text="Send" AnchorPane.bottomAnchor="14.399999999999999" AnchorPane.rightAnchor="57.6">
         <font>
             <Font size="14.0" />
         </font>

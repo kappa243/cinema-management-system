@@ -1,5 +1,7 @@
 package pl.edu.agh.cinema.ui.stats;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -7,10 +9,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -30,12 +29,12 @@ public class StatsDialog {
     Label timeLabel = new Label(" Select time range: ");
     Label dataLabel = new Label(" Select type of data: ");
 
-    ComboBox<Movie> movieComboBox = new ComboBox<>();
-    ComboBox<String> timeComboBox = new ComboBox<>();
-    ComboBox<String> dataComboBox = new ComboBox<>();
+    MFXComboBox<Movie> movieComboBox = new MFXComboBox<>();
+    MFXComboBox<String> timeComboBox = new MFXComboBox<>();
+    MFXComboBox<String> dataComboBox = new MFXComboBox<>();
 
-    Button applyButton = new Button("Apply");
-    Button closeButton = new Button("Close");
+    MFXButton applyButton = new MFXButton("Apply");
+    MFXButton closeButton = new MFXButton("Close");
 
     VBox layout = new VBox();
     GridPane gridPane = new GridPane();
@@ -53,6 +52,11 @@ public class StatsDialog {
     }
 
     void initialize() {
+        movieComboBox.setPrefWidth(250);
+        timeComboBox.setPrefWidth(250);
+        dataComboBox.setPrefWidth(250);
+
+
         layout.setPadding(new Insets(10, 10, 10, 10));
         layout.getChildren().add(gridPane);
         gridPane.setPadding(new Insets(10, 10, 10, 10));
@@ -64,24 +68,13 @@ public class StatsDialog {
         gridPane.add(dataLabel, 0, 3);
 
         ObservableList<Movie> movies = movieService.getMovies();
-//        movies.add(0, null); ???
-        movieComboBox.setItems(movies);
-        movieComboBox.getSelectionModel().select(0);
-        movieComboBox.setCellFactory(cellData -> {
-            ListCell<Movie> cell = new ListCell<Movie>() {
-                @Override
-                protected void updateItem(Movie item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText("All movies");
-                    } else {
-                        setText(item.getTitle());
-                    }
-                }
-            };
-            return cell;
-        });
 
+        movieComboBox.getItems().add(0, null);
+        movieComboBox.setOnHidden(e -> {
+            if (movieComboBox.getValue() == null) {
+                movieComboBox.setText("All movies");
+            }
+        });
 
         movieComboBox.setConverter(new StringConverter<Movie>() {
             @Override
@@ -98,14 +91,18 @@ public class StatsDialog {
             }
         });
 
+        movieComboBox.getItems().addAll(movies);
+        movieComboBox.getSelectionModel().selectFirst();
+        movieComboBox.setText("All movies");
+
         gridPane.add(movieComboBox, 1, 1);
 
         timeComboBox.getItems().addAll("Last week", "Last month");
-        timeComboBox.getSelectionModel().select(0);
+        timeComboBox.getSelectionModel().selectFirst();
         gridPane.add(timeComboBox, 1, 2);
 
         dataComboBox.getItems().addAll("Tickets", "Value of tickets");
-        dataComboBox.getSelectionModel().select(0);
+        dataComboBox.getSelectionModel().selectFirst();
         gridPane.add(dataComboBox, 1, 3);
 
         applyButton.setOnAction(e -> onApply());
