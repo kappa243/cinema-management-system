@@ -19,10 +19,10 @@ public class ShowsGenerator {
         List<Show> shows = new ArrayList<>();
 //        Show show1 = new Show(Timestamp.valueOf("2023-11-12 11:00:03.123456789").toLocalDateTime(), Timestamp.valueOf("2023-11-12 13:02:03.123456789").toLocalDateTime(), Timestamp.valueOf("2018-11-12 01:02:03.123456789").toLocalDateTime(), 12, 38);
         List<LocalDateTime> times = Arrays.asList();
-        LocalDateTime rano = Timestamp.valueOf("2022-12-01 10:00:00").toLocalDateTime();
-        LocalDateTime popoludnie = Timestamp.valueOf("2022-12-01 17:00:00").toLocalDateTime();
-        LocalDateTime wieczor = Timestamp.valueOf("2022-12-01 20:00:00").toLocalDateTime();
-        LocalDateTime noc = Timestamp.valueOf("2022-12-01 22:00:00").toLocalDateTime();
+        LocalDateTime rano = Timestamp.valueOf("2022-12-10 10:00:00").toLocalDateTime();
+        LocalDateTime popoludnie = Timestamp.valueOf("2022-12-10 17:00:00").toLocalDateTime();
+        LocalDateTime wieczor = Timestamp.valueOf("2022-12-10 20:00:00").toLocalDateTime();
+        LocalDateTime noc = Timestamp.valueOf("2022-12-10 22:00:00").toLocalDateTime();
         List<LocalDateTime> terminy = Arrays.asList(rano, popoludnie, wieczor, noc);
         Random rand = new Random();
         for (int i = 0; i < 45; i++) {
@@ -42,7 +42,7 @@ public class ShowsGenerator {
     //funkcja symulująca sprzedaż biletów w przeciagu godziny
     public static List<Sales> generateSales(List<Show> shows) {
         List<Sales> salesList = new ArrayList<>();
-        LocalDateTime startDate = Timestamp.valueOf("2022-12-01 10:00:00").toLocalDateTime().minusDays(5);
+        LocalDateTime startDate = Timestamp.valueOf("2022-12-10 10:00:00").toLocalDateTime().minusDays(5);
         for (int h = 0; ; h++) {
             LocalDateTime current = startDate.plusHours(h);
             if (LocalDateTime.now().isBefore(current)) break;

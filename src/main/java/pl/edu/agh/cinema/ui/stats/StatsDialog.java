@@ -15,6 +15,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import pl.edu.agh.cinema.model.movie.Movie;
 import pl.edu.agh.cinema.model.movie.MovieService;
 import pl.edu.agh.cinema.model.sales.SalesService;
@@ -23,6 +25,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
+@Component
+@Scope("prototype")
 public class StatsDialog {
 
     Label movieLabel = new Label(" Select movie: ");
